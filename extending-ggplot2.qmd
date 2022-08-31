@@ -1,0 +1,434 @@
+---
+format: 
+  revealjs:
+    theme: [simple, presentation.css]
+    auto-animate-easing: ease-in-out
+    footer: "James Otto (Baylor University)"
+    self-contained: false
+    slide-number: true
+    df-print: paged
+knitr:
+  opts_chunk: 
+    fig-format: png
+    echo: true
+---
+
+
+```{r setup_environment}
+#| include: false
+library("here")
+library("tidyverse") 
+library("patchwork")
+library("ggdensity")
+theme_set(theme_bw(13)) 
+theme_update(
+  panel.grid.minor = element_blank()
+)
+```
+
+# Introduction
+
+---
+
+Go through examples of **ggplot2** extensions
+
+# A first look at **ggproto** classes
+
+```{r}
+library("ggplot2")
+
+set.seed(1)
+
+df <- data.frame(
+  x = rnorm(10),
+  y = rnorm(10)
+)
+
+
+```
+
+---
+
+```{r}
+ggplot(df, aes(x, y)) +
+  geom_point()
+```
+
+---
+
+```{r}
+geom_point
+```
+
+---
+
+```{r}
+ggplot(df, aes(x, y)) +
+  layer(geom = GeomPoint, stat = StatIdentity, position = position_identity())
+```
+
+---
+
+**ggplot2** is built on the ggproto object oriented system.
+Below, we show how simple it is to extend via inheritance,
+creating `GeomPointNew` from `GeomPoint` with a few adjustments to the default aesthetic options.
+Using the `ggproto()` constructor.
+
+```{r}
+GeomPointNew <- ggproto("GeomPointNew", GeomPoint,
+                        
+  default_aes = aes(
+    shape = 21,
+    colour = "black",
+    size = 2,
+    fill = "slateblue",
+    alpha = NA,
+    stroke = .5
+  )
+  
+)
+```
+
+---
+
+```{r}
+ggplot(df, aes(x, y)) +
+  layer(geom = GeomPointNew, stat = StatIdentity, position = position_identity())
+```
+
+---
+
+```{r}
+geom_point_new <- function(mapping = NULL, data = NULL, 
+                           stat = "identity", position = "identity", 
+                           ...,
+                           na.rm = FALSE,
+                           show.legend = NA,
+                           inherit.aes = TRUE) {
+  layer(
+    data = data,
+    mapping = mapping,
+    stat = stat,
+    geom = GeomPointNew,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      na.rm = na.rm,
+      ...
+    )
+  )
+}
+```
+
+---
+
+```{r}
+ggplot(df, aes(x, y)) +
+  geom_point_new()
+```
+
+
+# Extending stats (travelling salesperson)
+
+---
+
+```{r}
+library("TSP")
+
+dist_mat <- dist(df, diag = TRUE, upper = TRUE)
+atsp <- as.ATSP(dist_mat)
+tour <- solve_TSP(atsp)
+
+df_sorted <- df[tour,]
+```
+
+---
+
+```{r}
+ggplot(df_sorted, aes(x, y)) +
+  geom_path() +
+  geom_point_new() 
+
+```
+
+---
+
+```{r}
+StatSalesperson <- ggproto("StatSalesperson",  Stat,
+                           
+  compute_group = function(data, scales) {
+    
+    dist_mat <- dist(data[,c("x", "y")], diag = TRUE, upper = TRUE)
+    atsp <- as.ATSP(dist_mat)
+    tour <- solve_TSP(atsp)
+    
+    data[tour,]
+    
+  },
+  
+  required_aes = c("x", "y")                     
+)
+
+stat_salesperson <- function(mapping = NULL, data = NULL, 
+                       geom = GeomPath, position = "identity",
+                       ...,
+                       na.rm = FALSE, 
+                       show.legend = NA, 
+                       inherit.aes = TRUE) {
+  layer(
+    stat = StatSalesperson, data = data, mapping = mapping, geom = geom, 
+    position = position, show.legend = show.legend, inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+---
+
+```{r}
+ggplot(df, aes(x, y)) +
+  stat_salesperson() +
+  geom_point_new() 
+
+```
+
+---
+
+```{r}
+StatSalesperson <- ggproto("StatSalesperson",  Stat,
+                           
+  compute_group = function(data, scales, method = NULL) {
+    
+    dist_mat <- dist(data[,c("x", "y")], diag = TRUE, upper = TRUE)
+    atsp <- as.ATSP(dist_mat)
+    tour <- solve_TSP(atsp, method)
+    
+    data[tour,]
+    
+  },
+  
+  required_aes = c("x", "y")                     
+)
+```
+
+---
+
+```{r}
+stat_salesperson <- function(mapping = NULL, data = NULL, 
+                       geom = GeomPath, position = "identity",
+                       ...,
+                       method = NULL,
+                       na.rm = FALSE, 
+                       show.legend = NA, 
+                       inherit.aes = TRUE) {
+  layer(
+    stat = StatSalesperson, 
+    data = data,
+    mapping = mapping,
+    geom = geom,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      method = method,
+      na.rm = na.rm,
+      ...
+    )
+  )
+}
+```
+
+---
+
+```{r}
+ggplot(df, aes(x, y)) +
+  stat_salesperson(method = "identity") +
+  geom_point_new() 
+```
+
+---
+
+```{r}
+ggplot(df, aes(x, y)) +
+  stat_salesperson(method = "random") +
+  geom_point_new() 
+```
+
+---
+
+```{r}
+ggplot(df, aes(x, y)) +
+  stat_salesperson(method = "nearest_insertion") +
+  geom_point_new() 
+```
+
+---
+
+```{r}
+
+GeomSalesperson <- ggproto("GeomSalesperson", GeomPath)
+
+geom_salesperson <- function(mapping = NULL, data = NULL, 
+                             stat = StatSalesperson, position = "identity", 
+                             ...,
+                             na.rm = FALSE,
+                             show.legend = NA,
+                             inherit.aes = TRUE) {
+  layer(
+    data = data,
+    mapping = mapping,
+    stat = stat,
+    geom = GeomSalesperson,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      na.rm = na.rm,
+      ...
+    )
+  )
+}
+
+```
+
+---
+
+```{r}
+
+ggplot(df, aes(x, y)) +
+  geom_salesperson() +
+  geom_point_new() 
+
+```
+
+---
+
+Note: generally, it's good to pick defaults that match up with defaults in **ggplot2** functions. 
+I'm specifically choosing alternative values to demonstrate how things can be changed.
+
+
+# Extending geoms (complete graphs)
+
+---
+
+Minor Introduction to grobs, reference book on grid graphics
+
+---
+
+```{r}
+
+GeomComplete <- ggproto("GeomComplete", Geom,
+                        
+  draw_panel = function(data, panel_params, coord) {
+    
+    data_expanded <- data[rep(1:nrow(data), each = nrow(data)), ]
+    data_expanded$xend <- rep(data$x, times = nrow(data))
+    data_expanded$yend <- rep(data$y, times = nrow(data))
+    
+    coord <- coord$transform(data_expanded, panel_params)
+    
+    grid::segmentsGrob(coord$x, coord$y, coord$xend, coord$yend,
+      default.units = "native",
+      gp = grid::gpar(
+        col = alpha(coord$colour, coord$alpha),
+        fill = alpha(coord$colour, coord$alpha),
+        lwd = coord$linewidth * .pt,
+        lty = coord$linetype
+      )
+    )
+    
+  },
+  
+  required_aes = c("x", "y"),
+  
+  non_missing_aes = c("linetype", "linewidth", "shape"),
+  
+  default_aes = aes(colour = "black", linewidth = 0.5, linetype = 1, alpha = NA),
+ 
+  draw_key = draw_key_path
+  
+)
+```
+
+---
+
+```{r}
+geom_complete <- function(mapping = NULL, data = NULL, 
+                             stat = StatIdentity, position = "identity", 
+                             ...,
+                             na.rm = FALSE,
+                             show.legend = NA,
+                             inherit.aes = TRUE) {
+  layer(
+    data = data,
+    mapping = mapping,
+    stat = stat,
+    geom = GeomComplete,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      na.rm = na.rm,
+      ...
+    )
+  )
+}
+```
+
+---
+
+```{r}
+ggplot(df, aes(x, y)) +
+  geom_complete()
+```
+
+
+# Why extend?
+
+---
+
+```{r}
+ggplot(df, aes(x, y)) +
+  geom_salesperson(size = 2, color = "firebrick") +
+  geom_complete(alpha = .8) +
+  geom_point_new(size = 3)
+```
+
+---
+
+```{r}
+set.seed(1)
+
+df_mult <- data.frame(
+  x = rnorm(3 * 10),
+  y = rnorm(3 * 10),
+  class = rep(c("a", "b", "c"), each = 10)
+)
+
+df_mult$x <- df_mult$x + rep(-1:1, each = 10)
+```
+
+---
+
+```{r}
+ggplot(df_mult, aes(x, y)) +
+  geom_salesperson(size = 2, color = "firebrick") +
+  geom_complete(alpha = .8) +
+  geom_point_new(size = 3) +
+  facet_wrap(vars(class)) +
+  theme_minimal()
+```
+
+---
+
+```{r}
+ggplot(df_mult, aes(x, y, fill = class)) +
+  geom_salesperson(aes(color = class), size = 2) +
+  geom_point_new(size = 3) +
+  theme_minimal()
+```
+
+
+
+
