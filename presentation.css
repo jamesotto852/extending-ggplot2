@@ -11,4 +11,23 @@ div .csl-entry {
   font-size: .85em;
 }
 
+.cell-output-stdout {
+  margin-top: 8px;
+  font-size: .88em;
+}
+
+.cell-output-display {
+  margin-top: 8px;
+  font-size: .45em;
+}
+
+.callout {
+  background-color: white;
+}
+
+.reveal div.sourceCode pre code {
+  max-height: 680px;
+}
+
+
 /*-- scss:defaults --*/
