@@ -395,291 +395,544 @@
 <p>Go through examples of <strong>ggplot2</strong> extensions</p>
 </section></section>
 <section>
-<section id="a-first-look-at-ggproto-classes" class="title-slide slide level1 center">
-<h1>A first look at <strong>ggproto</strong> classes</h1>
+<section id="a-first-look-at-ggproto-objects" class="title-slide slide level1 center">
+<h1>A first look at <strong>ggproto</strong> objects</h1>
+
+</section>
+<section id="section" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb1-6"><a href="#cb1-6"></a>  <span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>),</span>
-<span id="cb1-7"><a href="#cb1-7"></a>  <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)</span>
-<span id="cb1-8"><a href="#cb1-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb1-1" class="hljs-ln-code"><a href="#cb1-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-2" class="hljs-ln-code"><a href="#cb1-2"></a>  <span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>),</span>
+<span id="cb1-3" class="hljs-ln-code"><a href="#cb1-3"></a>  <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)</span>
+<span id="cb1-4" class="hljs-ln-code"><a href="#cb1-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section class="slide level2">
-
+<section id="section-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb2-1" class="hljs-ln-code"><a href="#cb2-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-2" class="hljs-ln-code"><a href="#cb2-2"></a>  <span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>),</span>
+<span id="cb2-3" class="hljs-ln-code"><a href="#cb2-3"></a>  <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)</span>
+<span id="cb2-4" class="hljs-ln-code"><a href="#cb2-4"></a>)</span>
+<span id="cb2-5" class="hljs-ln-code"><a href="#cb2-5"></a></span>
+<span id="cb2-6" class="hljs-ln-code"><a href="#cb2-6"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
 
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"-0.6264538","2":"1.51178117"},{"1":"0.1836433","2":"0.38984324"},{"1":"-0.8356286","2":"-0.62124058"},{"1":"1.5952808","2":"-2.21469989"},{"1":"0.3295078","2":"1.12493092"},{"1":"-0.8204684","2":"-0.04493361"},{"1":"0.4874291","2":"-0.01619026"},{"1":"0.7383247","2":"0.94383621"},{"1":"0.5757814","2":"0.82122120"},{"1":"-0.3053884","2":"0.59390132"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
 </div>
-<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>geom_point</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>function (mapping = NULL, data = NULL, stat = "identity", position = "identity", 
-    ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
-{
-    layer(data = data, mapping = mapping, stat = stat, geom = GeomPoint, 
-        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
-        params = list(na.rm = na.rm, ...))
-}
-&lt;bytecode: 0x5555a06442c0&gt;
-&lt;environment: namespace:ggplot2&gt;</code></pre>
 </div>
 </div>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">layer</span>(<span class="at">geom =</span> GeomPoint, <span class="at">stat =</span> StatIdentity, <span class="at">position =</span> <span class="fu">position_identity</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section>
 <section class="slide level2">
 
-<p><strong>ggplot2</strong> is built on the ggproto object oriented system. Below, we show how simple it is to extend via inheritance, creating <code>GeomPointNew</code> from <code>GeomPoint</code> with a few adjustments to the default aesthetic options. Using the <code>ggproto()</code> constructor.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>GeomPointNew <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"GeomPointNew"</span>, GeomPoint,</span>
-<span id="cb6-2"><a href="#cb6-2"></a>                        </span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="at">default_aes =</span> <span class="fu">aes</span>(</span>
-<span id="cb6-4"><a href="#cb6-4"></a>    <span class="at">shape =</span> <span class="dv">21</span>,</span>
-<span id="cb6-5"><a href="#cb6-5"></a>    <span class="at">colour =</span> <span class="st">"black"</span>,</span>
-<span id="cb6-6"><a href="#cb6-6"></a>    <span class="at">size =</span> <span class="dv">2</span>,</span>
-<span id="cb6-7"><a href="#cb6-7"></a>    <span class="at">fill =</span> <span class="st">"slateblue"</span>,</span>
-<span id="cb6-8"><a href="#cb6-8"></a>    <span class="at">alpha =</span> <span class="cn">NA</span>,</span>
-<span id="cb6-9"><a href="#cb6-9"></a>    <span class="at">stroke =</span> .<span class="dv">5</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a>  )</span>
-<span id="cb6-11"><a href="#cb6-11"></a>  </span>
-<span id="cb6-12"><a href="#cb6-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4" data-code-line-numbers="false"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>geom_point</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="cf">function</span> (<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, <span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"identity"</span>, </span>
+<span id="cb5-2"><a href="#cb5-2"></a>    ..., <span class="at">na.rm =</span> <span class="cn">FALSE</span>, <span class="at">show.legend =</span> <span class="cn">NA</span>, <span class="at">inherit.aes =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb5-3"><a href="#cb5-3"></a>{</span>
+<span id="cb5-4"><a href="#cb5-4"></a>    <span class="fu">layer</span>(<span class="at">data =</span> data, <span class="at">mapping =</span> mapping, <span class="at">stat =</span> stat, <span class="at">geom =</span> GeomPoint, </span>
+<span id="cb5-5"><a href="#cb5-5"></a>        <span class="at">position =</span> position, <span class="at">show.legend =</span> show.legend, <span class="at">inherit.aes =</span> inherit.aes, </span>
+<span id="cb5-6"><a href="#cb5-6"></a>        <span class="at">params =</span> <span class="fu">list</span>(<span class="at">na.rm =</span> na.rm, ...))</span>
+<span id="cb5-7"><a href="#cb5-7"></a>}</span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x560817409888</span><span class="sc">&gt;</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="er">&lt;</span>environment<span class="sc">:</span> namespace<span class="sc">:</span>ggplot2<span class="sc">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">layer</span>(<span class="at">geom =</span> GeomPointNew, <span class="at">stat =</span> StatIdentity, <span class="at">position =</span> <span class="fu">position_identity</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">layer</span>(<span class="at">geom =</span> GeomPoint, <span class="at">stat =</span> StatIdentity, <span class="at">position =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
 <section class="slide level2">
 
+<p><strong>ggplot2</strong> is built on the ggproto object oriented system.</p>
+<p><code>GeomPoint</code> is an object with methods and fields that encode the relevant procedures and defaults to create a scatterplot.</p>
+</section>
+<section class="slide level2">
+
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>geom_point_new <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
-<span id="cb8-2"><a href="#cb8-2"></a>                           <span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"identity"</span>, </span>
-<span id="cb8-3"><a href="#cb8-3"></a>                           ...,</span>
-<span id="cb8-4"><a href="#cb8-4"></a>                           <span class="at">na.rm =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb8-5"><a href="#cb8-5"></a>                           <span class="at">show.legend =</span> <span class="cn">NA</span>,</span>
-<span id="cb8-6"><a href="#cb8-6"></a>                           <span class="at">inherit.aes =</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb8-7"><a href="#cb8-7"></a>  <span class="fu">layer</span>(</span>
-<span id="cb8-8"><a href="#cb8-8"></a>    <span class="at">data =</span> data,</span>
-<span id="cb8-9"><a href="#cb8-9"></a>    <span class="at">mapping =</span> mapping,</span>
-<span id="cb8-10"><a href="#cb8-10"></a>    <span class="at">stat =</span> stat,</span>
-<span id="cb8-11"><a href="#cb8-11"></a>    <span class="at">geom =</span> GeomPointNew,</span>
-<span id="cb8-12"><a href="#cb8-12"></a>    <span class="at">position =</span> position,</span>
-<span id="cb8-13"><a href="#cb8-13"></a>    <span class="at">show.legend =</span> show.legend,</span>
-<span id="cb8-14"><a href="#cb8-14"></a>    <span class="at">inherit.aes =</span> inherit.aes,</span>
-<span id="cb8-15"><a href="#cb8-15"></a>    <span class="at">params =</span> <span class="fu">list</span>(</span>
-<span id="cb8-16"><a href="#cb8-16"></a>      <span class="at">na.rm =</span> na.rm,</span>
-<span id="cb8-17"><a href="#cb8-17"></a>      ...</span>
-<span id="cb8-18"><a href="#cb8-18"></a>    )</span>
-<span id="cb8-19"><a href="#cb8-19"></a>  )</span>
-<span id="cb8-20"><a href="#cb8-20"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7" data-code-line-numbers="|8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>GeomPoint</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt; &lt;ggproto object: Class GeomPoint, Geom, gg&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt;     aesthetics: function</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt;     default_aes: uneval</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt;     draw_group: function</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt;     draw_key: function</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#&gt;     draw_layer: function</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt;     draw_panel: function</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt;     extra_params: na.rm</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">#&gt;     handle_na: function</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co">#&gt;     non_missing_aes: size shape colour</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co">#&gt;     optional_aes: </span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="co">#&gt;     parameters: function</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="co">#&gt;     required_aes: x y</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="co">#&gt;     setup_data: function</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="co">#&gt;     setup_params: function</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="co">#&gt;     use_defaults: function</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a><span class="co">#&gt;     super:  &lt;ggproto object: Class Geom, gg&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">geom_point_new</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
+<div class="sourceCode cell-code" id="cb8" data-code-line-numbers="|8-18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>GeomPoint<span class="sc">$</span>draw_panel</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">#&gt; &lt;ggproto method&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt;   &lt;Wrapper function&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt;     function (...) </span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt; f(...)</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt; </span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt;   &lt;Inner function (f)&gt;</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt;     function (data, panel_params, coord, na.rm = FALSE) </span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt; {</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt;     if (is.character(data$shape)) {</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#&gt;         data$shape &lt;- translate_shape_string(data$shape)</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="co">#&gt;     }</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co">#&gt;     coords &lt;- coord$transform(data, panel_params)</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co">#&gt;     ggname("geom_point", pointsGrob(coords$x, coords$y, pch = coords$shape, </span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co">#&gt;         gp = gpar(col = alpha(coords$colour, coords$alpha), fill = alpha(coords$fill, </span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="co">#&gt;             coords$alpha), fontsize = coords$size * .pt + coords$stroke * </span></span>
+<span id="cb8-17"><a href="#cb8-17"></a><span class="co">#&gt;             .stroke/2, lwd = coords$stroke * .stroke/2)))</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a><span class="co">#&gt; }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section></section>
-<section>
-<section id="extending-stats-travelling-salesperson" class="title-slide slide level1 center">
-<h1>Extending stats (travelling salesperson)</h1>
-
+<!-- "Graphical primitives" -->
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">library</span>(<span class="st">"TSP"</span>)</span>
-<span id="cb10-2"><a href="#cb10-2"></a></span>
-<span id="cb10-3"><a href="#cb10-3"></a>dist_mat <span class="ot">&lt;-</span> <span class="fu">dist</span>(df, <span class="at">diag =</span> <span class="cn">TRUE</span>, <span class="at">upper =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb10-4"><a href="#cb10-4"></a>atsp <span class="ot">&lt;-</span> <span class="fu">as.ATSP</span>(dist_mat)</span>
-<span id="cb10-5"><a href="#cb10-5"></a>tour <span class="ot">&lt;-</span> <span class="fu">solve_TSP</span>(atsp)</span>
-<span id="cb10-6"><a href="#cb10-6"></a></span>
-<span id="cb10-7"><a href="#cb10-7"></a>df_sorted <span class="ot">&lt;-</span> df[tour,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section class="slide level2">
-
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">ggplot</span>(df_sorted, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">geom_path</span>() <span class="sc">+</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">geom_point_new</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>StatSalesperson <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"StatSalesperson"</span>,  Stat,</span>
-<span id="cb12-2"><a href="#cb12-2"></a>                           </span>
-<span id="cb12-3"><a href="#cb12-3"></a>  <span class="at">compute_group =</span> <span class="cf">function</span>(data, scales) {</span>
-<span id="cb12-4"><a href="#cb12-4"></a>    </span>
-<span id="cb12-5"><a href="#cb12-5"></a>    dist_mat <span class="ot">&lt;-</span> <span class="fu">dist</span>(data[,<span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)], <span class="at">diag =</span> <span class="cn">TRUE</span>, <span class="at">upper =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb12-6"><a href="#cb12-6"></a>    atsp <span class="ot">&lt;-</span> <span class="fu">as.ATSP</span>(dist_mat)</span>
-<span id="cb12-7"><a href="#cb12-7"></a>    tour <span class="ot">&lt;-</span> <span class="fu">solve_TSP</span>(atsp)</span>
-<span id="cb12-8"><a href="#cb12-8"></a>    </span>
-<span id="cb12-9"><a href="#cb12-9"></a>    data[tour,]</span>
-<span id="cb12-10"><a href="#cb12-10"></a>    </span>
-<span id="cb12-11"><a href="#cb12-11"></a>  },</span>
-<span id="cb12-12"><a href="#cb12-12"></a>  </span>
-<span id="cb12-13"><a href="#cb12-13"></a>  <span class="at">required_aes =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)                     </span>
-<span id="cb12-14"><a href="#cb12-14"></a>)</span>
-<span id="cb12-15"><a href="#cb12-15"></a></span>
-<span id="cb12-16"><a href="#cb12-16"></a>stat_salesperson <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
-<span id="cb12-17"><a href="#cb12-17"></a>                       <span class="at">geom =</span> GeomPath, <span class="at">position =</span> <span class="st">"identity"</span>,</span>
-<span id="cb12-18"><a href="#cb12-18"></a>                       ...,</span>
-<span id="cb12-19"><a href="#cb12-19"></a>                       <span class="at">na.rm =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb12-20"><a href="#cb12-20"></a>                       <span class="at">show.legend =</span> <span class="cn">NA</span>, </span>
-<span id="cb12-21"><a href="#cb12-21"></a>                       <span class="at">inherit.aes =</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb12-22"><a href="#cb12-22"></a>  <span class="fu">layer</span>(</span>
-<span id="cb12-23"><a href="#cb12-23"></a>    <span class="at">stat =</span> StatSalesperson, <span class="at">data =</span> data, <span class="at">mapping =</span> mapping, <span class="at">geom =</span> geom, </span>
-<span id="cb12-24"><a href="#cb12-24"></a>    <span class="at">position =</span> position, <span class="at">show.legend =</span> show.legend, <span class="at">inherit.aes =</span> inherit.aes,</span>
-<span id="cb12-25"><a href="#cb12-25"></a>    <span class="at">params =</span> <span class="fu">list</span>(<span class="at">na.rm =</span> na.rm, ...)</span>
-<span id="cb12-26"><a href="#cb12-26"></a>  )</span>
-<span id="cb12-27"><a href="#cb12-27"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>GeomPoint</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#&gt; &lt;ggproto object: Class GeomPoint, Geom, gg&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt;     aesthetics: function</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt;     default_aes: uneval</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt;     draw_group: function</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt;     draw_key: function</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt;     draw_layer: function</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt;     draw_panel: function</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt;     extra_params: na.rm</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt;     handle_na: function</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt;     non_missing_aes: size shape colour</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt;     optional_aes: </span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt;     parameters: function</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="co">#&gt;     required_aes: x y</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="co">#&gt;     setup_data: function</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="co">#&gt;     setup_params: function</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="co">#&gt;     use_defaults: function</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co">#&gt;     super:  &lt;ggproto object: Class Geom, gg&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">stat_salesperson</span>() <span class="sc">+</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">geom_point_new</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>GeomPoint<span class="sc">$</span>default_aes</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; Aesthetic mapping: </span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; * `shape`  -&gt; 19</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; * `colour` -&gt; "black"</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; * `size`   -&gt; 1.5</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; * `fill`   -&gt; NA</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; * `alpha`  -&gt; NA</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; * `stroke` -&gt; 0.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-24-1.png" width="960" class="r-stretch"></section>
+</section>
+<section class="slide level2">
+
+<p>It is simple to extend via inheritance, creating <code>GeomPointNew</code> from <code>GeomPoint</code> with a few adjustments to the default aesthetic options.</p>
+<p>Using the <code>ggproto()</code> function…</p>
+</section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>StatSalesperson <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"StatSalesperson"</span>,  Stat,</span>
-<span id="cb14-2"><a href="#cb14-2"></a>                           </span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="at">compute_group =</span> <span class="cf">function</span>(data, scales, <span class="at">method =</span> <span class="cn">NULL</span>) {</span>
-<span id="cb14-4"><a href="#cb14-4"></a>    </span>
-<span id="cb14-5"><a href="#cb14-5"></a>    dist_mat <span class="ot">&lt;-</span> <span class="fu">dist</span>(data[,<span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)], <span class="at">diag =</span> <span class="cn">TRUE</span>, <span class="at">upper =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb14-6"><a href="#cb14-6"></a>    atsp <span class="ot">&lt;-</span> <span class="fu">as.ATSP</span>(dist_mat)</span>
-<span id="cb14-7"><a href="#cb14-7"></a>    tour <span class="ot">&lt;-</span> <span class="fu">solve_TSP</span>(atsp, method)</span>
-<span id="cb14-8"><a href="#cb14-8"></a>    </span>
-<span id="cb14-9"><a href="#cb14-9"></a>    data[tour,]</span>
-<span id="cb14-10"><a href="#cb14-10"></a>    </span>
-<span id="cb14-11"><a href="#cb14-11"></a>  },</span>
-<span id="cb14-12"><a href="#cb14-12"></a>  </span>
-<span id="cb14-13"><a href="#cb14-13"></a>  <span class="at">required_aes =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)                     </span>
-<span id="cb14-14"><a href="#cb14-14"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>GeomPointNew <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"GeomPointNew"</span>, GeomPoint,</span>
+<span id="cb11-2"><a href="#cb11-2"></a>                        </span>
+<span id="cb11-3"><a href="#cb11-3"></a>  <span class="at">default_aes =</span> <span class="fu">aes</span>(</span>
+<span id="cb11-4"><a href="#cb11-4"></a>    <span class="at">shape =</span> <span class="dv">21</span>,</span>
+<span id="cb11-5"><a href="#cb11-5"></a>    <span class="at">colour =</span> <span class="st">"black"</span>,</span>
+<span id="cb11-6"><a href="#cb11-6"></a>    <span class="at">size =</span> <span class="dv">2</span>,</span>
+<span id="cb11-7"><a href="#cb11-7"></a>    <span class="at">fill =</span> <span class="st">"slateblue"</span>,</span>
+<span id="cb11-8"><a href="#cb11-8"></a>    <span class="at">alpha =</span> <span class="cn">NA</span>,</span>
+<span id="cb11-9"><a href="#cb11-9"></a>    <span class="at">stroke =</span> .<span class="dv">5</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a>  )</span>
+<span id="cb11-11"><a href="#cb11-11"></a>  </span>
+<span id="cb11-12"><a href="#cb11-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>stat_salesperson <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
-<span id="cb15-2"><a href="#cb15-2"></a>                       <span class="at">geom =</span> GeomPath, <span class="at">position =</span> <span class="st">"identity"</span>,</span>
-<span id="cb15-3"><a href="#cb15-3"></a>                       ...,</span>
-<span id="cb15-4"><a href="#cb15-4"></a>                       <span class="at">method =</span> <span class="cn">NULL</span>,</span>
-<span id="cb15-5"><a href="#cb15-5"></a>                       <span class="at">na.rm =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb15-6"><a href="#cb15-6"></a>                       <span class="at">show.legend =</span> <span class="cn">NA</span>, </span>
-<span id="cb15-7"><a href="#cb15-7"></a>                       <span class="at">inherit.aes =</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb15-8"><a href="#cb15-8"></a>  <span class="fu">layer</span>(</span>
-<span id="cb15-9"><a href="#cb15-9"></a>    <span class="at">stat =</span> StatSalesperson, </span>
-<span id="cb15-10"><a href="#cb15-10"></a>    <span class="at">data =</span> data,</span>
-<span id="cb15-11"><a href="#cb15-11"></a>    <span class="at">mapping =</span> mapping,</span>
-<span id="cb15-12"><a href="#cb15-12"></a>    <span class="at">geom =</span> geom,</span>
-<span id="cb15-13"><a href="#cb15-13"></a>    <span class="at">position =</span> position,</span>
-<span id="cb15-14"><a href="#cb15-14"></a>    <span class="at">show.legend =</span> show.legend,</span>
-<span id="cb15-15"><a href="#cb15-15"></a>    <span class="at">inherit.aes =</span> inherit.aes,</span>
-<span id="cb15-16"><a href="#cb15-16"></a>    <span class="at">params =</span> <span class="fu">list</span>(</span>
-<span id="cb15-17"><a href="#cb15-17"></a>      <span class="at">method =</span> method,</span>
-<span id="cb15-18"><a href="#cb15-18"></a>      <span class="at">na.rm =</span> na.rm,</span>
-<span id="cb15-19"><a href="#cb15-19"></a>      ...</span>
-<span id="cb15-20"><a href="#cb15-20"></a>    )</span>
-<span id="cb15-21"><a href="#cb15-21"></a>  )</span>
-<span id="cb15-22"><a href="#cb15-22"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="|8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>GeomPointNew</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="co">#&gt; &lt;ggproto object: Class GeomPointNew, GeomPoint, Geom, gg&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#&gt;     aesthetics: function</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">#&gt;     default_aes: uneval</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt;     draw_group: function</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt;     draw_key: function</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt;     draw_layer: function</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="co">#&gt;     draw_panel: function</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co">#&gt;     extra_params: na.rm</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="co">#&gt;     handle_na: function</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="co">#&gt;     non_missing_aes: size shape colour</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="co">#&gt;     optional_aes: </span></span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="co">#&gt;     parameters: function</span></span>
+<span id="cb12-14"><a href="#cb12-14"></a><span class="co">#&gt;     required_aes: x y</span></span>
+<span id="cb12-15"><a href="#cb12-15"></a><span class="co">#&gt;     setup_data: function</span></span>
+<span id="cb12-16"><a href="#cb12-16"></a><span class="co">#&gt;     setup_params: function</span></span>
+<span id="cb12-17"><a href="#cb12-17"></a><span class="co">#&gt;     use_defaults: function</span></span>
+<span id="cb12-18"><a href="#cb12-18"></a><span class="co">#&gt;     super:  &lt;ggproto object: Class GeomPoint, Geom, gg&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" data-code-line-numbers="|8-18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>GeomPointNew<span class="sc">$</span>draw_panel</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="co">#&gt; &lt;ggproto method&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="co">#&gt;   &lt;Wrapper function&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co">#&gt;     function (...) </span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co">#&gt; f(...)</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co">#&gt; </span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="co">#&gt;   &lt;Inner function (f)&gt;</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="co">#&gt;     function (data, panel_params, coord, na.rm = FALSE) </span></span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="co">#&gt; {</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a><span class="co">#&gt;     if (is.character(data$shape)) {</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="co">#&gt;         data$shape &lt;- translate_shape_string(data$shape)</span></span>
+<span id="cb13-12"><a href="#cb13-12"></a><span class="co">#&gt;     }</span></span>
+<span id="cb13-13"><a href="#cb13-13"></a><span class="co">#&gt;     coords &lt;- coord$transform(data, panel_params)</span></span>
+<span id="cb13-14"><a href="#cb13-14"></a><span class="co">#&gt;     ggname("geom_point", pointsGrob(coords$x, coords$y, pch = coords$shape, </span></span>
+<span id="cb13-15"><a href="#cb13-15"></a><span class="co">#&gt;         gp = gpar(col = alpha(coords$colour, coords$alpha), fill = alpha(coords$fill, </span></span>
+<span id="cb13-16"><a href="#cb13-16"></a><span class="co">#&gt;             coords$alpha), fontsize = coords$size * .pt + coords$stroke * </span></span>
+<span id="cb13-17"><a href="#cb13-17"></a><span class="co">#&gt;             .stroke/2, lwd = coords$stroke * .stroke/2)))</span></span>
+<span id="cb13-18"><a href="#cb13-18"></a><span class="co">#&gt; }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>GeomPointNew</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="co">#&gt; &lt;ggproto object: Class GeomPointNew, GeomPoint, Geom, gg&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="co">#&gt;     aesthetics: function</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#&gt;     default_aes: uneval</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co">#&gt;     draw_group: function</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co">#&gt;     draw_key: function</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="co">#&gt;     draw_layer: function</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="co">#&gt;     draw_panel: function</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="co">#&gt;     extra_params: na.rm</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="co">#&gt;     handle_na: function</span></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="co">#&gt;     non_missing_aes: size shape colour</span></span>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="co">#&gt;     optional_aes: </span></span>
+<span id="cb14-13"><a href="#cb14-13"></a><span class="co">#&gt;     parameters: function</span></span>
+<span id="cb14-14"><a href="#cb14-14"></a><span class="co">#&gt;     required_aes: x y</span></span>
+<span id="cb14-15"><a href="#cb14-15"></a><span class="co">#&gt;     setup_data: function</span></span>
+<span id="cb14-16"><a href="#cb14-16"></a><span class="co">#&gt;     setup_params: function</span></span>
+<span id="cb14-17"><a href="#cb14-17"></a><span class="co">#&gt;     use_defaults: function</span></span>
+<span id="cb14-18"><a href="#cb14-18"></a><span class="co">#&gt;     super:  &lt;ggproto object: Class GeomPoint, Geom, gg&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>GeomPointNew<span class="sc">$</span>default_aes</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="co">#&gt; Aesthetic mapping: </span></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="co">#&gt; * `shape`  -&gt; 21</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co">#&gt; * `colour` -&gt; "black"</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#&gt; * `size`   -&gt; 2</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co">#&gt; * `fill`   -&gt; "slateblue"</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="co">#&gt; * `alpha`  -&gt; NA</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#&gt; * `stroke` -&gt; 0.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
 
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">stat_salesperson</span>(<span class="at">method =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">geom_point_new</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
-<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">stat_salesperson</span>(<span class="at">method =</span> <span class="st">"random"</span>) <span class="sc">+</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">geom_point_new</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">layer</span>(<span class="at">geom =</span> GeomPointNew, <span class="at">stat =</span> StatIdentity, <span class="at">position =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-32-1.png" width="960" class="r-stretch"></section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">stat_salesperson</span>(<span class="at">method =</span> <span class="st">"nearest_insertion"</span>) <span class="sc">+</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">geom_point_new</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-34-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>GeomSalesperson <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"GeomSalesperson"</span>, GeomPath)</span>
-<span id="cb19-2"><a href="#cb19-2"></a></span>
-<span id="cb19-3"><a href="#cb19-3"></a>geom_salesperson <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
-<span id="cb19-4"><a href="#cb19-4"></a>                             <span class="at">stat =</span> StatSalesperson, <span class="at">position =</span> <span class="st">"identity"</span>, </span>
-<span id="cb19-5"><a href="#cb19-5"></a>                             ...,</span>
-<span id="cb19-6"><a href="#cb19-6"></a>                             <span class="at">na.rm =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb19-7"><a href="#cb19-7"></a>                             <span class="at">show.legend =</span> <span class="cn">NA</span>,</span>
-<span id="cb19-8"><a href="#cb19-8"></a>                             <span class="at">inherit.aes =</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb19-9"><a href="#cb19-9"></a>  <span class="fu">layer</span>(</span>
-<span id="cb19-10"><a href="#cb19-10"></a>    <span class="at">data =</span> data,</span>
-<span id="cb19-11"><a href="#cb19-11"></a>    <span class="at">mapping =</span> mapping,</span>
-<span id="cb19-12"><a href="#cb19-12"></a>    <span class="at">stat =</span> stat,</span>
-<span id="cb19-13"><a href="#cb19-13"></a>    <span class="at">geom =</span> GeomSalesperson,</span>
-<span id="cb19-14"><a href="#cb19-14"></a>    <span class="at">position =</span> position,</span>
-<span id="cb19-15"><a href="#cb19-15"></a>    <span class="at">show.legend =</span> show.legend,</span>
-<span id="cb19-16"><a href="#cb19-16"></a>    <span class="at">inherit.aes =</span> inherit.aes,</span>
-<span id="cb19-17"><a href="#cb19-17"></a>    <span class="at">params =</span> <span class="fu">list</span>(</span>
-<span id="cb19-18"><a href="#cb19-18"></a>      <span class="at">na.rm =</span> na.rm,</span>
-<span id="cb19-19"><a href="#cb19-19"></a>      ...</span>
-<span id="cb19-20"><a href="#cb19-20"></a>    )</span>
-<span id="cb19-21"><a href="#cb19-21"></a>  )</span>
-<span id="cb19-22"><a href="#cb19-22"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>geom_point_new <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
+<span id="cb17-2"><a href="#cb17-2"></a>                           <span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"identity"</span>, </span>
+<span id="cb17-3"><a href="#cb17-3"></a>                           ...,</span>
+<span id="cb17-4"><a href="#cb17-4"></a>                           <span class="at">na.rm =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb17-5"><a href="#cb17-5"></a>                           <span class="at">show.legend =</span> <span class="cn">NA</span>,</span>
+<span id="cb17-6"><a href="#cb17-6"></a>                           <span class="at">inherit.aes =</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb17-7"><a href="#cb17-7"></a>  <span class="fu">layer</span>(</span>
+<span id="cb17-8"><a href="#cb17-8"></a>    <span class="at">data =</span> data,</span>
+<span id="cb17-9"><a href="#cb17-9"></a>    <span class="at">mapping =</span> mapping,</span>
+<span id="cb17-10"><a href="#cb17-10"></a>    <span class="at">stat =</span> stat,</span>
+<span id="cb17-11"><a href="#cb17-11"></a>    <span class="at">geom =</span> GeomPointNew,</span>
+<span id="cb17-12"><a href="#cb17-12"></a>    <span class="at">position =</span> position,</span>
+<span id="cb17-13"><a href="#cb17-13"></a>    <span class="at">show.legend =</span> show.legend,</span>
+<span id="cb17-14"><a href="#cb17-14"></a>    <span class="at">inherit.aes =</span> inherit.aes,</span>
+<span id="cb17-15"><a href="#cb17-15"></a>    <span class="at">params =</span> <span class="fu">list</span>(</span>
+<span id="cb17-16"><a href="#cb17-16"></a>      <span class="at">na.rm =</span> na.rm,</span>
+<span id="cb17-17"><a href="#cb17-17"></a>      ...</span>
+<span id="cb17-18"><a href="#cb17-18"></a>    )</span>
+<span id="cb17-19"><a href="#cb17-19"></a>  )</span>
+<span id="cb17-20"><a href="#cb17-20"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">geom_salesperson</span>() <span class="sc">+</span></span>
-<span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">geom_point_new</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">geom_point_new</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-38-1.png" width="960" class="r-stretch"></section>
+<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-36-1.png" width="960" class="r-stretch"></section></section>
+<section>
+<section id="extending-stats" class="title-slide slide level1 center">
+<h1>Extending stats</h1>
+
+</section>
 <section class="slide level2">
 
-<p>Note: generally, it’s good to pick defaults that match up with defaults in <strong>ggplot2</strong> functions. I’m specifically choosing alternative values to demonstrate how things can be changed.</p>
-</section></section>
+<p>Introduce travelling salesperson problem with simple graphics</p>
+</section>
+<section id="section-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb19-1" class="hljs-ln-code"><a href="#cb19-1"></a><span class="fu">library</span>(<span class="st">"TSP"</span>)</span>
+<span id="cb19-2" class="hljs-ln-code"><a href="#cb19-2"></a></span>
+<span id="cb19-3" class="hljs-ln-code"><a href="#cb19-3"></a>dist_mat <span class="ot">&lt;-</span> <span class="fu">dist</span>(df, <span class="at">diag =</span> <span class="cn">TRUE</span>, <span class="at">upper =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-4" class="hljs-ln-code"><a href="#cb19-4"></a>atsp <span class="ot">&lt;-</span> <span class="fu">as.ATSP</span>(dist_mat)</span>
+<span id="cb19-5" class="hljs-ln-code"><a href="#cb19-5"></a>tour <span class="ot">&lt;-</span> <span class="fu">solve_TSP</span>(atsp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-3" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb20-1" class="hljs-ln-code"><a href="#cb20-1"></a><span class="fu">library</span>(<span class="st">"TSP"</span>)</span>
+<span id="cb20-2" class="hljs-ln-code"><a href="#cb20-2"></a></span>
+<span id="cb20-3" class="hljs-ln-code"><a href="#cb20-3"></a>dist_mat <span class="ot">&lt;-</span> <span class="fu">dist</span>(df, <span class="at">diag =</span> <span class="cn">TRUE</span>, <span class="at">upper =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-4" class="hljs-ln-code"><a href="#cb20-4"></a>atsp <span class="ot">&lt;-</span> <span class="fu">as.ATSP</span>(dist_mat)</span>
+<span id="cb20-5" class="hljs-ln-code"><a href="#cb20-5"></a>tour <span class="ot">&lt;-</span> <span class="fu">solve_TSP</span>(atsp)</span>
+<span id="cb20-6" class="hljs-ln-code"><a href="#cb20-6"></a></span>
+<span id="cb20-7" class="hljs-ln-code"><a href="#cb20-7"></a>tour</span>
+<span id="cb20-8" class="hljs-ln-code"><a href="#cb20-8"></a><span class="co">#&gt; object of class 'TOUR' </span></span>
+<span id="cb20-9" class="hljs-ln-code"><a href="#cb20-9"></a><span class="co">#&gt; result of method 'arbitrary_insertion+two_opt' for 10 cities</span></span>
+<span id="cb20-10" class="hljs-ln-code"><a href="#cb20-10"></a><span class="co">#&gt; tour length: 10.5101</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-4" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb21-1" class="hljs-ln-code"><a href="#cb21-1"></a><span class="fu">library</span>(<span class="st">"TSP"</span>)</span>
+<span id="cb21-2" class="hljs-ln-code"><a href="#cb21-2"></a></span>
+<span id="cb21-3" class="hljs-ln-code"><a href="#cb21-3"></a>dist_mat <span class="ot">&lt;-</span> <span class="fu">dist</span>(df, <span class="at">diag =</span> <span class="cn">TRUE</span>, <span class="at">upper =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-4" class="hljs-ln-code"><a href="#cb21-4"></a>atsp <span class="ot">&lt;-</span> <span class="fu">as.ATSP</span>(dist_mat)</span>
+<span id="cb21-5" class="hljs-ln-code"><a href="#cb21-5"></a>tour <span class="ot">&lt;-</span> <span class="fu">solve_TSP</span>(atsp)</span>
+<span id="cb21-6" class="hljs-ln-code"><a href="#cb21-6"></a></span>
+<span id="cb21-7" class="hljs-ln-code"><a href="#cb21-7"></a><span class="fu">str</span>(tour)</span>
+<span id="cb21-8" class="hljs-ln-code"><a href="#cb21-8"></a><span class="co">#&gt;  'TOUR' Named int [1:10] 8 5 1 10 6 3 4 7 2 9</span></span>
+<span id="cb21-9" class="hljs-ln-code"><a href="#cb21-9"></a><span class="co">#&gt;  - attr(*, "method")= chr "arbitrary_insertion+two_opt"</span></span>
+<span id="cb21-10" class="hljs-ln-code"><a href="#cb21-10"></a><span class="co">#&gt;  - attr(*, "tour_length")= num 10.5</span></span>
+<span id="cb21-11" class="hljs-ln-code"><a href="#cb21-11"></a><span class="co">#&gt;  - attr(*, "names")= chr [1:10] "8" "5" "1" "10" ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-5" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb22-1" class="hljs-ln-code"><a href="#cb22-1"></a>df_sorted <span class="ot">&lt;-</span> df[tour,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-6" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb23-1" class="hljs-ln-code"><a href="#cb23-1"></a>df_sorted <span class="ot">&lt;-</span> df[tour,]</span>
+<span id="cb23-2" class="hljs-ln-code"><a href="#cb23-2"></a></span>
+<span id="cb23-3" class="hljs-ln-code"><a href="#cb23-3"></a>df_sorted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.7383247","2":"0.94383621","_rn_":"8"},{"1":"0.3295078","2":"1.12493092","_rn_":"5"},{"1":"-0.6264538","2":"1.51178117","_rn_":"1"},{"1":"-0.3053884","2":"0.59390132","_rn_":"10"},{"1":"-0.8204684","2":"-0.04493361","_rn_":"6"},{"1":"-0.8356286","2":"-0.62124058","_rn_":"3"},{"1":"1.5952808","2":"-2.21469989","_rn_":"4"},{"1":"0.4874291","2":"-0.01619026","_rn_":"7"},{"1":"0.1836433","2":"0.38984324","_rn_":"2"},{"1":"0.5757814","2":"0.82122120","_rn_":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">ggplot</span>(df_sorted, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">geom_path</span>() <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">geom_point_new</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-48-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>StatSalesperson <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"StatSalesperson"</span>, Stat,</span>
+<span id="cb25-2"><a href="#cb25-2"></a>                           </span>
+<span id="cb25-3"><a href="#cb25-3"></a>  <span class="at">compute_group =</span> <span class="cf">function</span>(data, scales) {</span>
+<span id="cb25-4"><a href="#cb25-4"></a>    </span>
+<span id="cb25-5"><a href="#cb25-5"></a>    dist_mat <span class="ot">&lt;-</span> <span class="fu">dist</span>(data[,<span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)], <span class="at">diag =</span> <span class="cn">TRUE</span>, <span class="at">upper =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb25-6"><a href="#cb25-6"></a>    atsp <span class="ot">&lt;-</span> <span class="fu">as.ATSP</span>(dist_mat)</span>
+<span id="cb25-7"><a href="#cb25-7"></a>    tour <span class="ot">&lt;-</span> <span class="fu">solve_TSP</span>(atsp)</span>
+<span id="cb25-8"><a href="#cb25-8"></a>    </span>
+<span id="cb25-9"><a href="#cb25-9"></a>    data[tour,]</span>
+<span id="cb25-10"><a href="#cb25-10"></a>    </span>
+<span id="cb25-11"><a href="#cb25-11"></a>  },</span>
+<span id="cb25-12"><a href="#cb25-12"></a>  </span>
+<span id="cb25-13"><a href="#cb25-13"></a>  <span class="at">required_aes =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)                     </span>
+<span id="cb25-14"><a href="#cb25-14"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>stat_salesperson <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
+<span id="cb26-2"><a href="#cb26-2"></a>                       <span class="at">geom =</span> GeomPath, <span class="at">position =</span> <span class="st">"identity"</span>,</span>
+<span id="cb26-3"><a href="#cb26-3"></a>                       ...,</span>
+<span id="cb26-4"><a href="#cb26-4"></a>                       <span class="at">na.rm =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb26-5"><a href="#cb26-5"></a>                       <span class="at">show.legend =</span> <span class="cn">NA</span>, </span>
+<span id="cb26-6"><a href="#cb26-6"></a>                       <span class="at">inherit.aes =</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb26-7"><a href="#cb26-7"></a>  <span class="fu">layer</span>(</span>
+<span id="cb26-8"><a href="#cb26-8"></a>    <span class="at">stat =</span> StatSalesperson, <span class="at">data =</span> data, <span class="at">mapping =</span> mapping, <span class="at">geom =</span> geom, </span>
+<span id="cb26-9"><a href="#cb26-9"></a>    <span class="at">position =</span> position, <span class="at">show.legend =</span> show.legend, <span class="at">inherit.aes =</span> inherit.aes,</span>
+<span id="cb26-10"><a href="#cb26-10"></a>    <span class="at">params =</span> <span class="fu">list</span>(<span class="at">na.rm =</span> na.rm, ...)</span>
+<span id="cb26-11"><a href="#cb26-11"></a>  )</span>
+<span id="cb26-12"><a href="#cb26-12"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">stat_salesperson</span>() <span class="sc">+</span></span>
+<span id="cb27-3"><a href="#cb27-3"></a>  <span class="fu">geom_point_new</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-54-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>StatSalesperson <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"StatSalesperson"</span>,  Stat,</span>
+<span id="cb28-2"><a href="#cb28-2"></a>                           </span>
+<span id="cb28-3"><a href="#cb28-3"></a>  <span class="at">compute_group =</span> <span class="cf">function</span>(data, scales, <span class="at">method =</span> <span class="st">"nearest_insertion"</span>) {</span>
+<span id="cb28-4"><a href="#cb28-4"></a>    </span>
+<span id="cb28-5"><a href="#cb28-5"></a>    dist_mat <span class="ot">&lt;-</span> <span class="fu">dist</span>(data[,<span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)], <span class="at">diag =</span> <span class="cn">TRUE</span>, <span class="at">upper =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb28-6"><a href="#cb28-6"></a>    atsp <span class="ot">&lt;-</span> <span class="fu">as.ATSP</span>(dist_mat)</span>
+<span id="cb28-7"><a href="#cb28-7"></a>    tour <span class="ot">&lt;-</span> <span class="fu">solve_TSP</span>(atsp, method)</span>
+<span id="cb28-8"><a href="#cb28-8"></a>    </span>
+<span id="cb28-9"><a href="#cb28-9"></a>    data[tour,]</span>
+<span id="cb28-10"><a href="#cb28-10"></a>    </span>
+<span id="cb28-11"><a href="#cb28-11"></a>  },</span>
+<span id="cb28-12"><a href="#cb28-12"></a>  </span>
+<span id="cb28-13"><a href="#cb28-13"></a>  <span class="at">required_aes =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)                     </span>
+<span id="cb28-14"><a href="#cb28-14"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>stat_salesperson <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
+<span id="cb29-2"><a href="#cb29-2"></a>                       <span class="at">geom =</span> GeomPath, <span class="at">position =</span> <span class="st">"identity"</span>,</span>
+<span id="cb29-3"><a href="#cb29-3"></a>                       ...,</span>
+<span id="cb29-4"><a href="#cb29-4"></a>                       <span class="at">method =</span> <span class="st">"nearest_insertion"</span>,</span>
+<span id="cb29-5"><a href="#cb29-5"></a>                       <span class="at">na.rm =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb29-6"><a href="#cb29-6"></a>                       <span class="at">show.legend =</span> <span class="cn">NA</span>, </span>
+<span id="cb29-7"><a href="#cb29-7"></a>                       <span class="at">inherit.aes =</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb29-8"><a href="#cb29-8"></a>  <span class="fu">layer</span>(</span>
+<span id="cb29-9"><a href="#cb29-9"></a>    <span class="at">stat =</span> StatSalesperson, </span>
+<span id="cb29-10"><a href="#cb29-10"></a>    <span class="at">data =</span> data,</span>
+<span id="cb29-11"><a href="#cb29-11"></a>    <span class="at">mapping =</span> mapping,</span>
+<span id="cb29-12"><a href="#cb29-12"></a>    <span class="at">geom =</span> geom,</span>
+<span id="cb29-13"><a href="#cb29-13"></a>    <span class="at">position =</span> position,</span>
+<span id="cb29-14"><a href="#cb29-14"></a>    <span class="at">show.legend =</span> show.legend,</span>
+<span id="cb29-15"><a href="#cb29-15"></a>    <span class="at">inherit.aes =</span> inherit.aes,</span>
+<span id="cb29-16"><a href="#cb29-16"></a>    <span class="at">params =</span> <span class="fu">list</span>(</span>
+<span id="cb29-17"><a href="#cb29-17"></a>      <span class="at">method =</span> method,</span>
+<span id="cb29-18"><a href="#cb29-18"></a>      <span class="at">na.rm =</span> na.rm,</span>
+<span id="cb29-19"><a href="#cb29-19"></a>      ...</span>
+<span id="cb29-20"><a href="#cb29-20"></a>    )</span>
+<span id="cb29-21"><a href="#cb29-21"></a>  )</span>
+<span id="cb29-22"><a href="#cb29-22"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2"></a>  <span class="fu">stat_salesperson</span>(<span class="at">method =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3"></a>  <span class="fu">geom_point_new</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-60-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">stat_salesperson</span>(<span class="at">method =</span> <span class="st">"random"</span>) <span class="sc">+</span></span>
+<span id="cb31-3"><a href="#cb31-3"></a>  <span class="fu">geom_point_new</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-62-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a>  <span class="fu">stat_salesperson</span>() <span class="sc">+</span></span>
+<span id="cb32-3"><a href="#cb32-3"></a>  <span class="fu">geom_point_new</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-64-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>GeomSalesperson <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"GeomSalesperson"</span>, GeomPath)</span>
+<span id="cb33-2"><a href="#cb33-2"></a></span>
+<span id="cb33-3"><a href="#cb33-3"></a>geom_salesperson <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
+<span id="cb33-4"><a href="#cb33-4"></a>                             <span class="at">stat =</span> StatSalesperson, <span class="at">position =</span> <span class="st">"identity"</span>, </span>
+<span id="cb33-5"><a href="#cb33-5"></a>                             ...,</span>
+<span id="cb33-6"><a href="#cb33-6"></a>                             <span class="at">na.rm =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb33-7"><a href="#cb33-7"></a>                             <span class="at">show.legend =</span> <span class="cn">NA</span>,</span>
+<span id="cb33-8"><a href="#cb33-8"></a>                             <span class="at">inherit.aes =</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb33-9"><a href="#cb33-9"></a>  <span class="fu">layer</span>(</span>
+<span id="cb33-10"><a href="#cb33-10"></a>    <span class="at">data =</span> data,</span>
+<span id="cb33-11"><a href="#cb33-11"></a>    <span class="at">mapping =</span> mapping,</span>
+<span id="cb33-12"><a href="#cb33-12"></a>    <span class="at">stat =</span> stat,</span>
+<span id="cb33-13"><a href="#cb33-13"></a>    <span class="at">geom =</span> GeomSalesperson,</span>
+<span id="cb33-14"><a href="#cb33-14"></a>    <span class="at">position =</span> position,</span>
+<span id="cb33-15"><a href="#cb33-15"></a>    <span class="at">show.legend =</span> show.legend,</span>
+<span id="cb33-16"><a href="#cb33-16"></a>    <span class="at">inherit.aes =</span> inherit.aes,</span>
+<span id="cb33-17"><a href="#cb33-17"></a>    <span class="at">params =</span> <span class="fu">list</span>(</span>
+<span id="cb33-18"><a href="#cb33-18"></a>      <span class="at">na.rm =</span> na.rm,</span>
+<span id="cb33-19"><a href="#cb33-19"></a>      ...</span>
+<span id="cb33-20"><a href="#cb33-20"></a>    )</span>
+<span id="cb33-21"><a href="#cb33-21"></a>  )</span>
+<span id="cb33-22"><a href="#cb33-22"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb34-2"><a href="#cb34-2"></a>  <span class="fu">geom_salesperson</span>() <span class="sc">+</span></span>
+<span id="cb34-3"><a href="#cb34-3"></a>  <span class="fu">geom_point_new</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<!-- --- -->
+<!-- Note: generally, it's good to pick defaults that match up with defaults in **ggplot2** functions.  -->
+<!-- I'm specifically choosing alternative values to demonstrate how things can be changed. -->
+<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-68-1.png" width="960" class="r-stretch"></section></section>
 <section>
 <section id="extending-geoms-complete-graphs" class="title-slide slide level1 center">
 <h1>Extending geoms (complete graphs)</h1>
@@ -688,76 +941,156 @@
 <section class="slide level2">
 
 <p>Minor Introduction to grobs, reference book on grid graphics</p>
+<p>Use <code>segmentsGrob()</code> as an example!</p>
+</section>
+<section class="slide level2">
+
+<p>Introduction to complete graphs</p>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>GeomComplete <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"GeomComplete"</span>, Geom,</span>
-<span id="cb21-2"><a href="#cb21-2"></a>                        </span>
-<span id="cb21-3"><a href="#cb21-3"></a>  <span class="at">draw_panel =</span> <span class="cf">function</span>(data, panel_params, coord) {</span>
-<span id="cb21-4"><a href="#cb21-4"></a>    </span>
-<span id="cb21-5"><a href="#cb21-5"></a>    data_expanded <span class="ot">&lt;-</span> data[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data), <span class="at">each =</span> <span class="fu">nrow</span>(data)), ]</span>
-<span id="cb21-6"><a href="#cb21-6"></a>    data_expanded<span class="sc">$</span>xend <span class="ot">&lt;-</span> <span class="fu">rep</span>(data<span class="sc">$</span>x, <span class="at">times =</span> <span class="fu">nrow</span>(data))</span>
-<span id="cb21-7"><a href="#cb21-7"></a>    data_expanded<span class="sc">$</span>yend <span class="ot">&lt;-</span> <span class="fu">rep</span>(data<span class="sc">$</span>y, <span class="at">times =</span> <span class="fu">nrow</span>(data))</span>
-<span id="cb21-8"><a href="#cb21-8"></a>    </span>
-<span id="cb21-9"><a href="#cb21-9"></a>    coord <span class="ot">&lt;-</span> coord<span class="sc">$</span><span class="fu">transform</span>(data_expanded, panel_params)</span>
-<span id="cb21-10"><a href="#cb21-10"></a>    </span>
-<span id="cb21-11"><a href="#cb21-11"></a>    grid<span class="sc">::</span><span class="fu">segmentsGrob</span>(coord<span class="sc">$</span>x, coord<span class="sc">$</span>y, coord<span class="sc">$</span>xend, coord<span class="sc">$</span>yend,</span>
-<span id="cb21-12"><a href="#cb21-12"></a>      <span class="at">default.units =</span> <span class="st">"native"</span>,</span>
-<span id="cb21-13"><a href="#cb21-13"></a>      <span class="at">gp =</span> grid<span class="sc">::</span><span class="fu">gpar</span>(</span>
-<span id="cb21-14"><a href="#cb21-14"></a>        <span class="at">col =</span> <span class="fu">alpha</span>(coord<span class="sc">$</span>colour, coord<span class="sc">$</span>alpha),</span>
-<span id="cb21-15"><a href="#cb21-15"></a>        <span class="at">fill =</span> <span class="fu">alpha</span>(coord<span class="sc">$</span>colour, coord<span class="sc">$</span>alpha),</span>
-<span id="cb21-16"><a href="#cb21-16"></a>        <span class="at">lwd =</span> coord<span class="sc">$</span>linewidth <span class="sc">*</span> .pt,</span>
-<span id="cb21-17"><a href="#cb21-17"></a>        <span class="at">lty =</span> coord<span class="sc">$</span>linetype</span>
-<span id="cb21-18"><a href="#cb21-18"></a>      )</span>
-<span id="cb21-19"><a href="#cb21-19"></a>    )</span>
-<span id="cb21-20"><a href="#cb21-20"></a>    </span>
-<span id="cb21-21"><a href="#cb21-21"></a>  },</span>
-<span id="cb21-22"><a href="#cb21-22"></a>  </span>
-<span id="cb21-23"><a href="#cb21-23"></a>  <span class="at">required_aes =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
-<span id="cb21-24"><a href="#cb21-24"></a>  </span>
-<span id="cb21-25"><a href="#cb21-25"></a>  <span class="at">non_missing_aes =</span> <span class="fu">c</span>(<span class="st">"linetype"</span>, <span class="st">"linewidth"</span>, <span class="st">"shape"</span>),</span>
-<span id="cb21-26"><a href="#cb21-26"></a>  </span>
-<span id="cb21-27"><a href="#cb21-27"></a>  <span class="at">default_aes =</span> <span class="fu">aes</span>(<span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">linewidth =</span> <span class="fl">0.5</span>, <span class="at">linetype =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="cn">NA</span>),</span>
-<span id="cb21-28"><a href="#cb21-28"></a> </span>
-<span id="cb21-29"><a href="#cb21-29"></a>  <span class="at">draw_key =</span> draw_key_path</span>
-<span id="cb21-30"><a href="#cb21-30"></a>  </span>
-<span id="cb21-31"><a href="#cb21-31"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>df_expanded <span class="ot">&lt;-</span> df[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df), <span class="at">each =</span> <span class="fu">nrow</span>(df)), ]</span>
+<span id="cb35-2"><a href="#cb35-2"></a></span>
+<span id="cb35-3"><a href="#cb35-3"></a>df_expanded</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"-0.6264538","2":"1.51178117","_rn_":"1"},{"1":"-0.6264538","2":"1.51178117","_rn_":"1.1"},{"1":"-0.6264538","2":"1.51178117","_rn_":"1.2"},{"1":"-0.6264538","2":"1.51178117","_rn_":"1.3"},{"1":"-0.6264538","2":"1.51178117","_rn_":"1.4"},{"1":"-0.6264538","2":"1.51178117","_rn_":"1.5"},{"1":"-0.6264538","2":"1.51178117","_rn_":"1.6"},{"1":"-0.6264538","2":"1.51178117","_rn_":"1.7"},{"1":"-0.6264538","2":"1.51178117","_rn_":"1.8"},{"1":"-0.6264538","2":"1.51178117","_rn_":"1.9"},{"1":"0.1836433","2":"0.38984324","_rn_":"2"},{"1":"0.1836433","2":"0.38984324","_rn_":"2.1"},{"1":"0.1836433","2":"0.38984324","_rn_":"2.2"},{"1":"0.1836433","2":"0.38984324","_rn_":"2.3"},{"1":"0.1836433","2":"0.38984324","_rn_":"2.4"},{"1":"0.1836433","2":"0.38984324","_rn_":"2.5"},{"1":"0.1836433","2":"0.38984324","_rn_":"2.6"},{"1":"0.1836433","2":"0.38984324","_rn_":"2.7"},{"1":"0.1836433","2":"0.38984324","_rn_":"2.8"},{"1":"0.1836433","2":"0.38984324","_rn_":"2.9"},{"1":"-0.8356286","2":"-0.62124058","_rn_":"3"},{"1":"-0.8356286","2":"-0.62124058","_rn_":"3.1"},{"1":"-0.8356286","2":"-0.62124058","_rn_":"3.2"},{"1":"-0.8356286","2":"-0.62124058","_rn_":"3.3"},{"1":"-0.8356286","2":"-0.62124058","_rn_":"3.4"},{"1":"-0.8356286","2":"-0.62124058","_rn_":"3.5"},{"1":"-0.8356286","2":"-0.62124058","_rn_":"3.6"},{"1":"-0.8356286","2":"-0.62124058","_rn_":"3.7"},{"1":"-0.8356286","2":"-0.62124058","_rn_":"3.8"},{"1":"-0.8356286","2":"-0.62124058","_rn_":"3.9"},{"1":"1.5952808","2":"-2.21469989","_rn_":"4"},{"1":"1.5952808","2":"-2.21469989","_rn_":"4.1"},{"1":"1.5952808","2":"-2.21469989","_rn_":"4.2"},{"1":"1.5952808","2":"-2.21469989","_rn_":"4.3"},{"1":"1.5952808","2":"-2.21469989","_rn_":"4.4"},{"1":"1.5952808","2":"-2.21469989","_rn_":"4.5"},{"1":"1.5952808","2":"-2.21469989","_rn_":"4.6"},{"1":"1.5952808","2":"-2.21469989","_rn_":"4.7"},{"1":"1.5952808","2":"-2.21469989","_rn_":"4.8"},{"1":"1.5952808","2":"-2.21469989","_rn_":"4.9"},{"1":"0.3295078","2":"1.12493092","_rn_":"5"},{"1":"0.3295078","2":"1.12493092","_rn_":"5.1"},{"1":"0.3295078","2":"1.12493092","_rn_":"5.2"},{"1":"0.3295078","2":"1.12493092","_rn_":"5.3"},{"1":"0.3295078","2":"1.12493092","_rn_":"5.4"},{"1":"0.3295078","2":"1.12493092","_rn_":"5.5"},{"1":"0.3295078","2":"1.12493092","_rn_":"5.6"},{"1":"0.3295078","2":"1.12493092","_rn_":"5.7"},{"1":"0.3295078","2":"1.12493092","_rn_":"5.8"},{"1":"0.3295078","2":"1.12493092","_rn_":"5.9"},{"1":"-0.8204684","2":"-0.04493361","_rn_":"6"},{"1":"-0.8204684","2":"-0.04493361","_rn_":"6.1"},{"1":"-0.8204684","2":"-0.04493361","_rn_":"6.2"},{"1":"-0.8204684","2":"-0.04493361","_rn_":"6.3"},{"1":"-0.8204684","2":"-0.04493361","_rn_":"6.4"},{"1":"-0.8204684","2":"-0.04493361","_rn_":"6.5"},{"1":"-0.8204684","2":"-0.04493361","_rn_":"6.6"},{"1":"-0.8204684","2":"-0.04493361","_rn_":"6.7"},{"1":"-0.8204684","2":"-0.04493361","_rn_":"6.8"},{"1":"-0.8204684","2":"-0.04493361","_rn_":"6.9"},{"1":"0.4874291","2":"-0.01619026","_rn_":"7"},{"1":"0.4874291","2":"-0.01619026","_rn_":"7.1"},{"1":"0.4874291","2":"-0.01619026","_rn_":"7.2"},{"1":"0.4874291","2":"-0.01619026","_rn_":"7.3"},{"1":"0.4874291","2":"-0.01619026","_rn_":"7.4"},{"1":"0.4874291","2":"-0.01619026","_rn_":"7.5"},{"1":"0.4874291","2":"-0.01619026","_rn_":"7.6"},{"1":"0.4874291","2":"-0.01619026","_rn_":"7.7"},{"1":"0.4874291","2":"-0.01619026","_rn_":"7.8"},{"1":"0.4874291","2":"-0.01619026","_rn_":"7.9"},{"1":"0.7383247","2":"0.94383621","_rn_":"8"},{"1":"0.7383247","2":"0.94383621","_rn_":"8.1"},{"1":"0.7383247","2":"0.94383621","_rn_":"8.2"},{"1":"0.7383247","2":"0.94383621","_rn_":"8.3"},{"1":"0.7383247","2":"0.94383621","_rn_":"8.4"},{"1":"0.7383247","2":"0.94383621","_rn_":"8.5"},{"1":"0.7383247","2":"0.94383621","_rn_":"8.6"},{"1":"0.7383247","2":"0.94383621","_rn_":"8.7"},{"1":"0.7383247","2":"0.94383621","_rn_":"8.8"},{"1":"0.7383247","2":"0.94383621","_rn_":"8.9"},{"1":"0.5757814","2":"0.82122120","_rn_":"9"},{"1":"0.5757814","2":"0.82122120","_rn_":"9.1"},{"1":"0.5757814","2":"0.82122120","_rn_":"9.2"},{"1":"0.5757814","2":"0.82122120","_rn_":"9.3"},{"1":"0.5757814","2":"0.82122120","_rn_":"9.4"},{"1":"0.5757814","2":"0.82122120","_rn_":"9.5"},{"1":"0.5757814","2":"0.82122120","_rn_":"9.6"},{"1":"0.5757814","2":"0.82122120","_rn_":"9.7"},{"1":"0.5757814","2":"0.82122120","_rn_":"9.8"},{"1":"0.5757814","2":"0.82122120","_rn_":"9.9"},{"1":"-0.3053884","2":"0.59390132","_rn_":"10"},{"1":"-0.3053884","2":"0.59390132","_rn_":"10.1"},{"1":"-0.3053884","2":"0.59390132","_rn_":"10.2"},{"1":"-0.3053884","2":"0.59390132","_rn_":"10.3"},{"1":"-0.3053884","2":"0.59390132","_rn_":"10.4"},{"1":"-0.3053884","2":"0.59390132","_rn_":"10.5"},{"1":"-0.3053884","2":"0.59390132","_rn_":"10.6"},{"1":"-0.3053884","2":"0.59390132","_rn_":"10.7"},{"1":"-0.3053884","2":"0.59390132","_rn_":"10.8"},{"1":"-0.3053884","2":"0.59390132","_rn_":"10.9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
 </div>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>geom_complete <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
-<span id="cb22-2"><a href="#cb22-2"></a>                             <span class="at">stat =</span> StatIdentity, <span class="at">position =</span> <span class="st">"identity"</span>, </span>
-<span id="cb22-3"><a href="#cb22-3"></a>                             ...,</span>
-<span id="cb22-4"><a href="#cb22-4"></a>                             <span class="at">na.rm =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb22-5"><a href="#cb22-5"></a>                             <span class="at">show.legend =</span> <span class="cn">NA</span>,</span>
-<span id="cb22-6"><a href="#cb22-6"></a>                             <span class="at">inherit.aes =</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb22-7"><a href="#cb22-7"></a>  <span class="fu">layer</span>(</span>
-<span id="cb22-8"><a href="#cb22-8"></a>    <span class="at">data =</span> data,</span>
-<span id="cb22-9"><a href="#cb22-9"></a>    <span class="at">mapping =</span> mapping,</span>
-<span id="cb22-10"><a href="#cb22-10"></a>    <span class="at">stat =</span> stat,</span>
-<span id="cb22-11"><a href="#cb22-11"></a>    <span class="at">geom =</span> GeomComplete,</span>
-<span id="cb22-12"><a href="#cb22-12"></a>    <span class="at">position =</span> position,</span>
-<span id="cb22-13"><a href="#cb22-13"></a>    <span class="at">show.legend =</span> show.legend,</span>
-<span id="cb22-14"><a href="#cb22-14"></a>    <span class="at">inherit.aes =</span> inherit.aes,</span>
-<span id="cb22-15"><a href="#cb22-15"></a>    <span class="at">params =</span> <span class="fu">list</span>(</span>
-<span id="cb22-16"><a href="#cb22-16"></a>      <span class="at">na.rm =</span> na.rm,</span>
-<span id="cb22-17"><a href="#cb22-17"></a>      ...</span>
-<span id="cb22-18"><a href="#cb22-18"></a>    )</span>
-<span id="cb22-19"><a href="#cb22-19"></a>  )</span>
-<span id="cb22-20"><a href="#cb22-20"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>df_expanded<span class="sc">$</span>xend <span class="ot">&lt;-</span> <span class="fu">rep</span>(df<span class="sc">$</span>x, <span class="at">times =</span> <span class="fu">nrow</span>(df))</span>
+<span id="cb36-2"><a href="#cb36-2"></a>df_expanded<span class="sc">$</span>yend <span class="ot">&lt;-</span> <span class="fu">rep</span>(df<span class="sc">$</span>y, <span class="at">times =</span> <span class="fu">nrow</span>(df))</span>
+<span id="cb36-3"><a href="#cb36-3"></a></span>
+<span id="cb36-4"><a href="#cb36-4"></a>df_expanded</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["xend"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["yend"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"-0.6264538","2":"1.51178117","3":"-0.6264538","4":"1.51178117","_rn_":"1"},{"1":"-0.6264538","2":"1.51178117","3":"0.1836433","4":"0.38984324","_rn_":"1.1"},{"1":"-0.6264538","2":"1.51178117","3":"-0.8356286","4":"-0.62124058","_rn_":"1.2"},{"1":"-0.6264538","2":"1.51178117","3":"1.5952808","4":"-2.21469989","_rn_":"1.3"},{"1":"-0.6264538","2":"1.51178117","3":"0.3295078","4":"1.12493092","_rn_":"1.4"},{"1":"-0.6264538","2":"1.51178117","3":"-0.8204684","4":"-0.04493361","_rn_":"1.5"},{"1":"-0.6264538","2":"1.51178117","3":"0.4874291","4":"-0.01619026","_rn_":"1.6"},{"1":"-0.6264538","2":"1.51178117","3":"0.7383247","4":"0.94383621","_rn_":"1.7"},{"1":"-0.6264538","2":"1.51178117","3":"0.5757814","4":"0.82122120","_rn_":"1.8"},{"1":"-0.6264538","2":"1.51178117","3":"-0.3053884","4":"0.59390132","_rn_":"1.9"},{"1":"0.1836433","2":"0.38984324","3":"-0.6264538","4":"1.51178117","_rn_":"2"},{"1":"0.1836433","2":"0.38984324","3":"0.1836433","4":"0.38984324","_rn_":"2.1"},{"1":"0.1836433","2":"0.38984324","3":"-0.8356286","4":"-0.62124058","_rn_":"2.2"},{"1":"0.1836433","2":"0.38984324","3":"1.5952808","4":"-2.21469989","_rn_":"2.3"},{"1":"0.1836433","2":"0.38984324","3":"0.3295078","4":"1.12493092","_rn_":"2.4"},{"1":"0.1836433","2":"0.38984324","3":"-0.8204684","4":"-0.04493361","_rn_":"2.5"},{"1":"0.1836433","2":"0.38984324","3":"0.4874291","4":"-0.01619026","_rn_":"2.6"},{"1":"0.1836433","2":"0.38984324","3":"0.7383247","4":"0.94383621","_rn_":"2.7"},{"1":"0.1836433","2":"0.38984324","3":"0.5757814","4":"0.82122120","_rn_":"2.8"},{"1":"0.1836433","2":"0.38984324","3":"-0.3053884","4":"0.59390132","_rn_":"2.9"},{"1":"-0.8356286","2":"-0.62124058","3":"-0.6264538","4":"1.51178117","_rn_":"3"},{"1":"-0.8356286","2":"-0.62124058","3":"0.1836433","4":"0.38984324","_rn_":"3.1"},{"1":"-0.8356286","2":"-0.62124058","3":"-0.8356286","4":"-0.62124058","_rn_":"3.2"},{"1":"-0.8356286","2":"-0.62124058","3":"1.5952808","4":"-2.21469989","_rn_":"3.3"},{"1":"-0.8356286","2":"-0.62124058","3":"0.3295078","4":"1.12493092","_rn_":"3.4"},{"1":"-0.8356286","2":"-0.62124058","3":"-0.8204684","4":"-0.04493361","_rn_":"3.5"},{"1":"-0.8356286","2":"-0.62124058","3":"0.4874291","4":"-0.01619026","_rn_":"3.6"},{"1":"-0.8356286","2":"-0.62124058","3":"0.7383247","4":"0.94383621","_rn_":"3.7"},{"1":"-0.8356286","2":"-0.62124058","3":"0.5757814","4":"0.82122120","_rn_":"3.8"},{"1":"-0.8356286","2":"-0.62124058","3":"-0.3053884","4":"0.59390132","_rn_":"3.9"},{"1":"1.5952808","2":"-2.21469989","3":"-0.6264538","4":"1.51178117","_rn_":"4"},{"1":"1.5952808","2":"-2.21469989","3":"0.1836433","4":"0.38984324","_rn_":"4.1"},{"1":"1.5952808","2":"-2.21469989","3":"-0.8356286","4":"-0.62124058","_rn_":"4.2"},{"1":"1.5952808","2":"-2.21469989","3":"1.5952808","4":"-2.21469989","_rn_":"4.3"},{"1":"1.5952808","2":"-2.21469989","3":"0.3295078","4":"1.12493092","_rn_":"4.4"},{"1":"1.5952808","2":"-2.21469989","3":"-0.8204684","4":"-0.04493361","_rn_":"4.5"},{"1":"1.5952808","2":"-2.21469989","3":"0.4874291","4":"-0.01619026","_rn_":"4.6"},{"1":"1.5952808","2":"-2.21469989","3":"0.7383247","4":"0.94383621","_rn_":"4.7"},{"1":"1.5952808","2":"-2.21469989","3":"0.5757814","4":"0.82122120","_rn_":"4.8"},{"1":"1.5952808","2":"-2.21469989","3":"-0.3053884","4":"0.59390132","_rn_":"4.9"},{"1":"0.3295078","2":"1.12493092","3":"-0.6264538","4":"1.51178117","_rn_":"5"},{"1":"0.3295078","2":"1.12493092","3":"0.1836433","4":"0.38984324","_rn_":"5.1"},{"1":"0.3295078","2":"1.12493092","3":"-0.8356286","4":"-0.62124058","_rn_":"5.2"},{"1":"0.3295078","2":"1.12493092","3":"1.5952808","4":"-2.21469989","_rn_":"5.3"},{"1":"0.3295078","2":"1.12493092","3":"0.3295078","4":"1.12493092","_rn_":"5.4"},{"1":"0.3295078","2":"1.12493092","3":"-0.8204684","4":"-0.04493361","_rn_":"5.5"},{"1":"0.3295078","2":"1.12493092","3":"0.4874291","4":"-0.01619026","_rn_":"5.6"},{"1":"0.3295078","2":"1.12493092","3":"0.7383247","4":"0.94383621","_rn_":"5.7"},{"1":"0.3295078","2":"1.12493092","3":"0.5757814","4":"0.82122120","_rn_":"5.8"},{"1":"0.3295078","2":"1.12493092","3":"-0.3053884","4":"0.59390132","_rn_":"5.9"},{"1":"-0.8204684","2":"-0.04493361","3":"-0.6264538","4":"1.51178117","_rn_":"6"},{"1":"-0.8204684","2":"-0.04493361","3":"0.1836433","4":"0.38984324","_rn_":"6.1"},{"1":"-0.8204684","2":"-0.04493361","3":"-0.8356286","4":"-0.62124058","_rn_":"6.2"},{"1":"-0.8204684","2":"-0.04493361","3":"1.5952808","4":"-2.21469989","_rn_":"6.3"},{"1":"-0.8204684","2":"-0.04493361","3":"0.3295078","4":"1.12493092","_rn_":"6.4"},{"1":"-0.8204684","2":"-0.04493361","3":"-0.8204684","4":"-0.04493361","_rn_":"6.5"},{"1":"-0.8204684","2":"-0.04493361","3":"0.4874291","4":"-0.01619026","_rn_":"6.6"},{"1":"-0.8204684","2":"-0.04493361","3":"0.7383247","4":"0.94383621","_rn_":"6.7"},{"1":"-0.8204684","2":"-0.04493361","3":"0.5757814","4":"0.82122120","_rn_":"6.8"},{"1":"-0.8204684","2":"-0.04493361","3":"-0.3053884","4":"0.59390132","_rn_":"6.9"},{"1":"0.4874291","2":"-0.01619026","3":"-0.6264538","4":"1.51178117","_rn_":"7"},{"1":"0.4874291","2":"-0.01619026","3":"0.1836433","4":"0.38984324","_rn_":"7.1"},{"1":"0.4874291","2":"-0.01619026","3":"-0.8356286","4":"-0.62124058","_rn_":"7.2"},{"1":"0.4874291","2":"-0.01619026","3":"1.5952808","4":"-2.21469989","_rn_":"7.3"},{"1":"0.4874291","2":"-0.01619026","3":"0.3295078","4":"1.12493092","_rn_":"7.4"},{"1":"0.4874291","2":"-0.01619026","3":"-0.8204684","4":"-0.04493361","_rn_":"7.5"},{"1":"0.4874291","2":"-0.01619026","3":"0.4874291","4":"-0.01619026","_rn_":"7.6"},{"1":"0.4874291","2":"-0.01619026","3":"0.7383247","4":"0.94383621","_rn_":"7.7"},{"1":"0.4874291","2":"-0.01619026","3":"0.5757814","4":"0.82122120","_rn_":"7.8"},{"1":"0.4874291","2":"-0.01619026","3":"-0.3053884","4":"0.59390132","_rn_":"7.9"},{"1":"0.7383247","2":"0.94383621","3":"-0.6264538","4":"1.51178117","_rn_":"8"},{"1":"0.7383247","2":"0.94383621","3":"0.1836433","4":"0.38984324","_rn_":"8.1"},{"1":"0.7383247","2":"0.94383621","3":"-0.8356286","4":"-0.62124058","_rn_":"8.2"},{"1":"0.7383247","2":"0.94383621","3":"1.5952808","4":"-2.21469989","_rn_":"8.3"},{"1":"0.7383247","2":"0.94383621","3":"0.3295078","4":"1.12493092","_rn_":"8.4"},{"1":"0.7383247","2":"0.94383621","3":"-0.8204684","4":"-0.04493361","_rn_":"8.5"},{"1":"0.7383247","2":"0.94383621","3":"0.4874291","4":"-0.01619026","_rn_":"8.6"},{"1":"0.7383247","2":"0.94383621","3":"0.7383247","4":"0.94383621","_rn_":"8.7"},{"1":"0.7383247","2":"0.94383621","3":"0.5757814","4":"0.82122120","_rn_":"8.8"},{"1":"0.7383247","2":"0.94383621","3":"-0.3053884","4":"0.59390132","_rn_":"8.9"},{"1":"0.5757814","2":"0.82122120","3":"-0.6264538","4":"1.51178117","_rn_":"9"},{"1":"0.5757814","2":"0.82122120","3":"0.1836433","4":"0.38984324","_rn_":"9.1"},{"1":"0.5757814","2":"0.82122120","3":"-0.8356286","4":"-0.62124058","_rn_":"9.2"},{"1":"0.5757814","2":"0.82122120","3":"1.5952808","4":"-2.21469989","_rn_":"9.3"},{"1":"0.5757814","2":"0.82122120","3":"0.3295078","4":"1.12493092","_rn_":"9.4"},{"1":"0.5757814","2":"0.82122120","3":"-0.8204684","4":"-0.04493361","_rn_":"9.5"},{"1":"0.5757814","2":"0.82122120","3":"0.4874291","4":"-0.01619026","_rn_":"9.6"},{"1":"0.5757814","2":"0.82122120","3":"0.7383247","4":"0.94383621","_rn_":"9.7"},{"1":"0.5757814","2":"0.82122120","3":"0.5757814","4":"0.82122120","_rn_":"9.8"},{"1":"0.5757814","2":"0.82122120","3":"-0.3053884","4":"0.59390132","_rn_":"9.9"},{"1":"-0.3053884","2":"0.59390132","3":"-0.6264538","4":"1.51178117","_rn_":"10"},{"1":"-0.3053884","2":"0.59390132","3":"0.1836433","4":"0.38984324","_rn_":"10.1"},{"1":"-0.3053884","2":"0.59390132","3":"-0.8356286","4":"-0.62124058","_rn_":"10.2"},{"1":"-0.3053884","2":"0.59390132","3":"1.5952808","4":"-2.21469989","_rn_":"10.3"},{"1":"-0.3053884","2":"0.59390132","3":"0.3295078","4":"1.12493092","_rn_":"10.4"},{"1":"-0.3053884","2":"0.59390132","3":"-0.8204684","4":"-0.04493361","_rn_":"10.5"},{"1":"-0.3053884","2":"0.59390132","3":"0.4874291","4":"-0.01619026","_rn_":"10.6"},{"1":"-0.3053884","2":"0.59390132","3":"0.7383247","4":"0.94383621","_rn_":"10.7"},{"1":"-0.3053884","2":"0.59390132","3":"0.5757814","4":"0.82122120","_rn_":"10.8"},{"1":"-0.3053884","2":"0.59390132","3":"-0.3053884","4":"0.59390132","_rn_":"10.9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="r-stack">
+<div class="fragment semi-fade-out" data-fragment-index="1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">ggplot</span>(df_expanded, <span class="fu">aes</span>(x, y, <span class="at">xend =</span> xend, <span class="at">yend =</span> yend)) <span class="sc">+</span></span>
+<span id="cb37-2"><a href="#cb37-2"></a>  <span class="fu">geom_segment</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-74-1.png" width="960"></p>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="1">
+<div class="callout callout-note callout-captioned callout-style-simple">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>A classic question</strong></p>
+</div>
+<div class="callout-content">
+<p>Is this a statistical transformation or a graphical operation?</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<p>A slide discussing the differences between <code>Stat</code> and <code>Geom</code> objects</p>
+<ul>
+<li><code>Stats</code> are used for ____</li>
+<li><code>Geoms</code> are used for ____</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38" data-code-line-numbers="|3-21|23|25|27-32|34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>GeomComplete <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"GeomComplete"</span>, Geom,</span>
+<span id="cb38-2"><a href="#cb38-2"></a>                        </span>
+<span id="cb38-3"><a href="#cb38-3"></a>  <span class="at">draw_panel =</span> <span class="cf">function</span>(data, panel_params, coord) {</span>
+<span id="cb38-4"><a href="#cb38-4"></a>    </span>
+<span id="cb38-5"><a href="#cb38-5"></a>    data_expanded <span class="ot">&lt;-</span> data[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data), <span class="at">each =</span> <span class="fu">nrow</span>(data)), ]</span>
+<span id="cb38-6"><a href="#cb38-6"></a>    data_expanded<span class="sc">$</span>xend <span class="ot">&lt;-</span> <span class="fu">rep</span>(data<span class="sc">$</span>x, <span class="at">times =</span> <span class="fu">nrow</span>(data))</span>
+<span id="cb38-7"><a href="#cb38-7"></a>    data_expanded<span class="sc">$</span>yend <span class="ot">&lt;-</span> <span class="fu">rep</span>(data<span class="sc">$</span>y, <span class="at">times =</span> <span class="fu">nrow</span>(data))</span>
+<span id="cb38-8"><a href="#cb38-8"></a>    </span>
+<span id="cb38-9"><a href="#cb38-9"></a>    coord <span class="ot">&lt;-</span> coord<span class="sc">$</span><span class="fu">transform</span>(data_expanded, panel_params)</span>
+<span id="cb38-10"><a href="#cb38-10"></a>    </span>
+<span id="cb38-11"><a href="#cb38-11"></a>    grid<span class="sc">::</span><span class="fu">segmentsGrob</span>(coord<span class="sc">$</span>x, coord<span class="sc">$</span>y, coord<span class="sc">$</span>xend, coord<span class="sc">$</span>yend,</span>
+<span id="cb38-12"><a href="#cb38-12"></a>      <span class="at">default.units =</span> <span class="st">"native"</span>,</span>
+<span id="cb38-13"><a href="#cb38-13"></a>      <span class="at">gp =</span> grid<span class="sc">::</span><span class="fu">gpar</span>(</span>
+<span id="cb38-14"><a href="#cb38-14"></a>        <span class="at">col =</span> <span class="fu">alpha</span>(coord<span class="sc">$</span>colour, coord<span class="sc">$</span>alpha),</span>
+<span id="cb38-15"><a href="#cb38-15"></a>        <span class="at">fill =</span> <span class="fu">alpha</span>(coord<span class="sc">$</span>colour, coord<span class="sc">$</span>alpha),</span>
+<span id="cb38-16"><a href="#cb38-16"></a>        <span class="at">lwd =</span> coord<span class="sc">$</span>linewidth <span class="sc">*</span> .pt,</span>
+<span id="cb38-17"><a href="#cb38-17"></a>        <span class="at">lty =</span> coord<span class="sc">$</span>linetype</span>
+<span id="cb38-18"><a href="#cb38-18"></a>      )</span>
+<span id="cb38-19"><a href="#cb38-19"></a>    )</span>
+<span id="cb38-20"><a href="#cb38-20"></a>    </span>
+<span id="cb38-21"><a href="#cb38-21"></a>  },</span>
+<span id="cb38-22"><a href="#cb38-22"></a>  </span>
+<span id="cb38-23"><a href="#cb38-23"></a>  <span class="at">required_aes =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
+<span id="cb38-24"><a href="#cb38-24"></a>  </span>
+<span id="cb38-25"><a href="#cb38-25"></a>  <span class="at">non_missing_aes =</span> <span class="fu">c</span>(<span class="st">"linetype"</span>, <span class="st">"linewidth"</span>, <span class="st">"shape"</span>),</span>
+<span id="cb38-26"><a href="#cb38-26"></a>  </span>
+<span id="cb38-27"><a href="#cb38-27"></a>  <span class="at">default_aes =</span> <span class="fu">aes</span>(</span>
+<span id="cb38-28"><a href="#cb38-28"></a>    <span class="at">colour =</span> <span class="st">"black"</span>,</span>
+<span id="cb38-29"><a href="#cb38-29"></a>    <span class="at">linewidth =</span> <span class="fl">0.5</span>,</span>
+<span id="cb38-30"><a href="#cb38-30"></a>    <span class="at">linetype =</span> <span class="dv">1</span>,</span>
+<span id="cb38-31"><a href="#cb38-31"></a>    <span class="at">alpha =</span> <span class="cn">NA</span></span>
+<span id="cb38-32"><a href="#cb38-32"></a>  ),</span>
+<span id="cb38-33"><a href="#cb38-33"></a> </span>
+<span id="cb38-34"><a href="#cb38-34"></a>  <span class="at">draw_key =</span> draw_key_path</span>
+<span id="cb38-35"><a href="#cb38-35"></a>  </span>
+<span id="cb38-36"><a href="#cb38-36"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
-<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">geom_complete</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>geom_complete <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
+<span id="cb39-2"><a href="#cb39-2"></a>                          <span class="at">stat =</span> StatIdentity, <span class="at">position =</span> <span class="st">"identity"</span>, </span>
+<span id="cb39-3"><a href="#cb39-3"></a>                          ...,</span>
+<span id="cb39-4"><a href="#cb39-4"></a>                          <span class="at">na.rm =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb39-5"><a href="#cb39-5"></a>                          <span class="at">show.legend =</span> <span class="cn">NA</span>,</span>
+<span id="cb39-6"><a href="#cb39-6"></a>                          <span class="at">inherit.aes =</span> <span class="cn">TRUE</span>) {</span>
+<span id="cb39-7"><a href="#cb39-7"></a>  <span class="fu">layer</span>(</span>
+<span id="cb39-8"><a href="#cb39-8"></a>    <span class="at">data =</span> data,</span>
+<span id="cb39-9"><a href="#cb39-9"></a>    <span class="at">mapping =</span> mapping,</span>
+<span id="cb39-10"><a href="#cb39-10"></a>    <span class="at">stat =</span> stat,</span>
+<span id="cb39-11"><a href="#cb39-11"></a>    <span class="at">geom =</span> GeomComplete,</span>
+<span id="cb39-12"><a href="#cb39-12"></a>    <span class="at">position =</span> position,</span>
+<span id="cb39-13"><a href="#cb39-13"></a>    <span class="at">show.legend =</span> show.legend,</span>
+<span id="cb39-14"><a href="#cb39-14"></a>    <span class="at">inherit.aes =</span> inherit.aes,</span>
+<span id="cb39-15"><a href="#cb39-15"></a>    <span class="at">params =</span> <span class="fu">list</span>(</span>
+<span id="cb39-16"><a href="#cb39-16"></a>      <span class="at">na.rm =</span> na.rm,</span>
+<span id="cb39-17"><a href="#cb39-17"></a>      ...</span>
+<span id="cb39-18"><a href="#cb39-18"></a>    )</span>
+<span id="cb39-19"><a href="#cb39-19"></a>  )</span>
+<span id="cb39-20"><a href="#cb39-20"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a>  <span class="fu">geom_complete</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-44-1.png" width="960" class="r-stretch"></section></section>
+<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-80-1.png" width="960" class="r-stretch"></section></section>
 <section>
 <section id="why-extend" class="title-slide slide level1 center">
 <h1>Why extend?</h1>
@@ -765,50 +1098,440 @@
 </section>
 <section class="slide level2">
 
+<p>As we saw previously, we can do calculations outside of <strong>ggplot2</strong> without the need to define a custom <code>Stat</code> object:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
-<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">geom_salesperson</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"firebrick"</span>) <span class="sc">+</span></span>
-<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">geom_complete</span>(<span class="at">alpha =</span> .<span class="dv">8</span>) <span class="sc">+</span></span>
-<span id="cb24-4"><a href="#cb24-4"></a>  <span class="fu">geom_point_new</span>(<span class="at">size =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>dist_mat <span class="ot">&lt;-</span> <span class="fu">dist</span>(df, <span class="at">diag =</span> <span class="cn">TRUE</span>, <span class="at">upper =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb41-2"><a href="#cb41-2"></a>atsp <span class="ot">&lt;-</span> <span class="fu">as.ATSP</span>(dist_mat)</span>
+<span id="cb41-3"><a href="#cb41-3"></a>tour <span class="ot">&lt;-</span> <span class="fu">solve_TSP</span>(atsp)</span>
+<span id="cb41-4"><a href="#cb41-4"></a></span>
+<span id="cb41-5"><a href="#cb41-5"></a>df_sorted <span class="ot">&lt;-</span> df[tour,]</span>
+<span id="cb41-6"><a href="#cb41-6"></a></span>
+<span id="cb41-7"><a href="#cb41-7"></a><span class="fu">ggplot</span>(df_sorted, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb41-8"><a href="#cb41-8"></a>  <span class="fu">geom_path</span>() <span class="sc">+</span></span>
+<span id="cb41-9"><a href="#cb41-9"></a>  <span class="fu">geom_point_new</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-46-1.png" width="960" class="r-stretch"></section>
+</section>
+<section id="section-7" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<p>What if we want to plot multiple groups?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb42-1" class="hljs-ln-code"><a href="#cb42-1"></a>df_mult <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb42-2" class="hljs-ln-code"><a href="#cb42-2"></a>  <span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">3</span> <span class="sc">*</span> <span class="dv">10</span>),</span>
+<span id="cb42-3" class="hljs-ln-code"><a href="#cb42-3"></a>  <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">3</span> <span class="sc">*</span> <span class="dv">10</span>),</span>
+<span id="cb42-4" class="hljs-ln-code"><a href="#cb42-4"></a>  <span class="at">class =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>), <span class="at">each =</span> <span class="dv">10</span>)</span>
+<span id="cb42-5" class="hljs-ln-code"><a href="#cb42-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-8" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<p>What if we want to plot multiple groups?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb43-1" class="hljs-ln-code"><a href="#cb43-1"></a>df_mult <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb43-2" class="hljs-ln-code"><a href="#cb43-2"></a>  <span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">3</span> <span class="sc">*</span> <span class="dv">10</span>),</span>
+<span id="cb43-3" class="hljs-ln-code"><a href="#cb43-3"></a>  <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">3</span> <span class="sc">*</span> <span class="dv">10</span>),</span>
+<span id="cb43-4" class="hljs-ln-code"><a href="#cb43-4"></a>  <span class="at">class =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>), <span class="at">each =</span> <span class="dv">10</span>)</span>
+<span id="cb43-5" class="hljs-ln-code"><a href="#cb43-5"></a>)</span>
+<span id="cb43-6" class="hljs-ln-code"><a href="#cb43-6"></a></span>
+<span id="cb43-7" class="hljs-ln-code"><a href="#cb43-7"></a>df_mult</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["class"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"-0.62645381","2":"1.35867955","3":"a"},{"1":"0.18364332","2":"-0.10278773","3":"a"},{"1":"-0.83562861","2":"0.38767161","3":"a"},{"1":"1.59528080","2":"-0.05380504","3":"a"},{"1":"0.32950777","2":"-1.37705956","3":"a"},{"1":"-0.82046838","2":"-0.41499456","3":"a"},{"1":"0.48742905","2":"-0.39428995","3":"a"},{"1":"0.73832471","2":"-0.05931340","3":"a"},{"1":"0.57578135","2":"1.10002537","3":"a"},{"1":"-0.30538839","2":"0.76317575","3":"a"},{"1":"1.51178117","2":"-0.16452360","3":"b"},{"1":"0.38984324","2":"-0.25336168","3":"b"},{"1":"-0.62124058","2":"0.69696338","3":"b"},{"1":"-2.21469989","2":"0.55666320","3":"b"},{"1":"1.12493092","2":"-0.68875569","3":"b"},{"1":"-0.04493361","2":"-0.70749516","3":"b"},{"1":"-0.01619026","2":"0.36458196","3":"b"},{"1":"0.94383621","2":"0.76853292","3":"b"},{"1":"0.82122120","2":"-0.11234621","3":"b"},{"1":"0.59390132","2":"0.88110773","3":"b"},{"1":"0.91897737","2":"0.39810588","3":"c"},{"1":"0.78213630","2":"-0.61202639","3":"c"},{"1":"0.07456498","2":"0.34111969","3":"c"},{"1":"-1.98935170","2":"-1.12936310","3":"c"},{"1":"0.61982575","2":"1.43302370","3":"c"},{"1":"-0.05612874","2":"1.98039990","3":"c"},{"1":"-0.15579551","2":"-0.36722148","3":"c"},{"1":"-1.47075238","2":"-1.04413463","3":"c"},{"1":"-0.47815006","2":"0.56971963","3":"c"},{"1":"0.41794156","2":"-0.13505460","3":"c"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
 <section class="slide level2">
 
+<p>Split-Apply-Combine!</p>
+</section>
+<section id="section-9" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb25-2"><a href="#cb25-2"></a></span>
-<span id="cb25-3"><a href="#cb25-3"></a>df_mult <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb25-4"><a href="#cb25-4"></a>  <span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">3</span> <span class="sc">*</span> <span class="dv">10</span>),</span>
-<span id="cb25-5"><a href="#cb25-5"></a>  <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">3</span> <span class="sc">*</span> <span class="dv">10</span>),</span>
-<span id="cb25-6"><a href="#cb25-6"></a>  <span class="at">class =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>), <span class="at">each =</span> <span class="dv">10</span>)</span>
-<span id="cb25-7"><a href="#cb25-7"></a>)</span>
-<span id="cb25-8"><a href="#cb25-8"></a></span>
-<span id="cb25-9"><a href="#cb25-9"></a>df_mult<span class="sc">$</span>x <span class="ot">&lt;-</span> df_mult<span class="sc">$</span>x <span class="sc">+</span> <span class="fu">rep</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">each =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb44-1" class="hljs-ln-code"><a href="#cb44-1"></a><span class="co"># Split</span></span>
+<span id="cb44-2" class="hljs-ln-code"><a href="#cb44-2"></a></span>
+<span id="cb44-3" class="hljs-ln-code"><a href="#cb44-3"></a>df_mult_split <span class="ot">&lt;-</span> <span class="fu">split</span>(df_mult[,<span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)], df_mult<span class="sc">$</span>class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-10" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb45-1" class="hljs-ln-code"><a href="#cb45-1"></a><span class="co"># Split</span></span>
+<span id="cb45-2" class="hljs-ln-code"><a href="#cb45-2"></a></span>
+<span id="cb45-3" class="hljs-ln-code"><a href="#cb45-3"></a>df_mult_split <span class="ot">&lt;-</span> <span class="fu">split</span>(df_mult[,<span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)], df_mult<span class="sc">$</span>class)</span>
+<span id="cb45-4" class="hljs-ln-code"><a href="#cb45-4"></a></span>
+<span id="cb45-5" class="hljs-ln-code"><a href="#cb45-5"></a><span class="fu">str</span>(df_mult_split)</span>
+<span id="cb45-6" class="hljs-ln-code"><a href="#cb45-6"></a><span class="co">#&gt; List of 3</span></span>
+<span id="cb45-7" class="hljs-ln-code"><a href="#cb45-7"></a><span class="co">#&gt;  $ a:'data.frame':   10 obs. of  2 variables:</span></span>
+<span id="cb45-8" class="hljs-ln-code"><a href="#cb45-8"></a><span class="co">#&gt;   ..$ x: num [1:10] -0.626 0.184 -0.836 1.595 0.33 ...</span></span>
+<span id="cb45-9" class="hljs-ln-code"><a href="#cb45-9"></a><span class="co">#&gt;   ..$ y: num [1:10] 1.3587 -0.1028 0.3877 -0.0538 -1.3771 ...</span></span>
+<span id="cb45-10" class="hljs-ln-code"><a href="#cb45-10"></a><span class="co">#&gt;  $ b:'data.frame':   10 obs. of  2 variables:</span></span>
+<span id="cb45-11" class="hljs-ln-code"><a href="#cb45-11"></a><span class="co">#&gt;   ..$ x: num [1:10] 1.512 0.39 -0.621 -2.215 1.125 ...</span></span>
+<span id="cb45-12" class="hljs-ln-code"><a href="#cb45-12"></a><span class="co">#&gt;   ..$ y: num [1:10] -0.165 -0.253 0.697 0.557 -0.689 ...</span></span>
+<span id="cb45-13" class="hljs-ln-code"><a href="#cb45-13"></a><span class="co">#&gt;  $ c:'data.frame':   10 obs. of  2 variables:</span></span>
+<span id="cb45-14" class="hljs-ln-code"><a href="#cb45-14"></a><span class="co">#&gt;   ..$ x: num [1:10] 0.919 0.7821 0.0746 -1.9894 0.6198 ...</span></span>
+<span id="cb45-15" class="hljs-ln-code"><a href="#cb45-15"></a><span class="co">#&gt;   ..$ y: num [1:10] 0.398 -0.612 0.341 -1.129 1.433 ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-11" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb46-1" class="hljs-ln-code"><a href="#cb46-1"></a><span class="co"># Split</span></span>
+<span id="cb46-2" class="hljs-ln-code"><a href="#cb46-2"></a></span>
+<span id="cb46-3" class="hljs-ln-code"><a href="#cb46-3"></a>df_mult_split <span class="ot">&lt;-</span> <span class="fu">split</span>(df_mult[,<span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)], df_mult<span class="sc">$</span>class)</span>
+<span id="cb46-4" class="hljs-ln-code"><a href="#cb46-4"></a></span>
+<span id="cb46-5" class="hljs-ln-code"><a href="#cb46-5"></a>df_mult_split<span class="sc">$</span>a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"-0.6264538","2":"1.35867955","_rn_":"1"},{"1":"0.1836433","2":"-0.10278773","_rn_":"2"},{"1":"-0.8356286","2":"0.38767161","_rn_":"3"},{"1":"1.5952808","2":"-0.05380504","_rn_":"4"},{"1":"0.3295078","2":"-1.37705956","_rn_":"5"},{"1":"-0.8204684","2":"-0.41499456","_rn_":"6"},{"1":"0.4874291","2":"-0.39428995","_rn_":"7"},{"1":"0.7383247","2":"-0.05931340","_rn_":"8"},{"1":"0.5757814","2":"1.10002537","_rn_":"9"},{"1":"-0.3053884","2":"0.76317575","_rn_":"10"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="section-12" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb47-1" class="hljs-ln-code"><a href="#cb47-1"></a><span class="co"># Split</span></span>
+<span id="cb47-2" class="hljs-ln-code"><a href="#cb47-2"></a></span>
+<span id="cb47-3" class="hljs-ln-code"><a href="#cb47-3"></a>df_mult_split <span class="ot">&lt;-</span> <span class="fu">split</span>(df_mult[,<span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)], df_mult<span class="sc">$</span>class)</span>
+<span id="cb47-4" class="hljs-ln-code"><a href="#cb47-4"></a></span>
+<span id="cb47-5" class="hljs-ln-code"><a href="#cb47-5"></a>df_mult_split<span class="sc">$</span>b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"1.51178117","2":"-0.1645236","_rn_":"11"},{"1":"0.38984324","2":"-0.2533617","_rn_":"12"},{"1":"-0.62124058","2":"0.6969634","_rn_":"13"},{"1":"-2.21469989","2":"0.5566632","_rn_":"14"},{"1":"1.12493092","2":"-0.6887557","_rn_":"15"},{"1":"-0.04493361","2":"-0.7074952","_rn_":"16"},{"1":"-0.01619026","2":"0.3645820","_rn_":"17"},{"1":"0.94383621","2":"0.7685329","_rn_":"18"},{"1":"0.82122120","2":"-0.1123462","_rn_":"19"},{"1":"0.59390132","2":"0.8811077","_rn_":"20"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="section-13" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb48-1" class="hljs-ln-code"><a href="#cb48-1"></a><span class="co"># Split</span></span>
+<span id="cb48-2" class="hljs-ln-code"><a href="#cb48-2"></a></span>
+<span id="cb48-3" class="hljs-ln-code"><a href="#cb48-3"></a>df_mult_split <span class="ot">&lt;-</span> <span class="fu">split</span>(df_mult[,<span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)], df_mult<span class="sc">$</span>class)</span>
+<span id="cb48-4" class="hljs-ln-code"><a href="#cb48-4"></a></span>
+<span id="cb48-5" class="hljs-ln-code"><a href="#cb48-5"></a>df_mult_split<span class="sc">$</span>c</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.91897737","2":"0.3981059","_rn_":"21"},{"1":"0.78213630","2":"-0.6120264","_rn_":"22"},{"1":"0.07456498","2":"0.3411197","_rn_":"23"},{"1":"-1.98935170","2":"-1.1293631","_rn_":"24"},{"1":"0.61982575","2":"1.4330237","_rn_":"25"},{"1":"-0.05612874","2":"1.9803999","_rn_":"26"},{"1":"-0.15579551","2":"-0.3672215","_rn_":"27"},{"1":"-1.47075238","2":"-1.0441346","_rn_":"28"},{"1":"-0.47815006","2":"0.5697196","_rn_":"29"},{"1":"0.41794156","2":"-0.1350546","_rn_":"30"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<!-- ## {auto-animate=true auto-animate-restart} -->
+</section>
+<section id="section-14" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb49-1" class="hljs-ln-code"><a href="#cb49-1"></a><span class="co"># Apply</span></span>
+<span id="cb49-2" class="hljs-ln-code"><a href="#cb49-2"></a></span>
+<span id="cb49-3" class="hljs-ln-code"><a href="#cb49-3"></a>class_sols <span class="ot">&lt;-</span></span>
+<span id="cb49-4" class="hljs-ln-code"><a href="#cb49-4"></a>  df_mult_split <span class="sc">|&gt;</span></span>
+<span id="cb49-5" class="hljs-ln-code"><a href="#cb49-5"></a>  <span class="fu">lapply</span>(dist, <span class="at">diag =</span> <span class="cn">TRUE</span>, <span class="at">upper =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb49-6" class="hljs-ln-code"><a href="#cb49-6"></a>  <span class="fu">lapply</span>(as.ATSP) <span class="sc">|&gt;</span></span>
+<span id="cb49-7" class="hljs-ln-code"><a href="#cb49-7"></a>  <span class="fu">lapply</span>(solve_TSP) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-15" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb50-1" class="hljs-ln-code"><a href="#cb50-1"></a><span class="co"># Apply</span></span>
+<span id="cb50-2" class="hljs-ln-code"><a href="#cb50-2"></a></span>
+<span id="cb50-3" class="hljs-ln-code"><a href="#cb50-3"></a>class_sols <span class="ot">&lt;-</span></span>
+<span id="cb50-4" class="hljs-ln-code"><a href="#cb50-4"></a>  df_mult_split <span class="sc">|&gt;</span></span>
+<span id="cb50-5" class="hljs-ln-code"><a href="#cb50-5"></a>  <span class="fu">lapply</span>(dist, <span class="at">diag =</span> <span class="cn">TRUE</span>, <span class="at">upper =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-6" class="hljs-ln-code"><a href="#cb50-6"></a>  <span class="fu">lapply</span>(as.ATSP) <span class="sc">|&gt;</span></span>
+<span id="cb50-7" class="hljs-ln-code"><a href="#cb50-7"></a>  <span class="fu">lapply</span>(solve_TSP) </span>
+<span id="cb50-8" class="hljs-ln-code"><a href="#cb50-8"></a></span>
+<span id="cb50-9" class="hljs-ln-code"><a href="#cb50-9"></a><span class="fu">str</span>(class_sols)</span>
+<span id="cb50-10" class="hljs-ln-code"><a href="#cb50-10"></a><span class="co">#&gt; List of 3</span></span>
+<span id="cb50-11" class="hljs-ln-code"><a href="#cb50-11"></a><span class="co">#&gt;  $ a: 'TOUR' Named int [1:10] 10 3 6 5 7 2 8 4 9 1</span></span>
+<span id="cb50-12" class="hljs-ln-code"><a href="#cb50-12"></a><span class="co">#&gt;   ..- attr(*, "method")= chr "arbitrary_insertion+two_opt"</span></span>
+<span id="cb50-13" class="hljs-ln-code"><a href="#cb50-13"></a><span class="co">#&gt;   ..- attr(*, "tour_length")= num 9.23</span></span>
+<span id="cb50-14" class="hljs-ln-code"><a href="#cb50-14"></a><span class="co">#&gt;   ..- attr(*, "names")= chr [1:10] "10" "3" "6" "5" ...</span></span>
+<span id="cb50-15" class="hljs-ln-code"><a href="#cb50-15"></a><span class="co">#&gt;  $ b: 'TOUR' Named int [1:10] 10 7 3 4 6 2 5 1 9 8</span></span>
+<span id="cb50-16" class="hljs-ln-code"><a href="#cb50-16"></a><span class="co">#&gt;   ..- attr(*, "method")= chr "arbitrary_insertion+two_opt"</span></span>
+<span id="cb50-17" class="hljs-ln-code"><a href="#cb50-17"></a><span class="co">#&gt;   ..- attr(*, "tour_length")= num 9.68</span></span>
+<span id="cb50-18" class="hljs-ln-code"><a href="#cb50-18"></a><span class="co">#&gt;   ..- attr(*, "names")= chr [1:10] "20" "17" "13" "14" ...</span></span>
+<span id="cb50-19" class="hljs-ln-code"><a href="#cb50-19"></a><span class="co">#&gt;  $ c: 'TOUR' Named int [1:10] 3 9 4 8 7 10 2 1 5 6</span></span>
+<span id="cb50-20" class="hljs-ln-code"><a href="#cb50-20"></a><span class="co">#&gt;   ..- attr(*, "method")= chr "arbitrary_insertion+two_opt"</span></span>
+<span id="cb50-21" class="hljs-ln-code"><a href="#cb50-21"></a><span class="co">#&gt;   ..- attr(*, "tour_length")= num 10.7</span></span>
+<span id="cb50-22" class="hljs-ln-code"><a href="#cb50-22"></a><span class="co">#&gt;   ..- attr(*, "names")= chr [1:10] "23" "29" "24" "28" ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-16" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb51-1" class="hljs-ln-code"><a href="#cb51-1"></a><span class="co"># Apply</span></span>
+<span id="cb51-2" class="hljs-ln-code"><a href="#cb51-2"></a></span>
+<span id="cb51-3" class="hljs-ln-code"><a href="#cb51-3"></a>reorder_rows_by_indices <span class="ot">&lt;-</span> <span class="cf">function</span>(df, i) df[i,]</span>
+<span id="cb51-4" class="hljs-ln-code"><a href="#cb51-4"></a>df_mult_split <span class="ot">&lt;-</span> <span class="fu">Map</span>(reorder_rows_by_indices, df_mult_split, class_sols) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-17" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb52-1" class="hljs-ln-code"><a href="#cb52-1"></a><span class="co"># Apply</span></span>
+<span id="cb52-2" class="hljs-ln-code"><a href="#cb52-2"></a></span>
+<span id="cb52-3" class="hljs-ln-code"><a href="#cb52-3"></a>reorder_rows_by_indices <span class="ot">&lt;-</span> <span class="cf">function</span>(df, i) df[i,]</span>
+<span id="cb52-4" class="hljs-ln-code"><a href="#cb52-4"></a>df_mult_split <span class="ot">&lt;-</span> <span class="fu">Map</span>(reorder_rows_by_indices, df_mult_split, class_sols) </span>
+<span id="cb52-5" class="hljs-ln-code"><a href="#cb52-5"></a></span>
+<span id="cb52-6" class="hljs-ln-code"><a href="#cb52-6"></a><span class="fu">str</span>(df_mult_split)</span>
+<span id="cb52-7" class="hljs-ln-code"><a href="#cb52-7"></a><span class="co">#&gt; List of 3</span></span>
+<span id="cb52-8" class="hljs-ln-code"><a href="#cb52-8"></a><span class="co">#&gt;  $ a:'data.frame':   10 obs. of  2 variables:</span></span>
+<span id="cb52-9" class="hljs-ln-code"><a href="#cb52-9"></a><span class="co">#&gt;   ..$ x: num [1:10] -0.305 -0.836 -0.82 0.33 0.487 ...</span></span>
+<span id="cb52-10" class="hljs-ln-code"><a href="#cb52-10"></a><span class="co">#&gt;   ..$ y: num [1:10] 0.763 0.388 -0.415 -1.377 -0.394 ...</span></span>
+<span id="cb52-11" class="hljs-ln-code"><a href="#cb52-11"></a><span class="co">#&gt;  $ b:'data.frame':   10 obs. of  2 variables:</span></span>
+<span id="cb52-12" class="hljs-ln-code"><a href="#cb52-12"></a><span class="co">#&gt;   ..$ x: num [1:10] 0.5939 -0.0162 -0.6212 -2.2147 -0.0449 ...</span></span>
+<span id="cb52-13" class="hljs-ln-code"><a href="#cb52-13"></a><span class="co">#&gt;   ..$ y: num [1:10] 0.881 0.365 0.697 0.557 -0.707 ...</span></span>
+<span id="cb52-14" class="hljs-ln-code"><a href="#cb52-14"></a><span class="co">#&gt;  $ c:'data.frame':   10 obs. of  2 variables:</span></span>
+<span id="cb52-15" class="hljs-ln-code"><a href="#cb52-15"></a><span class="co">#&gt;   ..$ x: num [1:10] 0.0746 -0.4782 -1.9894 -1.4708 -0.1558 ...</span></span>
+<span id="cb52-16" class="hljs-ln-code"><a href="#cb52-16"></a><span class="co">#&gt;   ..$ y: num [1:10] 0.341 0.57 -1.129 -1.044 -0.367 ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-18" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb53-1" class="hljs-ln-code"><a href="#cb53-1"></a><span class="co"># Apply</span></span>
+<span id="cb53-2" class="hljs-ln-code"><a href="#cb53-2"></a></span>
+<span id="cb53-3" class="hljs-ln-code"><a href="#cb53-3"></a>reorder_rows_by_indices <span class="ot">&lt;-</span> <span class="cf">function</span>(df, i) df[i,]</span>
+<span id="cb53-4" class="hljs-ln-code"><a href="#cb53-4"></a>df_mult_split <span class="ot">&lt;-</span> <span class="fu">Map</span>(reorder_rows_by_indices, df_mult_split, class_sols) </span>
+<span id="cb53-5" class="hljs-ln-code"><a href="#cb53-5"></a></span>
+<span id="cb53-6" class="hljs-ln-code"><a href="#cb53-6"></a>df_mult_split<span class="sc">$</span>a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"-0.6264538","2":"1.35867955","_rn_":"1"},{"1":"-0.8204684","2":"-0.41499456","_rn_":"6"},{"1":"0.1836433","2":"-0.10278773","_rn_":"2"},{"1":"0.4874291","2":"-0.39428995","_rn_":"7"},{"1":"0.7383247","2":"-0.05931340","_rn_":"8"},{"1":"-0.8356286","2":"0.38767161","_rn_":"3"},{"1":"1.5952808","2":"-0.05380504","_rn_":"4"},{"1":"0.3295078","2":"-1.37705956","_rn_":"5"},{"1":"0.5757814","2":"1.10002537","_rn_":"9"},{"1":"-0.3053884","2":"0.76317575","_rn_":"10"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="section-19" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb54-1" class="hljs-ln-code"><a href="#cb54-1"></a><span class="co"># Apply</span></span>
+<span id="cb54-2" class="hljs-ln-code"><a href="#cb54-2"></a></span>
+<span id="cb54-3" class="hljs-ln-code"><a href="#cb54-3"></a>reorder_rows_by_indices <span class="ot">&lt;-</span> <span class="cf">function</span>(df, i) df[i,]</span>
+<span id="cb54-4" class="hljs-ln-code"><a href="#cb54-4"></a>df_mult_split <span class="ot">&lt;-</span> <span class="fu">Map</span>(reorder_rows_by_indices, df_mult_split, class_sols) </span>
+<span id="cb54-5" class="hljs-ln-code"><a href="#cb54-5"></a></span>
+<span id="cb54-6" class="hljs-ln-code"><a href="#cb54-6"></a>df_mult_split<span class="sc">$</span>b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"1.51178117","2":"-0.1645236","_rn_":"11"},{"1":"-0.04493361","2":"-0.7074952","_rn_":"16"},{"1":"-0.62124058","2":"0.6969634","_rn_":"13"},{"1":"-2.21469989","2":"0.5566632","_rn_":"14"},{"1":"-0.01619026","2":"0.3645820","_rn_":"17"},{"1":"1.12493092","2":"-0.6887557","_rn_":"15"},{"1":"0.38984324","2":"-0.2533617","_rn_":"12"},{"1":"0.94383621","2":"0.7685329","_rn_":"18"},{"1":"0.82122120","2":"-0.1123462","_rn_":"19"},{"1":"0.59390132","2":"0.8811077","_rn_":"20"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="section-20" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb55-1" class="hljs-ln-code"><a href="#cb55-1"></a><span class="co"># Apply</span></span>
+<span id="cb55-2" class="hljs-ln-code"><a href="#cb55-2"></a></span>
+<span id="cb55-3" class="hljs-ln-code"><a href="#cb55-3"></a>reorder_rows_by_indices <span class="ot">&lt;-</span> <span class="cf">function</span>(df, i) df[i,]</span>
+<span id="cb55-4" class="hljs-ln-code"><a href="#cb55-4"></a>df_mult_split <span class="ot">&lt;-</span> <span class="fu">Map</span>(reorder_rows_by_indices, df_mult_split, class_sols) </span>
+<span id="cb55-5" class="hljs-ln-code"><a href="#cb55-5"></a></span>
+<span id="cb55-6" class="hljs-ln-code"><a href="#cb55-6"></a>df_mult_split<span class="sc">$</span>c</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.91897737","2":"0.3981059","_rn_":"21"},{"1":"0.78213630","2":"-0.6120264","_rn_":"22"},{"1":"0.07456498","2":"0.3411197","_rn_":"23"},{"1":"-1.98935170","2":"-1.1293631","_rn_":"24"},{"1":"0.61982575","2":"1.4330237","_rn_":"25"},{"1":"-0.05612874","2":"1.9803999","_rn_":"26"},{"1":"-0.15579551","2":"-0.3672215","_rn_":"27"},{"1":"-1.47075238","2":"-1.0441346","_rn_":"28"},{"1":"-0.47815006","2":"0.5697196","_rn_":"29"},{"1":"0.41794156","2":"-0.1350546","_rn_":"30"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="section-21" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb56-1" class="hljs-ln-code"><a href="#cb56-1"></a><span class="co"># Combine</span></span>
+<span id="cb56-2" class="hljs-ln-code"><a href="#cb56-2"></a></span>
+<span id="cb56-3" class="hljs-ln-code"><a href="#cb56-3"></a>df_mult_ordered <span class="ot">&lt;-</span> <span class="fu">unsplit</span>(df_mult_split, df_mult<span class="sc">$</span>class)</span>
+<span id="cb56-4" class="hljs-ln-code"><a href="#cb56-4"></a>df_mult_ordered<span class="sc">$</span>class <span class="ot">&lt;-</span> df_mult<span class="sc">$</span>class</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-22" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb57-1" class="hljs-ln-code"><a href="#cb57-1"></a><span class="co"># Combine</span></span>
+<span id="cb57-2" class="hljs-ln-code"><a href="#cb57-2"></a></span>
+<span id="cb57-3" class="hljs-ln-code"><a href="#cb57-3"></a>df_mult_ordered <span class="ot">&lt;-</span> <span class="fu">unsplit</span>(df_mult_split, df_mult<span class="sc">$</span>class)</span>
+<span id="cb57-4" class="hljs-ln-code"><a href="#cb57-4"></a>df_mult_ordered<span class="sc">$</span>class <span class="ot">&lt;-</span> df_mult<span class="sc">$</span>class</span>
+<span id="cb57-5" class="hljs-ln-code"><a href="#cb57-5"></a>  </span>
+<span id="cb57-6" class="hljs-ln-code"><a href="#cb57-6"></a>df_mult_ordered</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["class"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"-0.62645381","2":"1.35867955","3":"a","_rn_":"1"},{"1":"-0.83562861","2":"0.38767161","3":"a","_rn_":"3"},{"1":"-0.82046838","2":"-0.41499456","3":"a","_rn_":"6"},{"1":"1.59528080","2":"-0.05380504","3":"a","_rn_":"4"},{"1":"0.32950777","2":"-1.37705956","3":"a","_rn_":"5"},{"1":"0.18364332","2":"-0.10278773","3":"a","_rn_":"2"},{"1":"0.48742905","2":"-0.39428995","3":"a","_rn_":"7"},{"1":"0.73832471","2":"-0.05931340","3":"a","_rn_":"8"},{"1":"0.57578135","2":"1.10002537","3":"a","_rn_":"9"},{"1":"-0.30538839","2":"0.76317575","3":"a","_rn_":"10"},{"1":"0.59390132","2":"0.88110773","3":"b","_rn_":"20"},{"1":"0.38984324","2":"-0.25336168","3":"b","_rn_":"12"},{"1":"-0.62124058","2":"0.69696338","3":"b","_rn_":"13"},{"1":"-2.21469989","2":"0.55666320","3":"b","_rn_":"14"},{"1":"1.12493092","2":"-0.68875569","3":"b","_rn_":"15"},{"1":"-0.04493361","2":"-0.70749516","3":"b","_rn_":"16"},{"1":"-0.01619026","2":"0.36458196","3":"b","_rn_":"17"},{"1":"1.51178117","2":"-0.16452360","3":"b","_rn_":"11"},{"1":"0.82122120","2":"-0.11234621","3":"b","_rn_":"19"},{"1":"0.94383621","2":"0.76853292","3":"b","_rn_":"18"},{"1":"0.91897737","2":"0.39810588","3":"c","_rn_":"21"},{"1":"0.78213630","2":"-0.61202639","3":"c","_rn_":"22"},{"1":"0.07456498","2":"0.34111969","3":"c","_rn_":"23"},{"1":"-1.98935170","2":"-1.12936310","3":"c","_rn_":"24"},{"1":"0.61982575","2":"1.43302370","3":"c","_rn_":"25"},{"1":"-0.05612874","2":"1.98039990","3":"c","_rn_":"26"},{"1":"-0.15579551","2":"-0.36722148","3":"c","_rn_":"27"},{"1":"-1.47075238","2":"-1.04413463","3":"c","_rn_":"28"},{"1":"-0.47815006","2":"0.56971963","3":"c","_rn_":"29"},{"1":"0.41794156","2":"-0.13505460","3":"c","_rn_":"30"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
 </div>
 </section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">ggplot</span>(df_mult, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
-<span id="cb26-2"><a href="#cb26-2"></a>  <span class="fu">geom_salesperson</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"firebrick"</span>) <span class="sc">+</span></span>
-<span id="cb26-3"><a href="#cb26-3"></a>  <span class="fu">geom_complete</span>(<span class="at">alpha =</span> .<span class="dv">8</span>) <span class="sc">+</span></span>
-<span id="cb26-4"><a href="#cb26-4"></a>  <span class="fu">geom_point_new</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb26-5"><a href="#cb26-5"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(class)) <span class="sc">+</span></span>
-<span id="cb26-6"><a href="#cb26-6"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a><span class="fu">ggplot</span>(df_mult_ordered, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb58-2"><a href="#cb58-2"></a>  <span class="fu">geom_path</span>() <span class="sc">+</span></span>
+<span id="cb58-3"><a href="#cb58-3"></a>  <span class="fu">geom_point_new</span>() <span class="sc">+</span></span>
+<span id="cb58-4"><a href="#cb58-4"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(class))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-50-1.png" width="960" class="r-stretch"></section>
+<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-118-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="r-stack">
+<div class="fragment semi-fade-out" data-fragment-index="1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a><span class="co"># Split</span></span>
+<span id="cb59-2"><a href="#cb59-2"></a>df_mult_split <span class="ot">&lt;-</span> <span class="fu">split</span>(df_mult[,<span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)], df_mult<span class="sc">$</span>class)</span>
+<span id="cb59-3"><a href="#cb59-3"></a></span>
+<span id="cb59-4"><a href="#cb59-4"></a><span class="co"># Apply</span></span>
+<span id="cb59-5"><a href="#cb59-5"></a>class_sols <span class="ot">&lt;-</span></span>
+<span id="cb59-6"><a href="#cb59-6"></a>  df_mult_split <span class="sc">|&gt;</span></span>
+<span id="cb59-7"><a href="#cb59-7"></a>  <span class="fu">lapply</span>(dist, <span class="at">diag =</span> <span class="cn">TRUE</span>, <span class="at">upper =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb59-8"><a href="#cb59-8"></a>  <span class="fu">lapply</span>(as.ATSP) <span class="sc">|&gt;</span></span>
+<span id="cb59-9"><a href="#cb59-9"></a>  <span class="fu">lapply</span>(solve_TSP) </span>
+<span id="cb59-10"><a href="#cb59-10"></a></span>
+<span id="cb59-11"><a href="#cb59-11"></a>reorder_rows_by_indices <span class="ot">&lt;-</span> <span class="cf">function</span>(df, i) df[i,]</span>
+<span id="cb59-12"><a href="#cb59-12"></a>df_mult_split <span class="ot">&lt;-</span> <span class="fu">Map</span>(reorder_rows_by_indices, df_mult_split, class_sols) </span>
+<span id="cb59-13"><a href="#cb59-13"></a></span>
+<span id="cb59-14"><a href="#cb59-14"></a><span class="co"># Combine</span></span>
+<span id="cb59-15"><a href="#cb59-15"></a>df_mult_ordered <span class="ot">&lt;-</span> <span class="fu">unsplit</span>(df_mult_split, df_mult<span class="sc">$</span>class)</span>
+<span id="cb59-16"><a href="#cb59-16"></a>df_mult_ordered<span class="sc">$</span>class <span class="ot">&lt;-</span> df_mult<span class="sc">$</span>class</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="1">
+<div class="callout callout-note no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p>Instead, we can let <strong>ggplot2</strong> do this for us!</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">ggplot</span>(df_mult, <span class="fu">aes</span>(x, y, <span class="at">fill =</span> class)) <span class="sc">+</span></span>
-<span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">geom_salesperson</span>(<span class="fu">aes</span>(<span class="at">color =</span> class), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb27-3"><a href="#cb27-3"></a>  <span class="fu">geom_point_new</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb27-4"><a href="#cb27-4"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a><span class="fu">ggplot</span>(df_mult, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb60-2"><a href="#cb60-2"></a>  <span class="fu">geom_salesperson</span>() <span class="sc">+</span></span>
+<span id="cb60-3"><a href="#cb60-3"></a>  <span class="fu">geom_point_new</span>() <span class="sc">+</span></span>
+<span id="cb60-4"><a href="#cb60-4"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(class)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-52-1.png" width="960" class="r-stretch"><div class="footer footer-default">
+<img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-122-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="r-stack">
+<div class="fragment semi-fade-out" data-fragment-index="1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a><span class="fu">ggplot</span>(df_mult, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb61-2"><a href="#cb61-2"></a>  <span class="fu">geom_salesperson</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"firebrick"</span>) <span class="sc">+</span></span>
+<span id="cb61-3"><a href="#cb61-3"></a>  <span class="fu">geom_complete</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb61-4"><a href="#cb61-4"></a>  <span class="fu">geom_point_new</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb61-5"><a href="#cb61-5"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(class)) <span class="sc">+</span></span>
+<span id="cb61-6"><a href="#cb61-6"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-124-1.png" width="960"></p>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="1">
+<div class="callout callout-note callout-captioned callout-style-simple">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Understanding the internals</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>ggplot2</strong> is using the same split-apply-combine strategy for each layer, <code>$compute_layer()</code> and <code>$draw_layer()</code> methods call <code>$compute_panel()</code> or <code>$draw_panel()</code> for each <code>class</code>!</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62" data-code-line-numbers="1|8-25|19-24|23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a>GeomComplete<span class="sc">$</span>draw_layer</span>
+<span id="cb62-2"><a href="#cb62-2"></a><span class="co">#&gt; &lt;ggproto method&gt;</span></span>
+<span id="cb62-3"><a href="#cb62-3"></a><span class="co">#&gt;   &lt;Wrapper function&gt;</span></span>
+<span id="cb62-4"><a href="#cb62-4"></a><span class="co">#&gt;     function (...) </span></span>
+<span id="cb62-5"><a href="#cb62-5"></a><span class="co">#&gt; f(..., self = self)</span></span>
+<span id="cb62-6"><a href="#cb62-6"></a><span class="co">#&gt; </span></span>
+<span id="cb62-7"><a href="#cb62-7"></a><span class="co">#&gt;   &lt;Inner function (f)&gt;</span></span>
+<span id="cb62-8"><a href="#cb62-8"></a><span class="co">#&gt;     function (self, data, params, layout, coord) </span></span>
+<span id="cb62-9"><a href="#cb62-9"></a><span class="co">#&gt; {</span></span>
+<span id="cb62-10"><a href="#cb62-10"></a><span class="co">#&gt;     if (empty(data)) {</span></span>
+<span id="cb62-11"><a href="#cb62-11"></a><span class="co">#&gt;         n &lt;- if (is.factor(data$PANEL)) </span></span>
+<span id="cb62-12"><a href="#cb62-12"></a><span class="co">#&gt;             nlevels(data$PANEL)</span></span>
+<span id="cb62-13"><a href="#cb62-13"></a><span class="co">#&gt;         else 1L</span></span>
+<span id="cb62-14"><a href="#cb62-14"></a><span class="co">#&gt;         return(rep(list(zeroGrob()), n))</span></span>
+<span id="cb62-15"><a href="#cb62-15"></a><span class="co">#&gt;     }</span></span>
+<span id="cb62-16"><a href="#cb62-16"></a><span class="co">#&gt;     params &lt;- params[intersect(names(params), self$parameters())]</span></span>
+<span id="cb62-17"><a href="#cb62-17"></a><span class="co">#&gt;     args &lt;- c(list(quote(data), quote(panel_params), quote(coord)), </span></span>
+<span id="cb62-18"><a href="#cb62-18"></a><span class="co">#&gt;         params)</span></span>
+<span id="cb62-19"><a href="#cb62-19"></a><span class="co">#&gt;     lapply(split(data, data$PANEL), function(data) {</span></span>
+<span id="cb62-20"><a href="#cb62-20"></a><span class="co">#&gt;         if (empty(data)) </span></span>
+<span id="cb62-21"><a href="#cb62-21"></a><span class="co">#&gt;             return(zeroGrob())</span></span>
+<span id="cb62-22"><a href="#cb62-22"></a><span class="co">#&gt;         panel_params &lt;- layout$panel_params[[data$PANEL[1]]]</span></span>
+<span id="cb62-23"><a href="#cb62-23"></a><span class="co">#&gt;         do.call(self$draw_panel, args)</span></span>
+<span id="cb62-24"><a href="#cb62-24"></a><span class="co">#&gt;     })</span></span>
+<span id="cb62-25"><a href="#cb62-25"></a><span class="co">#&gt; }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63" data-code-line-numbers="1|8-26|19-25|21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a>StatSalesperson<span class="sc">$</span>compute_layer</span>
+<span id="cb63-2"><a href="#cb63-2"></a><span class="co">#&gt; &lt;ggproto method&gt;</span></span>
+<span id="cb63-3"><a href="#cb63-3"></a><span class="co">#&gt;   &lt;Wrapper function&gt;</span></span>
+<span id="cb63-4"><a href="#cb63-4"></a><span class="co">#&gt;     function (...) </span></span>
+<span id="cb63-5"><a href="#cb63-5"></a><span class="co">#&gt; f(..., self = self)</span></span>
+<span id="cb63-6"><a href="#cb63-6"></a><span class="co">#&gt; </span></span>
+<span id="cb63-7"><a href="#cb63-7"></a><span class="co">#&gt;   &lt;Inner function (f)&gt;</span></span>
+<span id="cb63-8"><a href="#cb63-8"></a><span class="co">#&gt;     function (self, data, params, layout) </span></span>
+<span id="cb63-9"><a href="#cb63-9"></a><span class="co">#&gt; {</span></span>
+<span id="cb63-10"><a href="#cb63-10"></a><span class="co">#&gt;     check_required_aesthetics(self$required_aes, c(names(data), </span></span>
+<span id="cb63-11"><a href="#cb63-11"></a><span class="co">#&gt;         names(params)), snake_class(self))</span></span>
+<span id="cb63-12"><a href="#cb63-12"></a><span class="co">#&gt;     required_aes &lt;- intersect(names(data), unlist(strsplit(self$required_aes, </span></span>
+<span id="cb63-13"><a href="#cb63-13"></a><span class="co">#&gt;         "|", fixed = TRUE)))</span></span>
+<span id="cb63-14"><a href="#cb63-14"></a><span class="co">#&gt;     data &lt;- remove_missing(data, params$na.rm, c(required_aes, </span></span>
+<span id="cb63-15"><a href="#cb63-15"></a><span class="co">#&gt;         self$non_missing_aes), snake_class(self), finite = TRUE)</span></span>
+<span id="cb63-16"><a href="#cb63-16"></a><span class="co">#&gt;     params &lt;- params[intersect(names(params), self$parameters())]</span></span>
+<span id="cb63-17"><a href="#cb63-17"></a><span class="co">#&gt;     args &lt;- c(list(data = quote(data), scales = quote(scales)), </span></span>
+<span id="cb63-18"><a href="#cb63-18"></a><span class="co">#&gt;         params)</span></span>
+<span id="cb63-19"><a href="#cb63-19"></a><span class="co">#&gt;     dapply(data, "PANEL", function(data) {</span></span>
+<span id="cb63-20"><a href="#cb63-20"></a><span class="co">#&gt;         scales &lt;- layout$get_scales(data$PANEL[1])</span></span>
+<span id="cb63-21"><a href="#cb63-21"></a><span class="co">#&gt;         tryCatch(do.call(self$compute_panel, args), error = function(e) {</span></span>
+<span id="cb63-22"><a href="#cb63-22"></a><span class="co">#&gt;             warn(glue("Computation failed in `{snake_class(self)}()`:\n{e$message}"))</span></span>
+<span id="cb63-23"><a href="#cb63-23"></a><span class="co">#&gt;             new_data_frame()</span></span>
+<span id="cb63-24"><a href="#cb63-24"></a><span class="co">#&gt;         })</span></span>
+<span id="cb63-25"><a href="#cb63-25"></a><span class="co">#&gt;     })</span></span>
+<span id="cb63-26"><a href="#cb63-26"></a><span class="co">#&gt; }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="footer footer-default">
 <p>James Otto (Baylor University)</p>
 </div>
 </section></section>

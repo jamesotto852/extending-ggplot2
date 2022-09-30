@@ -11,6 +11,8 @@ knitr:
   opts_chunk: 
     fig-format: png
     echo: true
+    collapse: true
+    comment: "#>"
 ---
 
 
@@ -20,10 +22,15 @@ library("here")
 library("tidyverse") 
 library("patchwork")
 library("ggdensity")
+
 theme_set(theme_bw(13)) 
 theme_update(
   panel.grid.minor = element_blank()
 )
+
+# Masking default method to hide rownames (mildly dangerous!)
+# print.data.frame <- \(x) base::print.data.frame(x, row.names = FALSE)
+
 ```
 
 # Introduction
@@ -32,31 +39,47 @@ theme_update(
 
 Go through examples of **ggplot2** extensions
 
-# A first look at **ggproto** classes
+# A first look at **ggproto** objects
+
+## {auto-animate=true}
 
 ```{r}
-library("ggplot2")
+df <- data.frame(
+  x = rnorm(10),
+  y = rnorm(10)
+)
+```
 
+## {auto-animate=true}
+```{r}
+#| include: false
 set.seed(1)
-
+```
+```{r}
 df <- data.frame(
   x = rnorm(10),
   y = rnorm(10)
 )
 
-
+df
 ```
 
 ---
 
 ```{r}
+library("ggplot2")
+
 ggplot(df, aes(x, y)) +
   geom_point()
 ```
 
 ---
 
-```{r}
+```{r, class.output = "r"}
+#| code-line-numbers: false
+#| comment: ""
+#| collapse: false
+
 geom_point
 ```
 
@@ -64,15 +87,52 @@ geom_point
 
 ```{r}
 ggplot(df, aes(x, y)) +
-  layer(geom = GeomPoint, stat = StatIdentity, position = position_identity())
+  layer(geom = GeomPoint, stat = StatIdentity, position = "identity")
 ```
 
 ---
 
 **ggplot2** is built on the ggproto object oriented system.
-Below, we show how simple it is to extend via inheritance,
+
+`GeomPoint` is an object with methods and fields that encode the relevant 
+procedures and defaults to create a scatterplot.
+
+---
+
+```{r}
+#| code-line-numbers: "|8" 
+GeomPoint
+```
+
+---
+
+```{r}
+#| code-line-numbers: "|8-18" 
+GeomPoint$draw_panel
+```
+<!-- "Graphical primitives" -->
+
+---
+
+```{r}
+#| code-line-numbers: "4" 
+GeomPoint
+```
+
+---
+
+```{r}
+GeomPoint$default_aes
+```
+
+---
+
+It is simple to extend via inheritance,
 creating `GeomPointNew` from `GeomPoint` with a few adjustments to the default aesthetic options.
-Using the `ggproto()` constructor.
+
+Using the `ggproto()` function...
+
+---
 
 ```{r}
 GeomPointNew <- ggproto("GeomPointNew", GeomPoint,
@@ -92,8 +152,35 @@ GeomPointNew <- ggproto("GeomPointNew", GeomPoint,
 ---
 
 ```{r}
+#| code-line-numbers: "|8" 
+GeomPointNew
+```
+
+---
+
+```{r}
+#| code-line-numbers: "|8-18" 
+GeomPointNew$draw_panel
+```
+
+---
+
+```{r}
+#| code-line-numbers: "4" 
+GeomPointNew
+```
+
+---
+
+```{r}
+GeomPointNew$default_aes
+```
+
+---
+
+```{r}
 ggplot(df, aes(x, y)) +
-  layer(geom = GeomPointNew, stat = StatIdentity, position = position_identity())
+  layer(geom = GeomPointNew, stat = StatIdentity, position = "identity")
 ```
 
 ---
@@ -129,9 +216,23 @@ ggplot(df, aes(x, y)) +
 ```
 
 
-# Extending stats (travelling salesperson)
+# Extending stats 
 
 ---
+
+Introduce travelling salesperson problem with simple graphics
+
+## {auto-animate=true}
+
+```{r}
+library("TSP")
+
+dist_mat <- dist(df, diag = TRUE, upper = TRUE)
+atsp <- as.ATSP(dist_mat)
+tour <- solve_TSP(atsp)
+```
+
+## {auto-animate=true}
 
 ```{r}
 library("TSP")
@@ -140,7 +241,34 @@ dist_mat <- dist(df, diag = TRUE, upper = TRUE)
 atsp <- as.ATSP(dist_mat)
 tour <- solve_TSP(atsp)
 
+tour
+```
+
+## {auto-animate=true}
+
+```{r}
+library("TSP")
+
+dist_mat <- dist(df, diag = TRUE, upper = TRUE)
+atsp <- as.ATSP(dist_mat)
+tour <- solve_TSP(atsp)
+
+str(tour)
+```
+
+
+## {auto-animate=true}
+
+```{r}
 df_sorted <- df[tour,]
+```
+
+## {auto-animate=true}
+
+```{r}
+df_sorted <- df[tour,]
+
+df_sorted
 ```
 
 ---
@@ -155,7 +283,7 @@ ggplot(df_sorted, aes(x, y)) +
 ---
 
 ```{r}
-StatSalesperson <- ggproto("StatSalesperson",  Stat,
+StatSalesperson <- ggproto("StatSalesperson", Stat,
                            
   compute_group = function(data, scales) {
     
@@ -169,7 +297,11 @@ StatSalesperson <- ggproto("StatSalesperson",  Stat,
   
   required_aes = c("x", "y")                     
 )
+```
 
+---
+
+```{r}
 stat_salesperson <- function(mapping = NULL, data = NULL, 
                        geom = GeomPath, position = "identity",
                        ...,
@@ -198,7 +330,7 @@ ggplot(df, aes(x, y)) +
 ```{r}
 StatSalesperson <- ggproto("StatSalesperson",  Stat,
                            
-  compute_group = function(data, scales, method = NULL) {
+  compute_group = function(data, scales, method = "nearest_insertion") {
     
     dist_mat <- dist(data[,c("x", "y")], diag = TRUE, upper = TRUE)
     atsp <- as.ATSP(dist_mat)
@@ -218,7 +350,7 @@ StatSalesperson <- ggproto("StatSalesperson",  Stat,
 stat_salesperson <- function(mapping = NULL, data = NULL, 
                        geom = GeomPath, position = "identity",
                        ...,
-                       method = NULL,
+                       method = "nearest_insertion",
                        na.rm = FALSE, 
                        show.legend = NA, 
                        inherit.aes = TRUE) {
@@ -259,14 +391,13 @@ ggplot(df, aes(x, y)) +
 
 ```{r}
 ggplot(df, aes(x, y)) +
-  stat_salesperson(method = "nearest_insertion") +
+  stat_salesperson() +
   geom_point_new() 
 ```
 
 ---
 
 ```{r}
-
 GeomSalesperson <- ggproto("GeomSalesperson", GeomPath)
 
 geom_salesperson <- function(mapping = NULL, data = NULL, 
@@ -295,17 +426,16 @@ geom_salesperson <- function(mapping = NULL, data = NULL,
 ---
 
 ```{r}
-
 ggplot(df, aes(x, y)) +
   geom_salesperson() +
   geom_point_new() 
 
 ```
 
----
+<!-- --- -->
 
-Note: generally, it's good to pick defaults that match up with defaults in **ggplot2** functions. 
-I'm specifically choosing alternative values to demonstrate how things can be changed.
+<!-- Note: generally, it's good to pick defaults that match up with defaults in **ggplot2** functions.  -->
+<!-- I'm specifically choosing alternative values to demonstrate how things can be changed. -->
 
 
 # Extending geoms (complete graphs)
@@ -314,10 +444,63 @@ I'm specifically choosing alternative values to demonstrate how things can be ch
 
 Minor Introduction to grobs, reference book on grid graphics
 
+Use `segmentsGrob()` as an example!
+
+---
+
+Introduction to complete graphs
+
 ---
 
 ```{r}
+df_expanded <- df[rep(1:nrow(df), each = nrow(df)), ]
 
+df_expanded
+```
+
+---
+
+```{r}
+df_expanded$xend <- rep(df$x, times = nrow(df))
+df_expanded$yend <- rep(df$y, times = nrow(df))
+
+df_expanded
+```
+
+---
+
+:::{.r-stack}
+
+:::{.fragment .semi-fade-out fragment-index=1}
+```{r}
+ggplot(df_expanded, aes(x, y, xend = xend, yend = yend)) +
+  geom_segment()
+```
+:::
+
+:::{.fragment fragment-index=1}
+
+:::{.callout-note appearance="simple"}
+## A classic question
+
+Is this a statistical transformation or a graphical operation?
+:::
+
+:::
+
+:::
+
+---
+
+A slide discussing the differences between `Stat` and `Geom` objects
+ 
+* `Stats` are used for ____
+* `Geoms` are used for ____
+
+---
+
+```{r}
+#| code-line-numbers: "|3-21|23|25|27-32|34" 
 GeomComplete <- ggproto("GeomComplete", Geom,
                         
   draw_panel = function(data, panel_params, coord) {
@@ -344,7 +527,12 @@ GeomComplete <- ggproto("GeomComplete", Geom,
   
   non_missing_aes = c("linetype", "linewidth", "shape"),
   
-  default_aes = aes(colour = "black", linewidth = 0.5, linetype = 1, alpha = NA),
+  default_aes = aes(
+    colour = "black",
+    linewidth = 0.5,
+    linetype = 1,
+    alpha = NA
+  ),
  
   draw_key = draw_key_path
   
@@ -355,11 +543,11 @@ GeomComplete <- ggproto("GeomComplete", Geom,
 
 ```{r}
 geom_complete <- function(mapping = NULL, data = NULL, 
-                             stat = StatIdentity, position = "identity", 
-                             ...,
-                             na.rm = FALSE,
-                             show.legend = NA,
-                             inherit.aes = TRUE) {
+                          stat = StatIdentity, position = "identity", 
+                          ...,
+                          na.rm = FALSE,
+                          show.legend = NA,
+                          inherit.aes = TRUE) {
   layer(
     data = data,
     mapping = mapping,
@@ -386,49 +574,304 @@ ggplot(df, aes(x, y)) +
 
 # Why extend?
 
+
 ---
 
-```{r}
-ggplot(df, aes(x, y)) +
-  geom_salesperson(size = 2, color = "firebrick") +
-  geom_complete(alpha = .8) +
-  geom_point_new(size = 3)
+As we saw previously, we can do calculations outside of **ggplot2** without the need to define a custom `Stat` object:
+
+```{r, eval = FALSE}
+dist_mat <- dist(df, diag = TRUE, upper = TRUE)
+atsp <- as.ATSP(dist_mat)
+tour <- solve_TSP(atsp)
+
+df_sorted <- df[tour,]
+
+ggplot(df_sorted, aes(x, y)) +
+  geom_path() +
+  geom_point_new() 
 ```
 
----
+## {auto-animate=true}
+
+What if we want to plot multiple groups? 
 
 ```{r}
-set.seed(1)
+#| eval: false
+df_mult <- data.frame(
+  x = rnorm(3 * 10),
+  y = rnorm(3 * 10),
+  class = rep(c("a", "b", "c"), each = 10)
+)
+```
 
+## {auto-animate=true}
+
+What if we want to plot multiple groups? 
+
+```{r}
+#| include: false
+set.seed(1)
+```
+```{r}
 df_mult <- data.frame(
   x = rnorm(3 * 10),
   y = rnorm(3 * 10),
   class = rep(c("a", "b", "c"), each = 10)
 )
 
-df_mult$x <- df_mult$x + rep(-1:1, each = 10)
+df_mult
 ```
+
+---
+
+Split-Apply-Combine!
+
+## {auto-animate=true}
+
+```{r}
+#| eval: false
+# Split
+
+df_mult_split <- split(df_mult[,c("x", "y")], df_mult$class)
+```
+
+## {auto-animate=true}
+
+```{r}
+# Split
+
+df_mult_split <- split(df_mult[,c("x", "y")], df_mult$class)
+
+str(df_mult_split)
+```
+
+
+## {auto-animate=true}
+
+```{r}
+# Split
+
+df_mult_split <- split(df_mult[,c("x", "y")], df_mult$class)
+
+df_mult_split$a
+```
+
+## {auto-animate=true}
+
+```{r}
+# Split
+
+df_mult_split <- split(df_mult[,c("x", "y")], df_mult$class)
+
+df_mult_split$b
+```
+
+## {auto-animate=true}
+
+```{r}
+# Split
+
+df_mult_split <- split(df_mult[,c("x", "y")], df_mult$class)
+
+df_mult_split$c
+```
+
+<!-- ## {auto-animate=true auto-animate-restart} -->
+## {auto-animate=true}
+
+```{r}
+#| eval: false
+# Apply
+
+class_sols <-
+  df_mult_split |>
+  lapply(dist, diag = TRUE, upper = TRUE) |>
+  lapply(as.ATSP) |>
+  lapply(solve_TSP) 
+```
+
+## {auto-animate=true}
+
+```{r}
+# Apply
+
+class_sols <-
+  df_mult_split |>
+  lapply(dist, diag = TRUE, upper = TRUE) |>
+  lapply(as.ATSP) |>
+  lapply(solve_TSP) 
+
+str(class_sols)
+```
+
+## {auto-animate=true}
+
+```{r}
+#| eval: false
+# Apply
+
+reorder_rows_by_indices <- function(df, i) df[i,]
+df_mult_split <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
+```
+
+## {auto-animate=true}
+
+```{r}
+# Apply
+
+reorder_rows_by_indices <- function(df, i) df[i,]
+df_mult_split <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
+
+str(df_mult_split)
+```
+
+## {auto-animate=true}
+
+```{r}
+# Apply
+
+reorder_rows_by_indices <- function(df, i) df[i,]
+df_mult_split <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
+
+df_mult_split$a
+```
+
+## {auto-animate=true}
+
+```{r}
+# Apply
+
+reorder_rows_by_indices <- function(df, i) df[i,]
+df_mult_split <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
+
+df_mult_split$b
+```
+
+## {auto-animate=true}
+
+```{r}
+# Apply
+
+reorder_rows_by_indices <- function(df, i) df[i,]
+df_mult_split <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
+
+df_mult_split$c
+```
+
+## {auto-animate=true}
+
+```{r}
+#| eval: false
+# Combine
+
+df_mult_ordered <- unsplit(df_mult_split, df_mult$class)
+df_mult_ordered$class <- df_mult$class
+```
+
+## {auto-animate=true}
+
+```{r}
+# Combine
+
+df_mult_ordered <- unsplit(df_mult_split, df_mult$class)
+df_mult_ordered$class <- df_mult$class
+  
+df_mult_ordered
+```
+
+---
+
+```{r}
+ggplot(df_mult_ordered, aes(x, y)) +
+  geom_path() +
+  geom_point_new() +
+  facet_wrap(vars(class))
+```
+
+---
+
+:::{.r-stack}
+
+:::{.fragment .semi-fade-out fragment-index=1}
+```{r}
+#| eval: false
+# Split
+df_mult_split <- split(df_mult[,c("x", "y")], df_mult$class)
+
+# Apply
+class_sols <-
+  df_mult_split |>
+  lapply(dist, diag = TRUE, upper = TRUE) |>
+  lapply(as.ATSP) |>
+  lapply(solve_TSP) 
+
+reorder_rows_by_indices <- function(df, i) df[i,]
+df_mult_split <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
+
+# Combine
+df_mult_ordered <- unsplit(df_mult_split, df_mult$class)
+df_mult_ordered$class <- df_mult$class
+```
+:::
+
+:::{.fragment fragment-index=1}
+:::{.callout-note appearance="simple" icon=false}
+Instead, we can let **ggplot2** do this for us!
+:::
+:::
+
+:::
 
 ---
 
 ```{r}
 ggplot(df_mult, aes(x, y)) +
+  geom_salesperson() +
+  geom_point_new() +
+  facet_wrap(vars(class)) 
+```
+
+
+---
+
+:::{.r-stack}
+
+:::{.fragment .semi-fade-out fragment-index=1}
+```{r}
+ggplot(df_mult, aes(x, y)) +
   geom_salesperson(size = 2, color = "firebrick") +
-  geom_complete(alpha = .8) +
+  geom_complete(alpha = .3) +
   geom_point_new(size = 3) +
   facet_wrap(vars(class)) +
   theme_minimal()
+```
+:::
+
+:::{.fragment fragment-index=1}
+
+:::{.callout-note appearance="simple"}
+## Understanding the internals
+
+**ggplot2** is using the same split-apply-combine strategy for each layer, 
+`$compute_layer()` and `$draw_layer()` methods call `$compute_panel()` or `$draw_panel()` for each `class`!
+:::
+
+:::
+
+:::
+
+---
+
+```{r}
+#| code-line-numbers: "1|8-25|19-24|23" 
+GeomComplete$draw_layer
 ```
 
 ---
 
 ```{r}
-ggplot(df_mult, aes(x, y, fill = class)) +
-  geom_salesperson(aes(color = class), size = 2) +
-  geom_point_new(size = 3) +
-  theme_minimal()
+#| code-line-numbers: "1|8-26|19-25|21" 
+StatSalesperson$compute_layer
 ```
-
-
 
 
