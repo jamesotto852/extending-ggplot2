@@ -37,6 +37,7 @@ theme_update(
 
 ---
 
+<!-- TODO: -->
 Go through examples of **ggplot2** extensions
 
 # A first look at **ggproto** objects
@@ -76,7 +77,7 @@ ggplot(df, aes(x, y)) +
 ---
 
 ```{r, class.output = "r"}
-#| code-line-numbers: false
+#| code-line-numbers: "false" 
 #| comment: ""
 #| collapse: false
 
@@ -100,22 +101,7 @@ procedures and defaults to create a scatterplot.
 ---
 
 ```{r}
-#| code-line-numbers: "|8" 
-GeomPoint
-```
-
----
-
-```{r}
-#| code-line-numbers: "|8-18" 
-GeomPoint$draw_panel
-```
-<!-- "Graphical primitives" -->
-
----
-
-```{r}
-#| code-line-numbers: "4" 
+#| code-line-numbers: "|4" 
 GeomPoint
 ```
 
@@ -127,12 +113,30 @@ GeomPoint$default_aes
 
 ---
 
+```{r}
+#| code-line-numbers: "8" 
+GeomPoint
+```
+
+---
+
+<!-- Slightly out of order to get caught up in details on Geoms here: coord$transform() and pointsGrob() -->
+<!-- Just point out, mention that we'll look more at these ideas later when we make our own Geom class -->
+```{r}
+#| code-line-numbers: "|8-19|13|16-19" 
+GeomPoint$draw_panel
+```
+<!-- "Graphical primitives" -->
+
+---
+
 It is simple to extend via inheritance,
 creating `GeomPointNew` from `GeomPoint` with a few adjustments to the default aesthetic options.
 
-Using the `ggproto()` function...
 
----
+:::{.fragment}
+
+<!-- Maybe explain what `ggproto()` is? -->
 
 ```{r}
 GeomPointNew <- ggproto("GeomPointNew", GeomPoint,
@@ -149,10 +153,25 @@ GeomPointNew <- ggproto("GeomPointNew", GeomPoint,
 )
 ```
 
+:::
+
 ---
 
 ```{r}
-#| code-line-numbers: "|8" 
+#| code-line-numbers: "|4" 
+GeomPointNew
+```
+
+---
+
+```{r}
+GeomPointNew$default_aes
+```
+
+---
+
+```{r}
+#| code-line-numbers: "8" 
 GeomPointNew
 ```
 
@@ -161,19 +180,6 @@ GeomPointNew
 ```{r}
 #| code-line-numbers: "|8-18" 
 GeomPointNew$draw_panel
-```
-
----
-
-```{r}
-#| code-line-numbers: "4" 
-GeomPointNew
-```
-
----
-
-```{r}
-GeomPointNew$default_aes
 ```
 
 ---
@@ -220,6 +226,7 @@ ggplot(df, aes(x, y)) +
 
 ---
 
+<!-- TODO: -->
 Introduce travelling salesperson problem with simple graphics
 
 ## {auto-animate=true}
@@ -442,12 +449,14 @@ ggplot(df, aes(x, y)) +
 
 ---
 
-Minor Introduction to grobs, reference book on grid graphics
+<!-- TODO: -->
+Minor introduction to grobs, reference book on grid graphics
 
 Use `segmentsGrob()` as an example!
 
 ---
 
+<!-- TODO: -->
 Introduction to complete graphs
 
 ---
@@ -492,6 +501,7 @@ Is this a statistical transformation or a graphical operation?
 
 ---
 
+<!-- TODO: -->
 A slide discussing the differences between `Stat` and `Geom` objects
  
 * `Stats` are used for ____
@@ -500,9 +510,20 @@ A slide discussing the differences between `Stat` and `Geom` objects
 ---
 
 ```{r}
-#| code-line-numbers: "|3-21|23|25|27-32|34" 
+#| code-line-numbers: "|3|5-12|14-32|16-18|20|22-30|34" 
 GeomComplete <- ggproto("GeomComplete", Geom,
                         
+  required_aes = c("x", "y"),
+  
+  default_aes = aes(
+    colour = "black",
+    linewidth = 0.5,
+    linetype = 1,
+    alpha = NA
+  ),
+  
+  non_missing_aes = c("linetype", "linewidth", "shape"),
+  
   draw_panel = function(data, panel_params, coord) {
     
     data_expanded <- data[rep(1:nrow(data), each = nrow(data)), ]
@@ -522,17 +543,6 @@ GeomComplete <- ggproto("GeomComplete", Geom,
     )
     
   },
-  
-  required_aes = c("x", "y"),
-  
-  non_missing_aes = c("linetype", "linewidth", "shape"),
-  
-  default_aes = aes(
-    colour = "black",
-    linewidth = 0.5,
-    linetype = 1,
-    alpha = NA
-  ),
  
   draw_key = draw_key_path
   
@@ -577,7 +587,9 @@ ggplot(df, aes(x, y)) +
 
 ---
 
-As we saw previously, we can do calculations outside of **ggplot2** without the need to define a custom `Stat` object:
+Revisiting the traveling salesperson problem,
+we saw previously that we can easily perform the necessary calculations outside of **ggplot2**;
+avoiding the hassle of defining `GeomSalesperson` and friends:
 
 ```{r, eval = FALSE}
 dist_mat <- dist(df, diag = TRUE, upper = TRUE)
@@ -625,6 +637,10 @@ df_mult
 ---
 
 Split-Apply-Combine!
+
+<!-- TODO: -->
+Insert graphic here, along with reference
+https://vita.had.co.nz/papers/plyr.pdf
 
 ## {auto-animate=true}
 
@@ -863,7 +879,7 @@ ggplot(df_mult, aes(x, y)) +
 ---
 
 ```{r}
-#| code-line-numbers: "1|8-25|19-24|23" 
+#| code-line-numbers: "1|8-25|17-22|21" 
 GeomComplete$draw_layer
 ```
 
