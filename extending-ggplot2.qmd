@@ -736,9 +736,9 @@ df_mult_split <- Map(reorder_rows_by_indices, df_mult_split, class_sols)
 # Apply
 
 reorder_rows_by_indices <- function(df, i) df[i,]
-df_mult_split <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
+df_mult_split_ordered <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
 
-str(df_mult_split)
+str(df_mult_split_ordered)
 ```
 
 ## {auto-animate=true}
@@ -747,9 +747,9 @@ str(df_mult_split)
 # Apply
 
 reorder_rows_by_indices <- function(df, i) df[i,]
-df_mult_split <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
+df_mult_split_ordered <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
 
-df_mult_split$a
+df_mult_split_ordered$a
 ```
 
 ## {auto-animate=true}
@@ -758,9 +758,9 @@ df_mult_split$a
 # Apply
 
 reorder_rows_by_indices <- function(df, i) df[i,]
-df_mult_split <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
+df_mult_split_ordered <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
 
-df_mult_split$b
+df_mult_split_ordered$b
 ```
 
 ## {auto-animate=true}
@@ -769,9 +769,9 @@ df_mult_split$b
 # Apply
 
 reorder_rows_by_indices <- function(df, i) df[i,]
-df_mult_split <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
+df_mult_split_ordered <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
 
-df_mult_split$c
+df_mult_split_ordered$c
 ```
 
 ## {auto-animate=true}
@@ -780,7 +780,7 @@ df_mult_split$c
 #| eval: false
 # Combine
 
-df_mult_ordered <- unsplit(df_mult_split, df_mult$class)
+df_mult_ordered <- unsplit(df_mult_split_ordered, df_mult$class)
 df_mult_ordered$class <- df_mult$class
 ```
 
@@ -789,7 +789,7 @@ df_mult_ordered$class <- df_mult$class
 ```{r}
 # Combine
 
-df_mult_ordered <- unsplit(df_mult_split, df_mult$class)
+df_mult_ordered <- unsplit(df_mult_split_ordered, df_mult$class)
 df_mult_ordered$class <- df_mult$class
   
 df_mult_ordered
@@ -890,4 +890,819 @@ GeomComplete$draw_layer
 StatSalesperson$compute_layer
 ```
 
+# Details
+
+## `coord$transform()`
+```{r}
+#| code-line-numbers: "|1,13|1,16-19" 
+GeomPoint$draw_panel
+```
+
+
+## {auto-animate=true transition=fade}
+
+```{r, echo = FALSE}
+
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+p1 <- ggplot(df, aes(x, y)) +
+  geom_point()
+
+p2 <- ggplot(df, aes(x, y)) +
+  geom_point() +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks.length = unit(0, "npc"),
+    plot.margin = margin()
+  )
+
+df_rescaled <- df |>
+  mutate(
+    x = scales::rescale(x, to = c(0, 1), from = c(.55, 10.45)),
+    y = scales::rescale(y, to = c(0, 1), from = c(.55, 10.45))
+  )
+```
+
+:::: {.columns}
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+ggplot(df, aes(x, y)) +
+  geom_point()
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1
+```
+:::
+
+::::
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+# Question 1: what is the "range" 
+# of the plot along each axis?
+
+ggplot(df, aes(x, y)) +
+  geom_point()
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1
+```
+:::
+
+::::
+
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+range(df$x)
+#> [1]  1  10
+
+range(df$y)
+#> [1]  1  10
+
+ggplot(df, aes(x, y)) +
+  geom_point()
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1 
+```
+:::
+
+::::
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+range(df$x)
+#> [1]  1  10
+
+range(df$y)
+#> [1]  1  10
+
+ggplot(df, aes(x, y)) +
+  geom_point() +
+  geom_rect(
+    xmin = 1, xmax = 10,
+    ymin = 1, ymax = 10,
+    color = "red", fill = NA
+  )
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1 +
+  geom_rect(
+    xmin = 1, xmax = 10,
+    ymin = 1, ymax = 10,
+    color = "red", fill = NA
+  )
+```
+:::
+
+::::
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+range(df$x)
+#> [1]  1  10
+
+range(df$y)
+#> [1]  1  10
+
+# default from scale_x/y_continuous()
+scales::expand_range(c(1, 10), .05)
+#> [1]  0.55 10.45
+
+ggplot(df, aes(x, y)) +
+  geom_point() 
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1
+```
+:::
+
+::::
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+range(df$x)
+#> [1]  1  10
+
+range(df$y)
+#> [1]  1  10
+
+# default from scale_x/y_continuous()
+scales::expand_range(c(1, 10), .05)
+#> [1]  0.55 10.45
+
+ggplot(df, aes(x, y)) +
+  geom_point() +
+  geom_rect(
+    xmin = .55, xmax = 10.45,
+    ymin = .55, ymax = 10.45,
+    color = "red", fill = NA,
+    linewidth = 1
+  )
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1 +
+  geom_rect(
+    xmin = .55, xmax = 10.45,
+    ymin = .55, ymax = 10.45,
+    color = "red", fill = NA,
+    linewidth = 1
+  )
+```
+:::
+
+::::
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+# Question 2: how do we specify
+# where graphical primitives go?
+
+ggplot(df, aes(x, y)) +
+  geom_point()
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1
+```
+:::
+
+::::
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+ggplot(df, aes(x, y)) +
+  geom_point()
+
+grid::grid.points(x = 1, y = 1)
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1
+
+grid::grid.points(x = 1, y = 1)
+```
+:::
+
+::::
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+ggplot(df, aes(x, y)) +
+  geom_point()
+
+grid::grid.points(x = 1, y = 1)
+grid::grid.points(x = 10, y = 10)
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1
+
+grid::grid.points(x = 1, y = 1)
+grid::grid.points(x = 10, y = 10)
+```
+:::
+
+::::
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+ggplot(df, aes(x, y)) +
+  geom_point()
+
+grid::grid.points(x = 1, y = 1)
+grid::grid.points(x = 10, y = 10)
+grid::grid.points(x = 100, y = 100)
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1
+
+grid::grid.points(x = 1, y = 1)
+grid::grid.points(x = 10, y = 10)
+grid::grid.points(x = 100, y = 100)
+```
+:::
+
+::::
+
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+ggplot(df, aes(x, y)) +
+  geom_point()
+
+grid::grid.points(
+  x = grid::unit(1/2, "npc"),
+  y = grid::unit(1/2, "npc")
+)
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1
+
+grid::grid.points(
+  x = grid::unit(1/2, "npc"),
+  y = grid::unit(1/2, "npc")
+)
+```
+:::
+
+::::
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+ggplot(df, aes(x, y)) +
+  geom_point() 
+
+grid::grid.points(
+  x = grid::unit(1/2, "npc"),
+  y = grid::unit(1/2, "npc")
+)
+
+grid::grid.points(
+  x = grid::unit(c(0, 0, 1, 1), "npc"),
+  y = grid::unit(c(0, 1, 0, 1), "npc"),
+  gp = grid::gpar(col = "red")
+)
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1
+
+grid::grid.points(
+  x = grid::unit(1/2, "npc"),
+  y = grid::unit(1/2, "npc")
+)
+
+grid::grid.points(
+  x = grid::unit(c(0, 0, 1, 1), "npc"),
+  y = grid::unit(c(0, 1, 0, 1), "npc"),
+  gp = grid::gpar(col = "red")
+)
+```
+:::
+
+::::
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+ggplot(df, aes(x, y)) +
+  geom_point() +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks.length = unit(0, "npc"),
+    plot.margin = margin()
+  )
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p2
+```
+:::
+
+::::
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+ggplot(df, aes(x, y)) +
+  geom_point() +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks.length = unit(0, "npc"),
+    plot.margin = margin()
+  )
+
+grid::grid.points(
+  x = grid::unit(1/2, "npc"),
+  y = grid::unit(1/2, "npc")
+)
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p2
+
+grid::grid.points(
+  x = grid::unit(1/2, "npc"),
+  y = grid::unit(1/2, "npc")
+)
+```
+:::
+
+::::
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+ggplot(df, aes(x, y)) +
+  geom_point() +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks.length = unit(0, "npc"),
+    plot.margin = margin()
+  )
+
+grid::grid.points(
+  x = grid::unit(1/2, "npc"),
+  y = grid::unit(1/2, "npc")
+)
+
+grid::grid.points(
+  x = grid::unit(c(0, 0, 1, 1), "npc"),
+  y = grid::unit(c(0, 1, 0, 1), "npc"),
+  gp = grid::gpar(col = "red")
+)
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p2
+
+grid::grid.points(
+  x = grid::unit(1/2, "npc"),
+  y = grid::unit(1/2, "npc")
+)
+
+grid::grid.points(
+  x = grid::unit(c(0, 0, 1, 1), "npc"),
+  y = grid::unit(c(0, 1, 0, 1), "npc"),
+  gp = grid::gpar(col = "red")
+)
+```
+:::
+
+::::
+
+
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+ggplot(df, aes(x, y)) +
+  geom_point() +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks.length = unit(0, "npc"),
+    plot.margin = margin()
+  )
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p2
+```
+:::
+
+::::
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+ggplot(df, aes(x, y)) +
+  geom_point() +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks.length = unit(0, "npc"),
+    plot.margin = margin()
+  )
+
+df_rescaled <- df |>
+  mutate(
+    x = scales::rescale(x, 
+      to = c(0, 1), from = c(.55, 10.45)),
+    y = scales::rescale(y, 
+      to = c(0, 1), from = c(.55, 10.45))
+  )
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p2
+
+df_rescaled <- df |>
+  mutate(
+    x = scales::rescale(x, to = c(0, 1), from = c(.55, 10.45)),
+    y = scales::rescale(y, to = c(0, 1), from = c(.55, 10.45))
+  )
+```
+:::
+
+::::
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+ggplot(df, aes(x, y)) +
+  geom_point() +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks.length = unit(0, "npc"),
+    plot.margin = margin()
+  )
+
+df_rescaled <- df |>
+  mutate(
+    x = scales::rescale(x, 
+      to = c(0, 1), from = c(.55, 10.45)),
+    y = scales::rescale(y, 
+      to = c(0, 1), from = c(.55, 10.45))
+  )
+
+grid::grid.points(
+  x = grid::unit(df_rescaled$x, "npc"),
+  y = grid::unit(df_rescaled$y, "npc")
+)
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p2
+
+df_rescaled <- df |>
+  mutate(
+    x = scales::rescale(x, to = c(0, 1), from = c(.55, 10.45)),
+    y = scales::rescale(y, to = c(0, 1), from = c(.55, 10.45))
+  )
+
+grid::grid.points(
+  x = grid::unit(df_rescaled$x, "npc"),
+  y = grid::unit(df_rescaled$y, "npc")
+)
+```
+:::
+
+::::
+
+---
+
+```{r}
+#| code-line-numbers: "1,13" 
+GeomPoint$draw_panel
+```
+
+---
+
+```{r}
+#| code-line-numbers: "|1,10-11" 
+ggplot2:::CoordCartesian$transform
+```
+
+---
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|5,14" 
+# Can debug interactively with {ggtrace}
+# to learn about `panel_params$x/y$rescale()`
+ggtrace::ggdebugonce(ggplot2:::CoordCartesian$transform)
+
+panel_params$x$rescale
+#> <ggproto method>
+#>   <Wrapper function>
+#>   function (...) 
+#>     rescale(..., self = self)
+#> 
+#>   <Inner function (f)>
+#>     function (self, x) 
+#> {
+#>     self$scale$rescale(x, self$limits, self$continuous_range)
+#> }
+```
+
+<!-- --- -->
+
+<!-- :::{.r-stack} -->
+
+<!-- :::{.fragment .fade-out fragment-index=1} -->
+<!-- :::{.callout-tip .callout-code appearance="simple" icon=false} -->
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- #| code-line-numbers: "10"  -->
+<!-- ggplot(df, aes(x, y)) + -->
+<!--   geom_point() + -->
+<!--   theme( -->
+<!--     axis.title = element_blank(), -->
+<!--     axis.text = element_blank(), -->
+<!--     axis.ticks.length = unit(0, "npc"), -->
+<!--     plot.margin = margin() -->
+<!--   ) -->
+
+<!-- grid::grid.points(x = grid::unit(1/2, "npc"), y = grid::unit(1/2, "npc")) -->
+<!-- ``` -->
+<!-- ::: -->
+<!-- ::: -->
+
+
+<!-- ```{r} -->
+<!-- #| echo: false -->
+<!-- #| fig-height: 6 -->
+<!-- p2 -->
+<!-- grid::grid.points(x = grid::unit(1/2, "npc"), y = grid::unit(1/2, "npc")) -->
+<!-- ``` -->
+
+<!-- ::: -->
+
+## `Geom$setup_data()`
+temp
+
+---
+
+temp
 

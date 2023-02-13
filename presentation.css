@@ -11,6 +11,10 @@ div .csl-entry {
   font-size: .85em;
 }
 
+.column-code {
+  font-size: .65em;
+}
+
 .cell-output-stdout {
   margin-top: 8px;
   font-size: .88em;
@@ -23,6 +27,13 @@ div .csl-entry {
 
 .callout {
   background-color: white;
+}
+
+/*-- used for callouts with code --*/
+.callout-tip {
+  padding: 0 !important;
+  border: 0 !important;
+  
 }
 
 .reveal div.sourceCode pre code {
