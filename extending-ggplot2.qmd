@@ -123,7 +123,7 @@ GeomPoint
 <!-- Slightly out of order to get caught up in details on Geoms here: coord$transform() and pointsGrob() -->
 <!-- Just point out, mention that we'll look more at these ideas later when we make our own Geom class -->
 ```{r}
-#| code-line-numbers: "|8-19|13|16-19" 
+#| code-line-numbers: "|1,8-19|1,13|1,16-19" 
 GeomPoint$draw_panel
 ```
 <!-- "Graphical primitives" -->
@@ -178,7 +178,7 @@ GeomPointNew
 ---
 
 ```{r}
-#| code-line-numbers: "|8-18" 
+#| code-line-numbers: "|1,8-19" 
 GeomPointNew$draw_panel
 ```
 
@@ -447,17 +447,66 @@ ggplot(df, aes(x, y)) +
 
 # Extending geoms (complete graphs)
 
+## A note on "Grobs" 
+
+::: {.incremental}
+
+* Grobs are the fundamental building blocks of graphics in R[^1],
+the "graphical primitives".
+* These are the objects **ggplot2**'s `Geom` classes
+use to "draw".
+
+:::
+
+[^1]: Paul Murrell's ["R Graphics"](https://www.stat.auckland.ac.nz/~paul/RG2e/) is a good resource to learn more about Grobs (and more generally, **grid**)
+
+---
+
+```{r}
+#| fig-align: "center"
+line_segments <- 
+  grid::segmentsGrob(
+    x0 = seq(.1,  .9,  length = 10),
+    x1 = seq(.15, .95, length = 10),
+    y0 = rep(.05,      length = 10),
+    y1 = rep(.95,      length = 10)
+  )
+
+grid::grid.draw(line_segments)
+```
+
+---
+
+```{r}
+#| code-line-numbers: "|1,19-23" 
+GeomSegment$draw_panel
+```
+
+
+<!-- ## {transition="fade"} -->
+
+<!-- ```{r} -->
+<!-- #| fig-align: "center" -->
+<!-- # `grid.*()` is equivalent to `*Grob()` |> `grid.draw()` -->
+<!-- # (we will need this later) -->
+
+<!-- grid::grid.segments( -->
+<!--   x0 = seq(.1,  .9,  length = 10), -->
+<!--   x1 = seq(.15, .95, length = 10), -->
+<!--   y0 = rep(.05,      length = 10), -->
+<!--   y1 = rep(.95,      length = 10) -->
+<!-- ) -->
+<!-- ``` -->
+
+
 ---
 
 <!-- TODO: -->
-Minor introduction to grobs, reference book on grid graphics
+<!-- Consider moving this to the beginning,  -->
+<!-- intro to grobs to after hand-crafted ex, -->
+<!-- remove body of GeomSegments$draw_panel -->
 
-Use `segmentsGrob()` as an example!
-
----
-
-<!-- TODO: -->
-Introduction to complete graphs
+![](images/CompleteGraphs.svg){fig-align="center"}
 
 ---
 
@@ -478,34 +527,10 @@ df_expanded
 
 ---
 
-:::{.r-stack}
-
-:::{.fragment .semi-fade-out fragment-index=1}
 ```{r}
 ggplot(df_expanded, aes(x, y, xend = xend, yend = yend)) +
   geom_segment()
 ```
-:::
-
-:::{.fragment fragment-index=1}
-
-:::{.callout-note appearance="simple"}
-## A classic question
-
-Is this a statistical transformation or a graphical operation?
-:::
-
-:::
-
-:::
-
----
-
-<!-- TODO: -->
-A slide discussing the differences between `Stat` and `Geom` objects
- 
-* `Stats` are used for ____
-* `Geoms` are used for ____
 
 ---
 
@@ -576,10 +601,51 @@ geom_complete <- function(mapping = NULL, data = NULL,
 
 ---
 
+:::{.r-stack}
+
+:::{.fragment .semi-fade-out fragment-index=1}
+
 ```{r}
 ggplot(df, aes(x, y)) +
   geom_complete()
 ```
+:::
+
+:::{.fragment fragment-index=1}
+
+:::{.callout-note appearance="simple"}
+## A classic question
+
+Is this a statistical transformation or a graphical operation?
+:::
+
+:::
+
+:::
+
+---
+
+### An aside: `Stat` vs `Geom` implementations 
+
+* `Stat`s are used for transformations[^2] of data
+* `Geom`s are used for converting data structures into their visual representations[^3]
+
+[^2]: sometimes these are statistical transformations
+[^3]: and "simple" transformations of data
+
+---
+
+### An aside: `Stat` vs `Geom` implementations 
+
+::: {.incremental style="size: .7em"}
+
+Things to consider when deciding which to implement:
+
+* Can you implement a `Stat` which "plugs in" to an existing `Geom`? (e.g. `StatSalesperson` and `GeomSegment`)?
+* Would a user rather have the ability to specify an alternate `Stat` or `Geom`?
+* Which is easier? (typically, the `Stat` implementation)
+
+:::
 
 
 # Why extend?
@@ -855,7 +921,7 @@ ggplot(df_mult, aes(x, y)) +
 :::{.fragment .semi-fade-out fragment-index=1}
 ```{r}
 ggplot(df_mult, aes(x, y)) +
-  geom_salesperson(size = 2, color = "firebrick") +
+  geom_salesperson(linewidth = 2, color = "firebrick") +
   geom_complete(alpha = .3) +
   geom_point_new(size = 3) +
   facet_wrap(vars(class)) +
@@ -879,14 +945,14 @@ ggplot(df_mult, aes(x, y)) +
 ---
 
 ```{r}
-#| code-line-numbers: "1|8-25|17-22|21" 
+#| code-line-numbers: "1|8-25|17|21" 
 GeomComplete$draw_layer
 ```
 
 ---
 
 ```{r}
-#| code-line-numbers: "1|8-26|19-25|21" 
+#| code-line-numbers: "1|8-26|19|21" 
 StatSalesperson$compute_layer
 ```
 
@@ -1274,6 +1340,33 @@ grid::grid.points(x = 100, y = 100)
 
 ::::
 
+
+## {auto-animate=true transition=fade}
+
+:::: {.columns }
+
+::: {.column .column-code width="40%"}
+```{r}
+#| eval: false
+df <- data.frame(
+  x = 1:10,
+  y = 1:10
+) 
+
+ggplot(df, aes(x, y)) +
+  geom_point()
+```
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1
+```
+:::
+
+::::
 
 ## {auto-animate=true transition=fade}
 
