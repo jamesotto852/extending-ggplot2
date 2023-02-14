@@ -133,7 +133,7 @@ aligned_plots[[5]]
 
 # A first look at **ggproto** objects
 
-## {auto-animate=true}
+## {data-menu-title="GeomPoint 1" auto-animate=true}
 
 ```{r}
 df <- data.frame(
@@ -142,7 +142,7 @@ df <- data.frame(
 )
 ```
 
-## {auto-animate=true}
+## {data-menu-title="GeomPoint 2" auto-animate=true}
 ```{r}
 #| include: false
 set.seed(1)
@@ -156,14 +156,14 @@ df <- data.frame(
 df
 ```
 
----
+## {data-menu-title="GeomPoint 3"}
 
 ```{r}
 ggplot(df, aes(x, y)) +
   geom_point()
 ```
 
----
+## {data-menu-title="GeomPoint 4"}
 
 ```{r, class.output = "r"}
 #| code-line-numbers: "false" 
@@ -173,50 +173,49 @@ ggplot(df, aes(x, y)) +
 geom_point
 ```
 
----
+## {data-menu-title="GeomPoint 5"}
 
 ```{r}
 ggplot(df, aes(x, y)) +
   layer(geom = GeomPoint, stat = StatIdentity, position = "identity")
 ```
 
----
+## {data-menu-title="GeomPoint 6"}
 
 **ggplot2** is built on the ggproto object oriented system.
 
 `GeomPoint` and `StatIdentity` are each classes\* with methods and fields that encode the relevant 
 procedures and defaults to create a scatterplot.
 
----
+## {data-menu-title="GeomPoint 7"}
 
 ```{r}
 #| code-line-numbers: "|4" 
 GeomPoint
 ```
 
----
+## {data-menu-title="GeomPoint 8"}
 
 ```{r}
 GeomPoint$default_aes
 ```
 
----
+## {data-menu-title="GeomPoint 9"}
 
 ```{r}
 #| code-line-numbers: "8" 
 GeomPoint
 ```
 
----
+## {data-menu-title="GeomPoint 10"}
 
 <!-- Slightly out of order to get caught up in details on Geoms here: coord$transform() and pointsGrob() -->
-<!-- Just point out, mention that we'll look more at these ideas later when we make our own Geom class -->
+<!-- Just point out, mention that we'll look more at these ideas later when we make our own Geom -->
 ```{r}
 GeomPoint$draw_panel
 ```
-<!-- "Graphical primitives" -->
 
----
+## {data-menu-title="GeomPointNew 1"}
 
 It is simple to extend via inheritance,
 creating `GeomPointNew` from `GeomPoint` with a few adjustments to the default aesthetic options.
@@ -243,40 +242,40 @@ GeomPointNew <- ggproto("GeomPointNew", GeomPoint,
 
 :::
 
----
+## {data-menu-title="GeomPointNew 2"}
 
 ```{r}
 #| code-line-numbers: "|4" 
 GeomPointNew
 ```
 
----
+## {data-menu-title="GeomPointNew 3"}
 
 ```{r}
 GeomPointNew$default_aes
 ```
 
----
+## {data-menu-title="GeomPointNew 4"}
 
 ```{r}
 #| code-line-numbers: "8" 
 GeomPointNew
 ```
 
----
+## {data-menu-title="GeomPointNew 5"}
 
 ```{r}
 GeomPointNew$draw_panel
 ```
 
----
+## {data-menu-title="GeomPointNew 6"}
 
 ```{r}
 ggplot(df, aes(x, y)) +
   layer(geom = GeomPointNew, stat = StatIdentity, position = "identity")
 ```
 
----
+## {data-menu-title="GeomPointNew 7"}
 
 ```{r}
 #| code-line-numbers: "|11" 
@@ -302,7 +301,7 @@ geom_point_new <- function(mapping = NULL, data = NULL,
 }
 ```
 
----
+## {data-menu-title="GeomPointNew 8"}
 
 ```{r}
 ggplot(df, aes(x, y)) +
@@ -310,12 +309,12 @@ ggplot(df, aes(x, y)) +
 ```
 
 
-# Extending stats 
+# Extending stats <br> (traveling salesperson)
 
 ## {data-menu-title="salesperson intro 1"}
 
-<!-- TODO: -->
-Introduce travelling salesperson problem with simple graphics
+<!-- Img source: https://getcircuit.com/teams/blog/what-is-the-traveling-salesman-problem -->
+![](images/TSP.png){fig-align="center"}
 
 ## {data-menu-title="salesperson intro 2"}
 
@@ -581,14 +580,13 @@ ggplot(df_expanded, aes(x, y, xend = xend, yend = yend)) +
 
 ::: {.incremental}
 
-* Grobs are the fundamental building blocks of graphics in R[^1],
+* Grobs are the fundamental building blocks of graphics in R,
 the "graphical primitives".
 * These are the objects **ggplot2**'s `Geom` classes
 use to "draw".
+* Paul Murrell's ["R Graphics"](https://www.stat.auckland.ac.nz/~paul/RG2e/) is a good resource to learn more about Grobs (and more generally, **grid**)
 
 :::
-
-[^1]: Paul Murrell's ["R Graphics"](https://www.stat.auckland.ac.nz/~paul/RG2e/) is a good resource to learn more about Grobs (and more generally, **grid**)
 
 ## {data-menu-title="Grobs discussion 2"}
 
@@ -731,11 +729,11 @@ Is this a statistical transformation or a graphical operation?
 
 ### An aside: `Stat` vs `Geom` implementations 
 
-* `Stat`s are used for transformations[^2] of data
-* `Geom`s are used for converting data structures into their visual representations[^3]
+* `Stat`s are used for transformations[^1] of data
+* `Geom`s are used for converting data structures into their visual representations[^2]
 
-[^2]: sometimes these are statistical transformations
-[^3]: and "simple" transformations of data
+[^1]: sometimes these are statistical transformations
+[^2]: and "simple" transformations of data
 
 ## {data-menu-title="Stats vs Geoms 2"}
 
@@ -806,11 +804,9 @@ df_mult
 
 ## {data-menu-title="Why extend 4"}
 
-Split-Apply-Combine!
+Split, Apply, Combine!
 
-<!-- TODO: -->
-Insert graphic here, along with reference
-https://vita.had.co.nz/papers/plyr.pdf
+![](images/split-apply-combine.jpg){fig-align="center"}
 
 ## {data-menu-title="Why extend 5" auto-animate=true}
 
@@ -1079,7 +1075,7 @@ GeomPoint$draw_panel
 ```
 
 
-## {data-menu-title="coord$transform() pt 1" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 1" auto-animate=true transition=fade}
 
 ```{r, echo = FALSE}
 
@@ -1132,7 +1128,7 @@ p1
 
 ::::
 
-## {data-menu-title="coord$transform() pt 2" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 2" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1163,7 +1159,7 @@ p1
 ::::
 
 
-## {data-menu-title="coord$transform() pt 3" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 3" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1196,7 +1192,7 @@ p1
 
 ::::
 
-## {data-menu-title="coord$transform() pt 4" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 4" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1239,7 +1235,7 @@ p1 +
 
 ::::
 
-## {data-menu-title="coord$transform() pt 5" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 5" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1276,7 +1272,7 @@ p1
 
 ::::
 
-## {data-menu-title="coord$transform() pt 6" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 6" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1325,7 +1321,7 @@ p1 +
 
 ::::
 
-## {data-menu-title="coord$transform() pt 7" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 7" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1355,7 +1351,7 @@ p1
 
 ::::
 
-## {data-menu-title="coord$transform() pt 8" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 8" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1386,7 +1382,7 @@ grid::grid.points(x = 1, y = 1)
 
 ::::
 
-## {data-menu-title="coord$transform() pt 9" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 9" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1419,7 +1415,7 @@ grid::grid.points(x = 10, y = 10)
 
 ::::
 
-## {data-menu-title="coord$transform() pt 10" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 10" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1433,18 +1429,6 @@ df <- data.frame(
 
 ggplot(df, aes(x, y)) +
   geom_point()
-
-grid::grid.points(x = 1, y = 1)
-grid::grid.points(x = 10, y = 10)
-grid::grid.points(x = 100, y = 100)
-```
-:::
-
-::: {.column width="60%"}
-```{r}
-#| echo: false
-#| fig-height: 8
-p1
 
 grid::grid.points(x = 1, y = 1)
 grid::grid.points(x = 10, y = 10)
@@ -1452,10 +1436,22 @@ grid::grid.points(x = 100, y = 100)
 ```
 :::
 
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1
+
+grid::grid.points(x = 1, y = 1)
+grid::grid.points(x = 10, y = 10)
+grid::grid.points(x = 100, y = 100)
+```
+:::
+
 ::::
 
 
-## {data-menu-title="coord$transform() pt 11" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 11" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1482,7 +1478,7 @@ p1
 
 ::::
 
-## {data-menu-title="coord$transform() pt 12" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 12" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1519,7 +1515,7 @@ grid::grid.points(
 
 ::::
 
-## {data-menu-title="coord$transform() pt 13" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 13" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1568,7 +1564,7 @@ grid::grid.points(
 
 ::::
 
-## {data-menu-title="coord$transform() pt 14" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 14" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1601,7 +1597,7 @@ p2
 
 ::::
 
-## {data-menu-title="coord$transform() pt 15" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 15" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1644,7 +1640,7 @@ grid::grid.points(
 
 ::::
 
-## {data-menu-title="coord$transform() pt 16" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 16" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1664,25 +1660,6 @@ ggplot(df, aes(x, y)) +
     axis.ticks.length = unit(0, "npc"),
     plot.margin = margin()
   )
-
-grid::grid.points(
-  x = grid::unit(1/2, "npc"),
-  y = grid::unit(1/2, "npc")
-)
-
-grid::grid.points(
-  x = grid::unit(c(0, 0, 1, 1), "npc"),
-  y = grid::unit(c(0, 1, 0, 1), "npc"),
-  gp = grid::gpar(col = "red")
-)
-```
-:::
-
-::: {.column width="60%"}
-```{r}
-#| echo: false
-#| fig-height: 8
-p2
 
 grid::grid.points(
   x = grid::unit(1/2, "npc"),
@@ -1697,11 +1674,30 @@ grid::grid.points(
 ```
 :::
 
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p2
+
+grid::grid.points(
+  x = grid::unit(1/2, "npc"),
+  y = grid::unit(1/2, "npc")
+)
+
+grid::grid.points(
+  x = grid::unit(c(0, 0, 1, 1), "npc"),
+  y = grid::unit(c(0, 1, 0, 1), "npc"),
+  gp = grid::gpar(col = "red")
+)
+```
+:::
+
 ::::
 
 
 
-## {data-menu-title="coord$transform() pt 17" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 17" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1733,7 +1729,7 @@ p2
 :::
 
 ::::
-## {data-menu-title="coord$transform() pt 18" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 18" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1782,7 +1778,7 @@ df_rescaled <- df |>
 
 ::::
 
-## {data-menu-title="coord$transform() pt 19" auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() 19" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1841,21 +1837,21 @@ grid::grid.points(
 
 ::::
 
-## {data-menu-title="coord$transform() pt 20"}
+## {data-menu-title="coord$transform() 20"}
 
 ```{r}
 #| code-line-numbers: "1,13" 
 GeomPoint$draw_panel
 ```
 
-## {data-menu-title="coord$transform() pt 21"}
+## {data-menu-title="coord$transform() 21"}
 
 ```{r}
 #| code-line-numbers: "|1,10-11" 
 ggplot2:::CoordCartesian$transform
 ```
 
-## {data-menu-title="coord$transform() pt 22"}
+## {data-menu-title="coord$transform() 22"}
 
 ```{r}
 #| eval: false
@@ -1910,13 +1906,6 @@ panel_params$x$rescale
 
 <!-- ::: -->
 
-## `Geom$setup_data()`
-temp
-
-## {data-menu-title="Geom$setup_data() pt 1"}
-
-temp
-
 ## Prototypes
 
 * Technically, `Stat`s and `Geom`s are not classes; they are prototypes.
@@ -1925,7 +1914,7 @@ temp
 * This does not come up frequently, but it can lead to unexpected behavior 
 :::
 
-## {data-menu-title="Prototypes pt 1"}
+## {data-menu-title="Prototypes 1"}
 
 ```{r}
 #| code-line-numbers: "1-2|4-7|9-31" 
@@ -1936,7 +1925,7 @@ ls(GeomComplete)
 
 GeomComplete$draw_layer
 ```
-## {data-menu-title="Prototypes pt 2"}
+## {data-menu-title="Prototypes 2"}
 
 ```{r}
 #| code-line-numbers: "1-3|5-7|9-11" 
@@ -1950,10 +1939,4 @@ B$x
 A$x <- 3
 B$x
 ```
-
-
-
-
-
-
 

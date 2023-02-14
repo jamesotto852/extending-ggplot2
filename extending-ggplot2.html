@@ -451,7 +451,7 @@
 <h1>A first look at <strong>ggproto</strong> objects</h1>
 
 </section>
-<section id="section-5" class="slide level2" data-auto-animate="true">
+<section id="section-5" class="slide level2" data-menu-title="GeomPoint 1" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb6-1" class="hljs-ln-code"><a href="#cb6-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
@@ -460,7 +460,7 @@
 <span id="cb6-4" class="hljs-ln-code"><a href="#cb6-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-6" class="slide level2" data-auto-animate="true">
+<section id="section-6" class="slide level2" data-menu-title="GeomPoint 2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb7-1" class="hljs-ln-code"><a href="#cb7-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
@@ -479,16 +479,16 @@
 </div>
 </div>
 </section>
-<section class="slide level2">
-
+<section id="section-7" class="slide level2" data-menu-title="GeomPoint 3">
+<h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
+<section id="section-8" class="slide level2" data-menu-title="GeomPoint 4">
+<h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9" data-code-line-numbers="false"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>geom_point</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -499,26 +499,26 @@
 <span id="cb10-5"><a href="#cb10-5"></a>        <span class="at">position =</span> position, <span class="at">show.legend =</span> show.legend, <span class="at">inherit.aes =</span> inherit.aes, </span>
 <span id="cb10-6"><a href="#cb10-6"></a>        <span class="at">params =</span> <span class="fu">list2</span>(<span class="at">na.rm =</span> na.rm, ...))</span>
 <span id="cb10-7"><a href="#cb10-7"></a>}</span>
-<span id="cb10-8"><a href="#cb10-8"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x555f43730dd0</span><span class="sc">&gt;</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x56460917acc8</span><span class="sc">&gt;</span></span>
 <span id="cb10-9"><a href="#cb10-9"></a><span class="er">&lt;</span>environment<span class="sc">:</span> namespace<span class="sc">:</span>ggplot2<span class="sc">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
-<section class="slide level2">
-
+<section id="section-9" class="slide level2" data-menu-title="GeomPoint 5">
+<h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">layer</span>(<span class="at">geom =</span> GeomPoint, <span class="at">stat =</span> StatIdentity, <span class="at">position =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
+<section id="section-10" class="slide level2" data-menu-title="GeomPoint 6">
+<h2></h2>
 <p><strong>ggplot2</strong> is built on the ggproto object oriented system.</p>
 <p><code>GeomPoint</code> and <code>StatIdentity</code> are each classes* with methods and fields that encode the relevant procedures and defaults to create a scatterplot.</p>
 </section>
-<section class="slide level2">
-
+<section id="section-11" class="slide level2" data-menu-title="GeomPoint 7">
+<h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12" data-code-line-numbers="|4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>GeomPoint</span>
 <span id="cb12-2"><a href="#cb12-2"></a><span class="co">#&gt; &lt;ggproto object: Class GeomPoint, Geom, gg&gt;</span></span>
@@ -541,8 +541,8 @@
 <span id="cb12-19"><a href="#cb12-19"></a><span class="co">#&gt;     super:  &lt;ggproto object: Class Geom, gg&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section class="slide level2">
-
+<section id="section-12" class="slide level2" data-menu-title="GeomPoint 8">
+<h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>GeomPoint<span class="sc">$</span>default_aes</span>
 <span id="cb13-2"><a href="#cb13-2"></a><span class="co">#&gt; Aesthetic mapping: </span></span>
@@ -554,8 +554,8 @@
 <span id="cb13-8"><a href="#cb13-8"></a><span class="co">#&gt; * `stroke` -&gt; 0.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section class="slide level2">
-
+<section id="section-13" class="slide level2" data-menu-title="GeomPoint 9">
+<h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14" data-code-line-numbers="8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>GeomPoint</span>
 <span id="cb14-2"><a href="#cb14-2"></a><span class="co">#&gt; &lt;ggproto object: Class GeomPoint, Geom, gg&gt;</span></span>
@@ -578,10 +578,10 @@
 <span id="cb14-19"><a href="#cb14-19"></a><span class="co">#&gt;     super:  &lt;ggproto object: Class Geom, gg&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section class="slide level2">
-
+<section id="section-14" class="slide level2" data-menu-title="GeomPoint 10">
+<h2></h2>
 <!-- Slightly out of order to get caught up in details on Geoms here: coord$transform() and pointsGrob() -->
-<!-- Just point out, mention that we'll look more at these ideas later when we make our own Geom class -->
+<!-- Just point out, mention that we'll look more at these ideas later when we make our own Geom -->
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>GeomPoint<span class="sc">$</span>draw_panel</span>
 <span id="cb15-2"><a href="#cb15-2"></a><span class="co">#&gt; &lt;ggproto method&gt;</span></span>
@@ -604,10 +604,9 @@
 <span id="cb15-19"><a href="#cb15-19"></a><span class="co">#&gt;             .stroke/2, lwd = coords$stroke * .stroke/2)))</span></span>
 <span id="cb15-20"><a href="#cb15-20"></a><span class="co">#&gt; }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<!-- "Graphical primitives" -->
 </section>
-<section class="slide level2">
-
+<section id="section-15" class="slide level2" data-menu-title="GeomPointNew 1">
+<h2></h2>
 <p>It is simple to extend via inheritance, creating <code>GeomPointNew</code> from <code>GeomPoint</code> with a few adjustments to the default aesthetic options.</p>
 <div class="fragment">
 <!-- Maybe explain what `ggproto()` is? -->
@@ -627,8 +626,8 @@
 </div>
 </div>
 </section>
-<section class="slide level2">
-
+<section id="section-16" class="slide level2" data-menu-title="GeomPointNew 2">
+<h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17" data-code-line-numbers="|4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>GeomPointNew</span>
 <span id="cb17-2"><a href="#cb17-2"></a><span class="co">#&gt; &lt;ggproto object: Class GeomPointNew, GeomPoint, Geom, gg&gt;</span></span>
@@ -651,8 +650,8 @@
 <span id="cb17-19"><a href="#cb17-19"></a><span class="co">#&gt;     super:  &lt;ggproto object: Class GeomPoint, Geom, gg&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section class="slide level2">
-
+<section id="section-17" class="slide level2" data-menu-title="GeomPointNew 3">
+<h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>GeomPointNew<span class="sc">$</span>default_aes</span>
 <span id="cb18-2"><a href="#cb18-2"></a><span class="co">#&gt; Aesthetic mapping: </span></span>
@@ -664,8 +663,8 @@
 <span id="cb18-8"><a href="#cb18-8"></a><span class="co">#&gt; * `stroke` -&gt; 0.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section class="slide level2">
-
+<section id="section-18" class="slide level2" data-menu-title="GeomPointNew 4">
+<h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19" data-code-line-numbers="8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>GeomPointNew</span>
 <span id="cb19-2"><a href="#cb19-2"></a><span class="co">#&gt; &lt;ggproto object: Class GeomPointNew, GeomPoint, Geom, gg&gt;</span></span>
@@ -688,8 +687,8 @@
 <span id="cb19-19"><a href="#cb19-19"></a><span class="co">#&gt;     super:  &lt;ggproto object: Class GeomPoint, Geom, gg&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section class="slide level2">
-
+<section id="section-19" class="slide level2" data-menu-title="GeomPointNew 5">
+<h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>GeomPointNew<span class="sc">$</span>draw_panel</span>
 <span id="cb20-2"><a href="#cb20-2"></a><span class="co">#&gt; &lt;ggproto method&gt;</span></span>
@@ -713,16 +712,16 @@
 <span id="cb20-20"><a href="#cb20-20"></a><span class="co">#&gt; }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section class="slide level2">
-
+<section id="section-20" class="slide level2" data-menu-title="GeomPointNew 6">
+<h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
 <span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">layer</span>(<span class="at">geom =</span> GeomPointNew, <span class="at">stat =</span> StatIdentity, <span class="at">position =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-27-1.png" width="960" class="r-stretch"></section>
-<section class="slide level2">
-
+<section id="section-21" class="slide level2" data-menu-title="GeomPointNew 7">
+<h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22" data-code-line-numbers="|11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>geom_point_new <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
 <span id="cb22-2"><a href="#cb22-2"></a>                           <span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"identity"</span>, </span>
@@ -746,8 +745,8 @@
 <span id="cb22-20"><a href="#cb22-20"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section class="slide level2">
-
+<section id="section-22" class="slide level2" data-menu-title="GeomPointNew 8">
+<h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
 <span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">geom_point_new</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -755,16 +754,16 @@
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"></section></section>
 <section>
-<section id="extending-stats" class="title-slide slide level1 center">
-<h1>Extending stats</h1>
+<section id="extending-stats-traveling-salesperson" class="title-slide slide level1 center">
+<h1>Extending stats <br> (traveling salesperson)</h1>
 
 </section>
-<section id="section-7" class="slide level2" data-menu-title="salesperson intro 1">
+<section id="section-23" class="slide level2" data-menu-title="salesperson intro 1">
 <h2></h2>
-<!-- TODO: -->
-<p>Introduce travelling salesperson problem with simple graphics</p>
-</section>
-<section id="section-8" class="slide level2" data-menu-title="salesperson intro 2">
+<!-- Img source: https://getcircuit.com/teams/blog/what-is-the-traveling-salesman-problem -->
+
+<img data-src="images/TSP.png" class="r-stretch quarto-figure-center"></section>
+<section id="section-24" class="slide level2" data-menu-title="salesperson intro 2">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
@@ -772,7 +771,7 @@
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"></section>
-<section id="section-9" class="slide level2" data-menu-title="salesperson intro 3" data-auto-animate="true">
+<section id="section-25" class="slide level2" data-menu-title="salesperson intro 3" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb25-1" class="hljs-ln-code"><a href="#cb25-1"></a><span class="fu">library</span>(<span class="st">"TSP"</span>)</span>
@@ -782,7 +781,7 @@
 <span id="cb25-5" class="hljs-ln-code"><a href="#cb25-5"></a>tour <span class="ot">&lt;-</span> <span class="fu">solve_TSP</span>(atsp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-10" class="slide level2" data-menu-title="salesperson intro 4" data-auto-animate="true">
+<section id="section-26" class="slide level2" data-menu-title="salesperson intro 4" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb26-1" class="hljs-ln-code"><a href="#cb26-1"></a><span class="fu">library</span>(<span class="st">"TSP"</span>)</span>
@@ -797,7 +796,7 @@
 <span id="cb26-10" class="hljs-ln-code"><a href="#cb26-10"></a><span class="co">#&gt; tour length: 10.5101</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-11" class="slide level2" data-menu-title="salesperson intro 5" data-auto-animate="true">
+<section id="section-27" class="slide level2" data-menu-title="salesperson intro 5" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb27-1" class="hljs-ln-code"><a href="#cb27-1"></a><span class="fu">library</span>(<span class="st">"TSP"</span>)</span>
@@ -813,13 +812,13 @@
 <span id="cb27-11" class="hljs-ln-code"><a href="#cb27-11"></a><span class="co">#&gt;  - attr(*, "names")= chr [1:10] "8" "5" "1" "10" ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-12" class="slide level2" data-menu-title="salesperson intro 6" data-auto-animate="true">
+<section id="section-28" class="slide level2" data-menu-title="salesperson intro 6" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb28-1" class="hljs-ln-code"><a href="#cb28-1"></a>df_sorted <span class="ot">&lt;-</span> df[tour,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-13" class="slide level2" data-menu-title="salesperson intro 7" data-auto-animate="true">
+<section id="section-29" class="slide level2" data-menu-title="salesperson intro 7" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb29-1" class="hljs-ln-code"><a href="#cb29-1"></a>df_sorted <span class="ot">&lt;-</span> df[tour,]</span>
@@ -835,7 +834,7 @@
 </div>
 </div>
 </section>
-<section id="section-14" class="slide level2" data-menu-title="salesperson intro 8">
+<section id="section-30" class="slide level2" data-menu-title="salesperson intro 8">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">ggplot</span>(df_sorted, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
@@ -844,7 +843,7 @@
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-36-1.png" width="960" class="r-stretch"></section>
-<section id="section-15" class="slide level2" data-menu-title="StatSalesperson 1">
+<section id="section-31" class="slide level2" data-menu-title="StatSalesperson 1">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>StatSalesperson <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"StatSalesperson"</span>, Stat,</span>
@@ -863,7 +862,7 @@
 <span id="cb31-14"><a href="#cb31-14"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-16" class="slide level2" data-menu-title="StatSalesperson 2">
+<section id="section-32" class="slide level2" data-menu-title="StatSalesperson 2">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>stat_salesperson <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
@@ -880,7 +879,7 @@
 <span id="cb32-12"><a href="#cb32-12"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-17" class="slide level2" data-menu-title="StatSalesperson 3">
+<section id="section-33" class="slide level2" data-menu-title="StatSalesperson 3">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
@@ -889,7 +888,7 @@
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-39-1.png" width="960" class="r-stretch"></section>
-<section id="section-18" class="slide level2" data-menu-title="StatSalesperson 4">
+<section id="section-34" class="slide level2" data-menu-title="StatSalesperson 4">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>StatSalesperson <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"StatSalesperson"</span>,  Stat,</span>
@@ -908,7 +907,7 @@
 <span id="cb34-14"><a href="#cb34-14"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-19" class="slide level2" data-menu-title="StatSalesperson 5">
+<section id="section-35" class="slide level2" data-menu-title="StatSalesperson 5">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>stat_salesperson <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
@@ -935,7 +934,7 @@
 <span id="cb35-22"><a href="#cb35-22"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-20" class="slide level2" data-menu-title="StatSalesperson 6">
+<section id="section-36" class="slide level2" data-menu-title="StatSalesperson 6">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
@@ -944,7 +943,7 @@
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-42-1.png" width="960" class="r-stretch"></section>
-<section id="section-21" class="slide level2" data-menu-title="StatSalesperson 7">
+<section id="section-37" class="slide level2" data-menu-title="StatSalesperson 7">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
@@ -953,7 +952,7 @@
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-43-1.png" width="960" class="r-stretch"></section>
-<section id="section-22" class="slide level2" data-menu-title="StatSalesperson 8">
+<section id="section-38" class="slide level2" data-menu-title="StatSalesperson 8">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
@@ -962,7 +961,7 @@
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-44-1.png" width="960" class="r-stretch"></section>
-<section id="section-23" class="slide level2" data-menu-title="StatSalesperson 9">
+<section id="section-39" class="slide level2" data-menu-title="StatSalesperson 9">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>GeomSalesperson <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"GeomSalesperson"</span>, GeomPath)</span>
@@ -989,7 +988,7 @@
 <span id="cb39-22"><a href="#cb39-22"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-24" class="slide level2" data-menu-title="StatSalesperson 10">
+<section id="section-40" class="slide level2" data-menu-title="StatSalesperson 10">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
@@ -1003,11 +1002,11 @@
 <h1>Extending geoms (complete graphs)</h1>
 
 </section>
-<section id="section-25" class="slide level2" data-menu-title="complete graphs intro 1">
+<section id="section-41" class="slide level2" data-menu-title="complete graphs intro 1">
 <h2></h2>
 
 <img data-src="images/CompleteGraphs.svg" class="r-stretch quarto-figure-center"></section>
-<section id="section-26" class="slide level2" data-menu-title="complete graphs intro 2">
+<section id="section-42" class="slide level2" data-menu-title="complete graphs intro 2">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>df_circle <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
@@ -1026,7 +1025,7 @@
 </div>
 </div>
 </section>
-<section id="section-27" class="slide level2" data-menu-title="complete graphs intro 3">
+<section id="section-43" class="slide level2" data-menu-title="complete graphs intro 3">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>df_expanded <span class="ot">&lt;-</span> df_circle[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df_circle), <span class="at">each =</span> <span class="fu">nrow</span>(df_circle)), ]</span>
@@ -1042,7 +1041,7 @@
 </div>
 </div>
 </section>
-<section id="section-28" class="slide level2" data-menu-title="complete graphs intro 4">
+<section id="section-44" class="slide level2" data-menu-title="complete graphs intro 4">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>df_expanded<span class="sc">$</span>xend <span class="ot">&lt;-</span> <span class="fu">rep</span>(df_circle<span class="sc">$</span>x, <span class="at">times =</span> <span class="fu">nrow</span>(df_circle))</span>
@@ -1059,7 +1058,7 @@
 </div>
 </div>
 </section>
-<section id="section-29" class="slide level2" data-menu-title="complete graphs intro 5">
+<section id="section-45" class="slide level2" data-menu-title="complete graphs intro 5">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="fu">ggplot</span>(df_expanded, <span class="fu">aes</span>(x, y, <span class="at">xend =</span> xend, <span class="at">yend =</span> yend)) <span class="sc">+</span></span>
@@ -1072,12 +1071,13 @@
 <h2>A note on “Grobs”</h2>
 <div>
 <ul>
-<li class="fragment">Grobs are the fundamental building blocks of graphics in R<sup>1</sup>, the “graphical primitives”.</li>
+<li class="fragment">Grobs are the fundamental building blocks of graphics in R, the “graphical primitives”.</li>
 <li class="fragment">These are the objects <strong>ggplot2</strong>’s <code>Geom</code> classes use to “draw”.</li>
+<li class="fragment">Paul Murrell’s <a href="https://www.stat.auckland.ac.nz/~paul/RG2e/">“R Graphics”</a> is a good resource to learn more about Grobs (and more generally, <strong>grid</strong>)</li>
 </ul>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn1"><p>Paul Murrell’s <a href="https://www.stat.auckland.ac.nz/~paul/RG2e/">“R Graphics”</a> is a good resource to learn more about Grobs (and more generally, <strong>grid</strong>)</p></li></ol></aside></section>
-<section id="section-30" class="slide level2" data-menu-title="Grobs discussion 2">
+</section>
+<section id="section-46" class="slide level2" data-menu-title="Grobs discussion 2">
 <h2></h2>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>line_segments <span class="ot">&lt;-</span> </span>
@@ -1092,7 +1092,7 @@
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-51-1.png" width="960" class="r-stretch quarto-figure-center"></section>
-<section id="section-31" class="slide level2" data-menu-title="Grobs discussion 3">
+<section id="section-47" class="slide level2" data-menu-title="Grobs discussion 3">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46" data-code-line-numbers="|1,19-23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>GeomSegment<span class="sc">$</span>draw_panel</span>
@@ -1142,7 +1142,7 @@
 <!-- ) -->
 <!-- ``` -->
 </section>
-<section id="section-32" class="slide level2" data-menu-title="GeomComplete 1">
+<section id="section-48" class="slide level2" data-menu-title="GeomComplete 1">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47" data-code-line-numbers="1|14-32|16-18|20|22-30|3-12|34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>GeomComplete <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"GeomComplete"</span>, Geom,</span>
@@ -1183,7 +1183,7 @@
 <span id="cb47-36"><a href="#cb47-36"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-33" class="slide level2" data-menu-title="GeomComplete 2">
+<section id="section-49" class="slide level2" data-menu-title="GeomComplete 2">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>geom_complete <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
@@ -1208,7 +1208,7 @@
 <span id="cb48-20"><a href="#cb48-20"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-34" class="slide level2" data-menu-title="GeomComplete 3">
+<section id="section-50" class="slide level2" data-menu-title="GeomComplete 3">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a><span class="fu">ggplot</span>(df_circle, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
@@ -1217,7 +1217,7 @@
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-55-1.png" width="960" class="r-stretch"></section>
-<section id="section-35" class="slide level2" data-menu-title="GeomComplete 4">
+<section id="section-51" class="slide level2" data-menu-title="GeomComplete 4">
 <h2></h2>
 <div class="r-stack">
 <div class="fragment semi-fade-out" data-fragment-index="1">
@@ -1246,15 +1246,15 @@
 </div>
 </div>
 </section>
-<section id="section-36" class="slide level2" data-menu-title="Stats vs Geoms 1">
+<section id="section-52" class="slide level2" data-menu-title="Stats vs Geoms 1">
 <h2></h2>
 <h3 id="an-aside-stat-vs-geom-implementations">An aside: <code>Stat</code> vs <code>Geom</code> implementations</h3>
 <ul>
 <li><code>Stat</code>s are used for transformations<sup>1</sup> of data</li>
 <li><code>Geom</code>s are used for converting data structures into their visual representations<sup>2</sup></li>
 </ul>
-<aside><ol class="aside-footnotes"><li id="fn2"><p>sometimes these are statistical transformations</p></li><li id="fn3"><p>and “simple” transformations of data</p></li></ol></aside></section>
-<section id="section-37" class="slide level2" data-menu-title="Stats vs Geoms 2">
+<aside><ol class="aside-footnotes"><li id="fn1"><p>sometimes these are statistical transformations</p></li><li id="fn2"><p>and “simple” transformations of data</p></li></ol></aside></section>
+<section id="section-53" class="slide level2" data-menu-title="Stats vs Geoms 2">
 <h2></h2>
 <h3 id="an-aside-stat-vs-geom-implementations-1">An aside: <code>Stat</code> vs <code>Geom</code> implementations</h3>
 <div style="size: .7em">
@@ -1272,7 +1272,7 @@
 <h1>Why extend?</h1>
 
 </section>
-<section id="section-38" class="slide level2" data-menu-title="Why extend 1">
+<section id="section-54" class="slide level2" data-menu-title="Why extend 1">
 <h2></h2>
 <p>Revisiting the traveling salesperson problem, we saw previously that we can easily perform the necessary calculations outside of <strong>ggplot2</strong>; avoiding the hassle of defining <code>GeomSalesperson</code> and friends:</p>
 <div class="cell">
@@ -1287,7 +1287,7 @@
 <span id="cb51-9"><a href="#cb51-9"></a>  <span class="fu">geom_point_new</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-39" class="slide level2" data-menu-title="Why extend 2" data-auto-animate="true">
+<section id="section-55" class="slide level2" data-menu-title="Why extend 2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <p>What if we want to plot multiple groups?</p>
 <div class="cell">
@@ -1298,7 +1298,7 @@
 <span id="cb52-5" class="hljs-ln-code"><a href="#cb52-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-40" class="slide level2" data-menu-title="Why extend 3" data-auto-animate="true">
+<section id="section-56" class="slide level2" data-menu-title="Why extend 3" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <p>What if we want to plot multiple groups?</p>
 <div class="cell">
@@ -1319,13 +1319,12 @@
 </div>
 </div>
 </section>
-<section id="section-41" class="slide level2" data-menu-title="Why extend 4">
+<section id="section-57" class="slide level2" data-menu-title="Why extend 4">
 <h2></h2>
-<p>Split-Apply-Combine!</p>
-<!-- TODO: -->
-<p>Insert graphic here, along with reference https://vita.had.co.nz/papers/plyr.pdf</p>
-</section>
-<section id="section-42" class="slide level2" data-menu-title="Why extend 5" data-auto-animate="true">
+<p>Split, Apply, Combine!</p>
+
+<img data-src="images/split-apply-combine.jpg" class="r-stretch quarto-figure-center"></section>
+<section id="section-58" class="slide level2" data-menu-title="Why extend 5" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb54-1" class="hljs-ln-code"><a href="#cb54-1"></a><span class="co"># Split</span></span>
@@ -1333,7 +1332,7 @@
 <span id="cb54-3" class="hljs-ln-code"><a href="#cb54-3"></a>df_split <span class="ot">&lt;-</span> <span class="fu">split</span>(df_mult[,<span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)], df_mult<span class="sc">$</span>class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-43" class="slide level2" data-menu-title="Why extend 6" data-auto-animate="true">
+<section id="section-59" class="slide level2" data-menu-title="Why extend 6" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb55-1" class="hljs-ln-code"><a href="#cb55-1"></a><span class="co"># Split</span></span>
@@ -1353,7 +1352,7 @@
 <span id="cb55-15" class="hljs-ln-code"><a href="#cb55-15"></a><span class="co">#&gt;   ..$ y: num [1:10] 0.398 -0.612 0.341 -1.129 1.433 ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-44" class="slide level2" data-menu-title="Why extend 7" data-auto-animate="true">
+<section id="section-60" class="slide level2" data-menu-title="Why extend 7" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb56-1" class="hljs-ln-code"><a href="#cb56-1"></a><span class="co"># Split</span></span>
@@ -1371,7 +1370,7 @@
 </div>
 </div>
 </section>
-<section id="section-45" class="slide level2" data-menu-title="Why extend 8" data-auto-animate="true">
+<section id="section-61" class="slide level2" data-menu-title="Why extend 8" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb57-1" class="hljs-ln-code"><a href="#cb57-1"></a><span class="co"># Split</span></span>
@@ -1389,7 +1388,7 @@
 </div>
 </div>
 </section>
-<section id="section-46" class="slide level2" data-menu-title="Why extend 9" data-auto-animate="true">
+<section id="section-62" class="slide level2" data-menu-title="Why extend 9" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb58-1" class="hljs-ln-code"><a href="#cb58-1"></a><span class="co"># Split</span></span>
@@ -1408,7 +1407,7 @@
 </div>
 <!-- ## {auto-animate=true auto-animate-restart} -->
 </section>
-<section id="section-47" class="slide level2" data-menu-title="Why extend 10" data-auto-animate="true">
+<section id="section-63" class="slide level2" data-menu-title="Why extend 10" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb59-1" class="hljs-ln-code"><a href="#cb59-1"></a><span class="co"># Apply</span></span>
@@ -1420,7 +1419,7 @@
 <span id="cb59-7" class="hljs-ln-code"><a href="#cb59-7"></a>  <span class="fu">lapply</span>(solve_TSP) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-48" class="slide level2" data-menu-title="Why extend 11" data-auto-animate="true">
+<section id="section-64" class="slide level2" data-menu-title="Why extend 11" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb60-1" class="hljs-ln-code"><a href="#cb60-1"></a><span class="co"># Apply</span></span>
@@ -1447,7 +1446,7 @@
 <span id="cb60-22" class="hljs-ln-code"><a href="#cb60-22"></a><span class="co">#&gt;   ..- attr(*, "names")= chr [1:10] "23" "29" "24" "28" ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-49" class="slide level2" data-menu-title="Why extend 12" data-auto-animate="true">
+<section id="section-65" class="slide level2" data-menu-title="Why extend 12" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb61-1" class="hljs-ln-code"><a href="#cb61-1"></a><span class="co"># Apply</span></span>
@@ -1456,7 +1455,7 @@
 <span id="cb61-4" class="hljs-ln-code"><a href="#cb61-4"></a>df_split_ordered <span class="ot">&lt;-</span> <span class="fu">Map</span>(reorder_rows_by_indices, df_split, class_sols) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-50" class="slide level2" data-menu-title="Why extend 13" data-auto-animate="true">
+<section id="section-66" class="slide level2" data-menu-title="Why extend 13" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb62-1" class="hljs-ln-code"><a href="#cb62-1"></a><span class="co"># Apply</span></span>
@@ -1477,7 +1476,7 @@
 <span id="cb62-16" class="hljs-ln-code"><a href="#cb62-16"></a><span class="co">#&gt;   ..$ y: num [1:10] 0.341 0.57 -1.129 -1.044 -0.367 ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-51" class="slide level2" data-menu-title="Why extend 14" data-auto-animate="true">
+<section id="section-67" class="slide level2" data-menu-title="Why extend 14" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb63-1" class="hljs-ln-code"><a href="#cb63-1"></a><span class="co"># Apply</span></span>
@@ -1496,7 +1495,7 @@
 </div>
 </div>
 </section>
-<section id="section-52" class="slide level2" data-menu-title="Why extend 15" data-auto-animate="true">
+<section id="section-68" class="slide level2" data-menu-title="Why extend 15" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb64-1" class="hljs-ln-code"><a href="#cb64-1"></a><span class="co"># Apply</span></span>
@@ -1515,7 +1514,7 @@
 </div>
 </div>
 </section>
-<section id="section-53" class="slide level2" data-menu-title="Why extend 16" data-auto-animate="true">
+<section id="section-69" class="slide level2" data-menu-title="Why extend 16" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb65-1" class="hljs-ln-code"><a href="#cb65-1"></a><span class="co"># Apply</span></span>
@@ -1534,7 +1533,7 @@
 </div>
 </div>
 </section>
-<section id="section-54" class="slide level2" data-menu-title="Why extend 17" data-auto-animate="true">
+<section id="section-70" class="slide level2" data-menu-title="Why extend 17" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb66-1" class="hljs-ln-code"><a href="#cb66-1"></a><span class="co"># Combine</span></span>
@@ -1543,7 +1542,7 @@
 <span id="cb66-4" class="hljs-ln-code"><a href="#cb66-4"></a>df_mult_ordered<span class="sc">$</span>class <span class="ot">&lt;-</span> df_mult<span class="sc">$</span>class</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-55" class="slide level2" data-menu-title="Why extend 18" data-auto-animate="true">
+<section id="section-71" class="slide level2" data-menu-title="Why extend 18" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb67-1" class="hljs-ln-code"><a href="#cb67-1"></a><span class="co"># Combine</span></span>
@@ -1562,7 +1561,7 @@
 </div>
 </div>
 </section>
-<section id="section-56" class="slide level2" data-menu-title="Why extend 19">
+<section id="section-72" class="slide level2" data-menu-title="Why extend 19">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a><span class="fu">ggplot</span>(df_mult_ordered, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
@@ -1572,7 +1571,7 @@
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-75-1.png" width="960" class="r-stretch"></section>
-<section id="section-57" class="slide level2" data-menu-title="Why extend 20">
+<section id="section-73" class="slide level2" data-menu-title="Why extend 20">
 <h2></h2>
 <div class="r-stack">
 <div class="fragment semi-fade-out" data-fragment-index="1">
@@ -1606,7 +1605,7 @@
 </div>
 </div>
 </section>
-<section id="section-58" class="slide level2" data-menu-title="Why extend 21">
+<section id="section-74" class="slide level2" data-menu-title="Why extend 21">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a><span class="fu">ggplot</span>(df_mult, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
@@ -1616,7 +1615,7 @@
 
 </div>
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-77-1.png" width="960" class="r-stretch"></section>
-<section id="section-59" class="slide level2" data-menu-title="Why extend 22">
+<section id="section-75" class="slide level2" data-menu-title="Why extend 22">
 <h2></h2>
 <div class="r-stack">
 <div class="fragment semi-fade-out" data-fragment-index="1">
@@ -1649,7 +1648,7 @@
 </div>
 </div>
 </section>
-<section id="section-60" class="slide level2" data-menu-title="Why extend 23">
+<section id="section-76" class="slide level2" data-menu-title="Why extend 23">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb72" data-code-line-numbers="1|8-25|17|21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a>GeomComplete<span class="sc">$</span>draw_layer</span>
@@ -1677,7 +1676,7 @@
 <span id="cb72-23"><a href="#cb72-23"></a><span class="co">#&gt; }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-61" class="slide level2" data-menu-title="Why extend 24">
+<section id="section-77" class="slide level2" data-menu-title="Why extend 24">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb73" data-code-line-numbers="1|8-26|19|21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1"></a>StatSalesperson<span class="sc">$</span>compute_layer</span>
@@ -1715,7 +1714,7 @@
 <h1>Additional Resources</h1>
 
 </section>
-<section id="section-62" class="slide level2 smaller" data-menu-title="Resource List">
+<section id="section-78" class="slide level2 smaller" data-menu-title="Resource List">
 <h2></h2>
 <ul>
 <li><a href="https://ggplot2-book.org/"><strong>ggplot2</strong>: Elegant Graphics for Data Analysis</a> by Hadley Wickham
@@ -1760,7 +1759,7 @@
 <span id="cb74-20"><a href="#cb74-20"></a><span class="co">#&gt; }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-63" class="slide level2" data-menu-title="coord$transform() pt 1" data-auto-animate="true" data-transition="fade">
+<section id="section-79" class="slide level2" data-menu-title="coord$transform() 1" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="cell">
 
@@ -1785,7 +1784,7 @@
 </div>
 </div>
 </section>
-<section id="section-64" class="slide level2" data-menu-title="coord$transform() pt 2" data-auto-animate="true" data-transition="fade">
+<section id="section-80" class="slide level2" data-menu-title="coord$transform() 2" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -1810,7 +1809,7 @@
 </div>
 </div>
 </section>
-<section id="section-65" class="slide level2" data-menu-title="coord$transform() pt 3" data-auto-animate="true" data-transition="fade">
+<section id="section-81" class="slide level2" data-menu-title="coord$transform() 3" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -1838,7 +1837,7 @@
 </div>
 </div>
 </section>
-<section id="section-66" class="slide level2" data-menu-title="coord$transform() pt 4" data-auto-animate="true" data-transition="fade">
+<section id="section-82" class="slide level2" data-menu-title="coord$transform() 4" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -1871,7 +1870,7 @@
 </div>
 </div>
 </section>
-<section id="section-67" class="slide level2" data-menu-title="coord$transform() pt 5" data-auto-animate="true" data-transition="fade">
+<section id="section-83" class="slide level2" data-menu-title="coord$transform() 5" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -1903,7 +1902,7 @@
 </div>
 </div>
 </section>
-<section id="section-68" class="slide level2" data-menu-title="coord$transform() pt 6" data-auto-animate="true" data-transition="fade">
+<section id="section-84" class="slide level2" data-menu-title="coord$transform() 6" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -1941,7 +1940,7 @@
 </div>
 </div>
 </section>
-<section id="section-69" class="slide level2" data-menu-title="coord$transform() pt 7" data-auto-animate="true" data-transition="fade">
+<section id="section-85" class="slide level2" data-menu-title="coord$transform() 7" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -1966,7 +1965,7 @@
 </div>
 </div>
 </section>
-<section id="section-70" class="slide level2" data-menu-title="coord$transform() pt 8" data-auto-animate="true" data-transition="fade">
+<section id="section-86" class="slide level2" data-menu-title="coord$transform() 8" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -1990,7 +1989,7 @@
 </div>
 </div>
 </section>
-<section id="section-71" class="slide level2" data-menu-title="coord$transform() pt 9" data-auto-animate="true" data-transition="fade">
+<section id="section-87" class="slide level2" data-menu-title="coord$transform() 9" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -2015,7 +2014,7 @@
 </div>
 </div>
 </section>
-<section id="section-72" class="slide level2" data-menu-title="coord$transform() pt 10" data-auto-animate="true" data-transition="fade">
+<section id="section-88" class="slide level2" data-menu-title="coord$transform() 10" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -2041,7 +2040,7 @@
 </div>
 </div>
 </section>
-<section id="section-73" class="slide level2" data-menu-title="coord$transform() pt 11" data-auto-animate="true" data-transition="fade">
+<section id="section-89" class="slide level2" data-menu-title="coord$transform() 11" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -2063,7 +2062,7 @@
 </div>
 </div>
 </section>
-<section id="section-74" class="slide level2" data-menu-title="coord$transform() pt 12" data-auto-animate="true" data-transition="fade">
+<section id="section-90" class="slide level2" data-menu-title="coord$transform() 12" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -2090,7 +2089,7 @@
 </div>
 </div>
 </section>
-<section id="section-75" class="slide level2" data-menu-title="coord$transform() pt 13" data-auto-animate="true" data-transition="fade">
+<section id="section-91" class="slide level2" data-menu-title="coord$transform() 13" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -2123,7 +2122,7 @@
 </div>
 </div>
 </section>
-<section id="section-76" class="slide level2" data-menu-title="coord$transform() pt 14" data-auto-animate="true" data-transition="fade">
+<section id="section-92" class="slide level2" data-menu-title="coord$transform() 14" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -2151,7 +2150,7 @@
 </div>
 </div>
 </section>
-<section id="section-77" class="slide level2" data-menu-title="coord$transform() pt 15" data-auto-animate="true" data-transition="fade">
+<section id="section-93" class="slide level2" data-menu-title="coord$transform() 15" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -2184,7 +2183,7 @@
 </div>
 </div>
 </section>
-<section id="section-78" class="slide level2" data-menu-title="coord$transform() pt 16" data-auto-animate="true" data-transition="fade">
+<section id="section-94" class="slide level2" data-menu-title="coord$transform() 16" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -2223,7 +2222,7 @@
 </div>
 </div>
 </section>
-<section id="section-79" class="slide level2" data-menu-title="coord$transform() pt 17" data-auto-animate="true" data-transition="fade">
+<section id="section-95" class="slide level2" data-menu-title="coord$transform() 17" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -2251,7 +2250,7 @@
 </div>
 </div>
 </section>
-<section id="section-80" class="slide level2" data-menu-title="coord$transform() pt 18" data-auto-animate="true" data-transition="fade">
+<section id="section-96" class="slide level2" data-menu-title="coord$transform() 18" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -2289,7 +2288,7 @@
 </div>
 </div>
 </section>
-<section id="section-81" class="slide level2" data-menu-title="coord$transform() pt 19" data-auto-animate="true" data-transition="fade">
+<section id="section-97" class="slide level2" data-menu-title="coord$transform() 19" data-auto-animate="true" data-transition="fade">
 <h2 data-id="quarto-animate-title"></h2>
 <div class="columns">
 <div class="column column-code" style="width:40%;">
@@ -2332,7 +2331,7 @@
 </div>
 </div>
 </section>
-<section id="section-82" class="slide level2" data-menu-title="coord$transform() pt 20">
+<section id="section-98" class="slide level2" data-menu-title="coord$transform() 20">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb94" data-code-line-numbers="1,13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1"></a>GeomPoint<span class="sc">$</span>draw_panel</span>
@@ -2357,7 +2356,7 @@
 <span id="cb94-20"><a href="#cb94-20"></a><span class="co">#&gt; }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-83" class="slide level2" data-menu-title="coord$transform() pt 21">
+<section id="section-99" class="slide level2" data-menu-title="coord$transform() 21">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb95" data-code-line-numbers="|1,10-11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1"></a>ggplot2<span class="sc">:::</span>CoordCartesian<span class="sc">$</span>transform</span>
@@ -2375,7 +2374,7 @@
 <span id="cb95-13"><a href="#cb95-13"></a><span class="co">#&gt; }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-84" class="slide level2" data-menu-title="coord$transform() pt 22">
+<section id="section-100" class="slide level2" data-menu-title="coord$transform() 22">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb96" data-code-line-numbers="|5,14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1"></a><span class="co"># Can debug interactively with {ggtrace}</span></span>
@@ -2421,14 +2420,6 @@
 <!-- ``` -->
 <!-- ::: -->
 </section>
-<section id="geomsetup_data" class="slide level2">
-<h2><code>Geom$setup_data()</code></h2>
-<p>temp</p>
-</section>
-<section id="section-85" class="slide level2" data-menu-title="Geom$setup_data() pt 1">
-<h2></h2>
-<p>temp</p>
-</section>
 <section id="prototypes" class="slide level2">
 <h2>Prototypes</h2>
 <ul>
@@ -2440,7 +2431,7 @@
 </ul>
 </div>
 </section>
-<section id="section-86" class="slide level2" data-menu-title="Prototypes pt 1">
+<section id="section-101" class="slide level2" data-menu-title="Prototypes 1">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb97" data-code-line-numbers="1-2|4-7|9-31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1"></a><span class="fu">is.environment</span>(GeomComplete)</span>
@@ -2476,7 +2467,7 @@
 <span id="cb97-31"><a href="#cb97-31"></a><span class="co">#&gt; }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="section-87" class="slide level2" data-menu-title="Prototypes pt 2">
+<section id="section-102" class="slide level2" data-menu-title="Prototypes 2">
 <h2></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb98" data-code-line-numbers="1-3|5-7|9-11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1"></a>A <span class="ot">&lt;-</span> <span class="fu">ggproto</span>(<span class="st">"A"</span>, <span class="cn">NULL</span>,</span>
