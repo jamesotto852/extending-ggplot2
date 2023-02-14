@@ -22,6 +22,7 @@ library("here")
 library("tidyverse") 
 library("patchwork")
 library("ggdensity")
+library("palmerpenguins")
 
 theme_set(theme_bw(13)) 
 theme_update(
@@ -35,10 +36,100 @@ theme_update(
 
 # Introduction
 
----
+```{r}
+#| echo: false
+p1 <- ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point()
 
-<!-- TODO: -->
-Go through examples of **ggplot2** extensions
+p2 <- ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  geom_point()
+
+p3 <- ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, fill = species)) +
+  ggdensity::geom_hdr()
+
+p4 <- ggplot(penguins, aes(x = bill_length_mm, y = species)) +
+  ggbeeswarm::geom_quasirandom()
+
+p5 <- ggplot(penguins, aes(x = bill_length_mm, y = species, fill = after_stat(x))) +
+  ggridges::geom_density_ridges_gradient() +
+  scale_fill_viridis_c(name = "bill_length_mm", option = "C")
+
+aligned_plots <- align_patches(p1, p2, p3, p4, p5)
+```
+
+## {data-menu-title="ggplot2 ex 1" .smaller}
+
+```{r}
+#| eval: false
+ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_point()
+```
+```{r}
+#| echo: false
+aligned_plots[[1]]
+```
+
+## {data-menu-title="ggplot2 ex 2" .smaller}
+
+```{r}
+#| eval: false
+ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  geom_point()
+```
+```{r}
+#| echo: false
+aligned_plots[[2]]
+```
+
+## {data-menu-title="ggplot2 extension ex (ggdensity)" .smaller}
+
+```{r}
+#| eval: false
+ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, fill = species)) +
+  ggdensity::geom_hdr()
+```
+```{r}
+#| echo: false
+aligned_plots[[3]]
+```
+
+## {data-menu-title="ggplot2 extension ex (ggbeeswarm)" .smaller}
+
+```{r}
+#| eval: false
+ggplot(penguins, aes(x = bill_length_mm, y = species)) +
+  ggbeeswarm::geom_quasirandom()
+```
+```{r}
+#| echo: false
+aligned_plots[[4]]
+```
+
+## {data-menu-title="ggplot2 extension ex (ggridges)" .smaller}
+
+```{r}
+#| eval: false
+ggplot(penguins, aes(x = bill_length_mm, y = species, fill = after_stat(x))) +
+  ggridges::geom_density_ridges_gradient()
+```
+```{r}
+#| echo: false
+aligned_plots[[5]]
+```
+
+
+<!-- --- -->
+
+<!-- ```{r} -->
+<!-- penguins |> -->
+<!--   drop_na() |> -->
+<!--   group_by(species) |> -->
+<!--   summarize(mean = mean(bill_length_mm), sd = sd(bill_length_mm)) |> -->
+<!--   ggplot(aes(y = species, xdist = distributional::dist_normal(mean, sd))) + -->
+<!--   ggdist::stat_halfeye() -->
+<!-- ``` -->
+
+
 
 # A first look at **ggproto** objects
 
@@ -68,8 +159,6 @@ df
 ---
 
 ```{r}
-library("ggplot2")
-
 ggplot(df, aes(x, y)) +
   geom_point()
 ```
@@ -95,7 +184,7 @@ ggplot(df, aes(x, y)) +
 
 **ggplot2** is built on the ggproto object oriented system.
 
-`GeomPoint` is an object with methods and fields that encode the relevant 
+`GeomPoint` and `StatIdentity` are each classes\* with methods and fields that encode the relevant 
 procedures and defaults to create a scatterplot.
 
 ---
@@ -123,7 +212,6 @@ GeomPoint
 <!-- Slightly out of order to get caught up in details on Geoms here: coord$transform() and pointsGrob() -->
 <!-- Just point out, mention that we'll look more at these ideas later when we make our own Geom class -->
 ```{r}
-#| code-line-numbers: "|1,8-19|1,13|1,16-19" 
 GeomPoint$draw_panel
 ```
 <!-- "Graphical primitives" -->
@@ -178,7 +266,6 @@ GeomPointNew
 ---
 
 ```{r}
-#| code-line-numbers: "|1,8-19" 
 GeomPointNew$draw_panel
 ```
 
@@ -192,6 +279,7 @@ ggplot(df, aes(x, y)) +
 ---
 
 ```{r}
+#| code-line-numbers: "|11" 
 geom_point_new <- function(mapping = NULL, data = NULL, 
                            stat = "identity", position = "identity", 
                            ...,
@@ -224,12 +312,19 @@ ggplot(df, aes(x, y)) +
 
 # Extending stats 
 
----
+## {data-menu-title="salesperson intro 1"}
 
 <!-- TODO: -->
 Introduce travelling salesperson problem with simple graphics
 
-## {auto-animate=true}
+## {data-menu-title="salesperson intro 2"}
+
+```{r}
+ggplot(df, aes(x, y)) +
+  geom_point()
+```
+
+## {data-menu-title="salesperson intro 3" auto-animate=true}
 
 ```{r}
 library("TSP")
@@ -239,7 +334,7 @@ atsp <- as.ATSP(dist_mat)
 tour <- solve_TSP(atsp)
 ```
 
-## {auto-animate=true}
+## {data-menu-title="salesperson intro 4" auto-animate=true}
 
 ```{r}
 library("TSP")
@@ -251,7 +346,7 @@ tour <- solve_TSP(atsp)
 tour
 ```
 
-## {auto-animate=true}
+## {data-menu-title="salesperson intro 5" auto-animate=true}
 
 ```{r}
 library("TSP")
@@ -264,13 +359,13 @@ str(tour)
 ```
 
 
-## {auto-animate=true}
+## {data-menu-title="salesperson intro 6" auto-animate=true}
 
 ```{r}
 df_sorted <- df[tour,]
 ```
 
-## {auto-animate=true}
+## {data-menu-title="salesperson intro 7" auto-animate=true}
 
 ```{r}
 df_sorted <- df[tour,]
@@ -278,7 +373,7 @@ df_sorted <- df[tour,]
 df_sorted
 ```
 
----
+## {data-menu-title="salesperson intro 8"}
 
 ```{r}
 ggplot(df_sorted, aes(x, y)) +
@@ -287,7 +382,7 @@ ggplot(df_sorted, aes(x, y)) +
 
 ```
 
----
+## {data-menu-title="StatSalesperson 1"}
 
 ```{r}
 StatSalesperson <- ggproto("StatSalesperson", Stat,
@@ -306,7 +401,7 @@ StatSalesperson <- ggproto("StatSalesperson", Stat,
 )
 ```
 
----
+## {data-menu-title="StatSalesperson 2"}
 
 ```{r}
 stat_salesperson <- function(mapping = NULL, data = NULL, 
@@ -323,7 +418,7 @@ stat_salesperson <- function(mapping = NULL, data = NULL,
 }
 ```
 
----
+## {data-menu-title="StatSalesperson 3"}
 
 ```{r}
 ggplot(df, aes(x, y)) +
@@ -332,7 +427,7 @@ ggplot(df, aes(x, y)) +
 
 ```
 
----
+## {data-menu-title="StatSalesperson 4"}
 
 ```{r}
 StatSalesperson <- ggproto("StatSalesperson",  Stat,
@@ -351,7 +446,7 @@ StatSalesperson <- ggproto("StatSalesperson",  Stat,
 )
 ```
 
----
+## {data-menu-title="StatSalesperson 5"}
 
 ```{r}
 stat_salesperson <- function(mapping = NULL, data = NULL, 
@@ -378,7 +473,7 @@ stat_salesperson <- function(mapping = NULL, data = NULL,
 }
 ```
 
----
+## {data-menu-title="StatSalesperson 6"}
 
 ```{r}
 ggplot(df, aes(x, y)) +
@@ -386,7 +481,7 @@ ggplot(df, aes(x, y)) +
   geom_point_new() 
 ```
 
----
+## {data-menu-title="StatSalesperson 7"}
 
 ```{r}
 ggplot(df, aes(x, y)) +
@@ -394,7 +489,7 @@ ggplot(df, aes(x, y)) +
   geom_point_new() 
 ```
 
----
+## {data-menu-title="StatSalesperson 8"}
 
 ```{r}
 ggplot(df, aes(x, y)) +
@@ -402,7 +497,7 @@ ggplot(df, aes(x, y)) +
   geom_point_new() 
 ```
 
----
+## {data-menu-title="StatSalesperson 9"}
 
 ```{r}
 GeomSalesperson <- ggproto("GeomSalesperson", GeomPath)
@@ -430,7 +525,7 @@ geom_salesperson <- function(mapping = NULL, data = NULL,
 
 ```
 
----
+## {data-menu-title="StatSalesperson 10"}
 
 ```{r}
 ggplot(df, aes(x, y)) +
@@ -439,15 +534,50 @@ ggplot(df, aes(x, y)) +
 
 ```
 
-<!-- --- -->
-
-<!-- Note: generally, it's good to pick defaults that match up with defaults in **ggplot2** functions.  -->
-<!-- I'm specifically choosing alternative values to demonstrate how things can be changed. -->
-
-
 # Extending geoms (complete graphs)
 
-## A note on "Grobs" 
+## {data-menu-title="complete graphs intro 1"}
+
+![](images/CompleteGraphs.svg){fig-align="center"}
+
+
+## {data-menu-title="complete graphs intro 2"}
+
+```{r}
+df_circle <- data.frame(
+  x = cos(seq(0, 2*pi, length.out = 11))[-11],
+  y = sin(seq(0, 2*pi, length.out = 11))[-11]
+)
+
+df_circle
+```
+
+## {data-menu-title="complete graphs intro 3"}
+
+```{r}
+df_expanded <- df_circle[rep(1:nrow(df_circle), each = nrow(df_circle)), ]
+
+df_expanded
+```
+
+## {data-menu-title="complete graphs intro 4"}
+
+```{r}
+df_expanded$xend <- rep(df_circle$x, times = nrow(df_circle))
+df_expanded$yend <- rep(df_circle$y, times = nrow(df_circle))
+
+df_expanded
+```
+
+## {data-menu-title="complete graphs intro 5"}
+
+```{r}
+ggplot(df_expanded, aes(x, y, xend = xend, yend = yend)) +
+  geom_segment() +
+  coord_fixed()
+```
+
+## A note on "Grobs" {data-menu-title="Grobs discussion 1"}
 
 ::: {.incremental}
 
@@ -460,7 +590,7 @@ use to "draw".
 
 [^1]: Paul Murrell's ["R Graphics"](https://www.stat.auckland.ac.nz/~paul/RG2e/) is a good resource to learn more about Grobs (and more generally, **grid**)
 
----
+## {data-menu-title="Grobs discussion 2"}
 
 ```{r}
 #| fig-align: "center"
@@ -475,7 +605,7 @@ line_segments <-
 grid::grid.draw(line_segments)
 ```
 
----
+## {data-menu-title="Grobs discussion 3"}
 
 ```{r}
 #| code-line-numbers: "|1,19-23" 
@@ -498,44 +628,10 @@ GeomSegment$draw_panel
 <!-- ) -->
 <!-- ``` -->
 
-
----
-
-<!-- TODO: -->
-<!-- Consider moving this to the beginning,  -->
-<!-- intro to grobs to after hand-crafted ex, -->
-<!-- remove body of GeomSegments$draw_panel -->
-
-![](images/CompleteGraphs.svg){fig-align="center"}
-
----
+## {data-menu-title="GeomComplete 1"}
 
 ```{r}
-df_expanded <- df[rep(1:nrow(df), each = nrow(df)), ]
-
-df_expanded
-```
-
----
-
-```{r}
-df_expanded$xend <- rep(df$x, times = nrow(df))
-df_expanded$yend <- rep(df$y, times = nrow(df))
-
-df_expanded
-```
-
----
-
-```{r}
-ggplot(df_expanded, aes(x, y, xend = xend, yend = yend)) +
-  geom_segment()
-```
-
----
-
-```{r}
-#| code-line-numbers: "|3|5-12|14-32|16-18|20|22-30|34" 
+#| code-line-numbers: "1|14-32|16-18|20|22-30|3-12|34" 
 GeomComplete <- ggproto("GeomComplete", Geom,
                         
   required_aes = c("x", "y"),
@@ -574,7 +670,7 @@ GeomComplete <- ggproto("GeomComplete", Geom,
 )
 ```
 
----
+## {data-menu-title="GeomComplete 2"}
 
 ```{r}
 geom_complete <- function(mapping = NULL, data = NULL, 
@@ -599,7 +695,15 @@ geom_complete <- function(mapping = NULL, data = NULL,
 }
 ```
 
----
+## {data-menu-title="GeomComplete 3"}
+
+```{r}
+ggplot(df_circle, aes(x, y)) +
+  geom_complete() +
+  coord_fixed()
+```
+
+## {data-menu-title="GeomComplete 4"}
 
 :::{.r-stack}
 
@@ -623,7 +727,7 @@ Is this a statistical transformation or a graphical operation?
 
 :::
 
----
+## {data-menu-title="Stats vs Geoms 1"}
 
 ### An aside: `Stat` vs `Geom` implementations 
 
@@ -633,7 +737,7 @@ Is this a statistical transformation or a graphical operation?
 [^2]: sometimes these are statistical transformations
 [^3]: and "simple" transformations of data
 
----
+## {data-menu-title="Stats vs Geoms 2"}
 
 ### An aside: `Stat` vs `Geom` implementations 
 
@@ -644,14 +748,14 @@ Things to consider when deciding which to implement:
 * Can you implement a `Stat` which "plugs in" to an existing `Geom`? (e.g. `StatSalesperson` and `GeomSegment`)?
 * Would a user rather have the ability to specify an alternate `Stat` or `Geom`?
 * Which is easier? (typically, the `Stat` implementation)
+* Do you need both?
 
 :::
 
 
 # Why extend?
 
-
----
+## {data-menu-title="Why extend 1"}
 
 Revisiting the traveling salesperson problem,
 we saw previously that we can easily perform the necessary calculations outside of **ggplot2**;
@@ -669,7 +773,7 @@ ggplot(df_sorted, aes(x, y)) +
   geom_point_new() 
 ```
 
-## {auto-animate=true}
+## {data-menu-title="Why extend 2" auto-animate=true}
 
 What if we want to plot multiple groups? 
 
@@ -682,7 +786,7 @@ df_mult <- data.frame(
 )
 ```
 
-## {auto-animate=true}
+## {data-menu-title="Why extend 3" auto-animate=true}
 
 What if we want to plot multiple groups? 
 
@@ -700,7 +804,7 @@ df_mult <- data.frame(
 df_mult
 ```
 
----
+## {data-menu-title="Why extend 4"}
 
 Split-Apply-Combine!
 
@@ -708,77 +812,77 @@ Split-Apply-Combine!
 Insert graphic here, along with reference
 https://vita.had.co.nz/papers/plyr.pdf
 
-## {auto-animate=true}
+## {data-menu-title="Why extend 5" auto-animate=true}
 
 ```{r}
 #| eval: false
 # Split
 
-df_mult_split <- split(df_mult[,c("x", "y")], df_mult$class)
+df_split <- split(df_mult[,c("x", "y")], df_mult$class)
 ```
 
-## {auto-animate=true}
+## {data-menu-title="Why extend 6" auto-animate=true}
 
 ```{r}
 # Split
 
-df_mult_split <- split(df_mult[,c("x", "y")], df_mult$class)
+df_split <- split(df_mult[,c("x", "y")], df_mult$class)
 
-str(df_mult_split)
+str(df_split)
 ```
 
 
-## {auto-animate=true}
+## {data-menu-title="Why extend 7" auto-animate=true}
 
 ```{r}
 # Split
 
-df_mult_split <- split(df_mult[,c("x", "y")], df_mult$class)
+df_split <- split(df_mult[,c("x", "y")], df_mult$class)
 
-df_mult_split$a
+df_split$a
 ```
 
-## {auto-animate=true}
+## {data-menu-title="Why extend 8" auto-animate=true}
 
 ```{r}
 # Split
 
-df_mult_split <- split(df_mult[,c("x", "y")], df_mult$class)
+df_split <- split(df_mult[,c("x", "y")], df_mult$class)
 
-df_mult_split$b
+df_split$b
 ```
 
-## {auto-animate=true}
+## {data-menu-title="Why extend 9" auto-animate=true}
 
 ```{r}
 # Split
 
-df_mult_split <- split(df_mult[,c("x", "y")], df_mult$class)
+df_split <- split(df_mult[,c("x", "y")], df_mult$class)
 
-df_mult_split$c
+df_split$c
 ```
 
 <!-- ## {auto-animate=true auto-animate-restart} -->
-## {auto-animate=true}
+## {data-menu-title="Why extend 10" auto-animate=true}
 
 ```{r}
 #| eval: false
 # Apply
 
 class_sols <-
-  df_mult_split |>
+  df_split |>
   lapply(dist, diag = TRUE, upper = TRUE) |>
   lapply(as.ATSP) |>
   lapply(solve_TSP) 
 ```
 
-## {auto-animate=true}
+## {data-menu-title="Why extend 11" auto-animate=true}
 
 ```{r}
 # Apply
 
 class_sols <-
-  df_mult_split |>
+  df_split |>
   lapply(dist, diag = TRUE, upper = TRUE) |>
   lapply(as.ATSP) |>
   lapply(solve_TSP) 
@@ -786,82 +890,81 @@ class_sols <-
 str(class_sols)
 ```
 
-## {auto-animate=true}
-
-```{r}
-#| eval: false
-# Apply
-
-reorder_rows_by_indices <- function(df, i) df[i,]
-df_mult_split <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
-```
-
-## {auto-animate=true}
+## {data-menu-title="Why extend 12" auto-animate=true}
 
 ```{r}
 # Apply
 
 reorder_rows_by_indices <- function(df, i) df[i,]
-df_mult_split_ordered <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
-
-str(df_mult_split_ordered)
+df_split_ordered <- Map(reorder_rows_by_indices, df_split, class_sols) 
 ```
 
-## {auto-animate=true}
+## {data-menu-title="Why extend 13" auto-animate=true}
 
 ```{r}
 # Apply
 
 reorder_rows_by_indices <- function(df, i) df[i,]
-df_mult_split_ordered <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
+df_split_ordered <- Map(reorder_rows_by_indices, df_split, class_sols) 
 
-df_mult_split_ordered$a
+str(df_split_ordered)
 ```
 
-## {auto-animate=true}
+## {data-menu-title="Why extend 14" auto-animate=true}
 
 ```{r}
 # Apply
 
 reorder_rows_by_indices <- function(df, i) df[i,]
-df_mult_split_ordered <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
+df_split_ordered <- Map(reorder_rows_by_indices, df_split, class_sols) 
 
-df_mult_split_ordered$b
+df_split_ordered$a
 ```
 
-## {auto-animate=true}
+## {data-menu-title="Why extend 15" auto-animate=true}
 
 ```{r}
 # Apply
 
 reorder_rows_by_indices <- function(df, i) df[i,]
-df_mult_split_ordered <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
+df_split_ordered <- Map(reorder_rows_by_indices, df_split, class_sols) 
 
-df_mult_split_ordered$c
+df_split_ordered$b
 ```
 
-## {auto-animate=true}
+## {data-menu-title="Why extend 16" auto-animate=true}
+
+```{r}
+# Apply
+
+reorder_rows_by_indices <- function(df, i) df[i,]
+df_split_ordered <- Map(reorder_rows_by_indices, df_split, class_sols) 
+
+df_split_ordered$c
+```
+
+## {data-menu-title="Why extend 17" auto-animate=true}
 
 ```{r}
 #| eval: false
 # Combine
 
-df_mult_ordered <- unsplit(df_mult_split_ordered, df_mult$class)
+df_mult_ordered <- unsplit(df_split_ordered, df_mult$class)
 df_mult_ordered$class <- df_mult$class
 ```
 
-## {auto-animate=true}
+## {data-menu-title="Why extend 18" auto-animate=true}
 
 ```{r}
 # Combine
 
-df_mult_ordered <- unsplit(df_mult_split_ordered, df_mult$class)
+df_mult_ordered <- unsplit(df_split_ordered, df_mult$class)
 df_mult_ordered$class <- df_mult$class
   
 df_mult_ordered
 ```
 
----
+## {data-menu-title="Why extend 19"}
 
 ```{r}
 ggplot(df_mult_ordered, aes(x, y)) +
@@ -870,7 +973,7 @@ ggplot(df_mult_ordered, aes(x, y)) +
   facet_wrap(vars(class))
 ```
 
----
+## {data-menu-title="Why extend 20"}
 
 :::{.r-stack}
 
@@ -878,20 +981,20 @@ ggplot(df_mult_ordered, aes(x, y)) +
 ```{r}
 #| eval: false
 # Split
-df_mult_split <- split(df_mult[,c("x", "y")], df_mult$class)
+df_split <- split(df_mult[,c("x", "y")], df_mult$class)
 
 # Apply
 class_sols <-
-  df_mult_split |>
+  df_split |>
   lapply(dist, diag = TRUE, upper = TRUE) |>
   lapply(as.ATSP) |>
   lapply(solve_TSP) 
 
 reorder_rows_by_indices <- function(df, i) df[i,]
-df_mult_split <- Map(reorder_rows_by_indices, df_mult_split, class_sols) 
+df_split_ordered <- Map(reorder_rows_by_indices, df_split, class_sols) 
 
 # Combine
-df_mult_ordered <- unsplit(df_mult_split, df_mult$class)
+df_mult_ordered <- unsplit(df_split_ordered, df_mult$class)
 df_mult_ordered$class <- df_mult$class
 ```
 :::
@@ -904,7 +1007,7 @@ Instead, we can let **ggplot2** do this for us!
 
 :::
 
----
+## {data-menu-title="Why extend 21"}
 
 ```{r}
 ggplot(df_mult, aes(x, y)) +
@@ -914,7 +1017,7 @@ ggplot(df_mult, aes(x, y)) +
 ```
 
 
----
+## {data-menu-title="Why extend 22"}
 
 :::{.r-stack}
 
@@ -942,19 +1045,30 @@ ggplot(df_mult, aes(x, y)) +
 
 :::
 
----
+## {data-menu-title="Why extend 23"}
 
 ```{r}
 #| code-line-numbers: "1|8-25|17|21" 
 GeomComplete$draw_layer
 ```
 
----
+## {data-menu-title="Why extend 24"}
 
 ```{r}
 #| code-line-numbers: "1|8-26|19|21" 
 StatSalesperson$compute_layer
 ```
+
+# Additional Resources
+
+## {data-menu-title="Resource List" .smaller}
+
+* [**ggplot2**: Elegant Graphics for Data Analysis](https://ggplot2-book.org/) by Hadley Wickham
+  * The third edition has a [chapter](https://ggplot2-book.org/extensions.html) on writing extensions
+* [`vignette("extending-ggplot2")`](https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html)
+* **ggplot2**'s [source code](https://github.com/tidyverse/ggplot2)
+  * Also, the source code of **ggplot2** [extensions](https://exts.ggplot2.tidyverse.org/gallery/)
+* [R Graphics](https://www.stat.auckland.ac.nz/~paul/RG2e/) by Paul Murrell
 
 # Details
 
@@ -965,7 +1079,7 @@ GeomPoint$draw_panel
 ```
 
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 1" auto-animate=true transition=fade}
 
 ```{r, echo = FALSE}
 
@@ -1018,7 +1132,7 @@ p1
 
 ::::
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 2" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1049,7 +1163,7 @@ p1
 ::::
 
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 3" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1082,7 +1196,7 @@ p1
 
 ::::
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 4" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1125,7 +1239,7 @@ p1 +
 
 ::::
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 5" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1162,7 +1276,7 @@ p1
 
 ::::
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 6" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1211,7 +1325,7 @@ p1 +
 
 ::::
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 7" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1241,7 +1355,7 @@ p1
 
 ::::
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 8" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1272,7 +1386,7 @@ grid::grid.points(x = 1, y = 1)
 
 ::::
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 9" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1305,7 +1419,7 @@ grid::grid.points(x = 10, y = 10)
 
 ::::
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 10" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1319,18 +1433,6 @@ df <- data.frame(
 
 ggplot(df, aes(x, y)) +
   geom_point()
-
-grid::grid.points(x = 1, y = 1)
-grid::grid.points(x = 10, y = 10)
-grid::grid.points(x = 100, y = 100)
-```
-:::
-
-::: {.column width="60%"}
-```{r}
-#| echo: false
-#| fig-height: 8
-p1
 
 grid::grid.points(x = 1, y = 1)
 grid::grid.points(x = 10, y = 10)
@@ -1338,10 +1440,22 @@ grid::grid.points(x = 100, y = 100)
 ```
 :::
 
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p1
+
+grid::grid.points(x = 1, y = 1)
+grid::grid.points(x = 10, y = 10)
+grid::grid.points(x = 100, y = 100)
+```
+:::
+
 ::::
 
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 11" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1368,7 +1482,7 @@ p1
 
 ::::
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 12" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1405,7 +1519,7 @@ grid::grid.points(
 
 ::::
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 13" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1454,7 +1568,7 @@ grid::grid.points(
 
 ::::
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 14" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1487,7 +1601,7 @@ p2
 
 ::::
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 15" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1530,7 +1644,7 @@ grid::grid.points(
 
 ::::
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 16" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1550,25 +1664,6 @@ ggplot(df, aes(x, y)) +
     axis.ticks.length = unit(0, "npc"),
     plot.margin = margin()
   )
-
-grid::grid.points(
-  x = grid::unit(1/2, "npc"),
-  y = grid::unit(1/2, "npc")
-)
-
-grid::grid.points(
-  x = grid::unit(c(0, 0, 1, 1), "npc"),
-  y = grid::unit(c(0, 1, 0, 1), "npc"),
-  gp = grid::gpar(col = "red")
-)
-```
-:::
-
-::: {.column width="60%"}
-```{r}
-#| echo: false
-#| fig-height: 8
-p2
 
 grid::grid.points(
   x = grid::unit(1/2, "npc"),
@@ -1583,11 +1678,30 @@ grid::grid.points(
 ```
 :::
 
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| fig-height: 8
+p2
+
+grid::grid.points(
+  x = grid::unit(1/2, "npc"),
+  y = grid::unit(1/2, "npc")
+)
+
+grid::grid.points(
+  x = grid::unit(c(0, 0, 1, 1), "npc"),
+  y = grid::unit(c(0, 1, 0, 1), "npc"),
+  gp = grid::gpar(col = "red")
+)
+```
+:::
+
 ::::
 
 
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 17" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1619,7 +1733,7 @@ p2
 :::
 
 ::::
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 18" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1640,6 +1754,8 @@ ggplot(df, aes(x, y)) +
     plot.margin = margin()
   )
 
+# transform from the data coordinates 
+# to the plotting coordinates (npc)
 df_rescaled <- df |>
   mutate(
     x = scales::rescale(x, 
@@ -1666,7 +1782,7 @@ df_rescaled <- df |>
 
 ::::
 
-## {auto-animate=true transition=fade}
+## {data-menu-title="coord$transform() pt 19" auto-animate=true transition=fade}
 
 :::: {.columns }
 
@@ -1687,6 +1803,8 @@ ggplot(df, aes(x, y)) +
     plot.margin = margin()
   )
 
+# transform from the data coordinates 
+# to the plotting coordinates (npc)
 df_rescaled <- df |>
   mutate(
     x = scales::rescale(x, 
@@ -1723,21 +1841,21 @@ grid::grid.points(
 
 ::::
 
----
+## {data-menu-title="coord$transform() pt 20"}
 
 ```{r}
 #| code-line-numbers: "1,13" 
 GeomPoint$draw_panel
 ```
 
----
+## {data-menu-title="coord$transform() pt 21"}
 
 ```{r}
 #| code-line-numbers: "|1,10-11" 
 ggplot2:::CoordCartesian$transform
 ```
 
----
+## {data-menu-title="coord$transform() pt 22"}
 
 ```{r}
 #| eval: false
@@ -1795,7 +1913,47 @@ panel_params$x$rescale
 ## `Geom$setup_data()`
 temp
 
----
+## {data-menu-title="Geom$setup_data() pt 1"}
 
 temp
+
+## Prototypes
+
+* Technically, `Stat`s and `Geom`s are not classes; they are prototypes.
+
+::: {.fragment}
+* This does not come up frequently, but it can lead to unexpected behavior 
+:::
+
+## {data-menu-title="Prototypes pt 1"}
+
+```{r}
+#| code-line-numbers: "1-2|4-7|9-31" 
+is.environment(GeomComplete)
+
+# Only see what we set, not what we inherited:
+ls(GeomComplete)
+
+GeomComplete$draw_layer
+```
+## {data-menu-title="Prototypes pt 2"}
+
+```{r}
+#| code-line-numbers: "1-3|5-7|9-11" 
+A <- ggproto("A", NULL,
+  x = 1
+)
+
+B <- ggproto("B", A)
+B$x
+
+A$x <- 3
+B$x
+```
+
+
+
+
+
+
 
