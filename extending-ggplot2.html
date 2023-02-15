@@ -390,6 +390,23 @@
     <div class="slides">
 
 
+<section class="slide level2">
+
+<h1>
+Extending <strong>ggplot2</strong>
+</h1>
+<h2>
+with custom <code>Geom</code>s and <code>Stat</code>s
+</h2>
+<hr>
+<h3>
+James Otto
+</h3>
+<p><img data-src="images/ggplot2.svg" class="absolute" style="top: 270px; left: 670px; width: 300px; "></p>
+<div class="footer">
+
+</div>
+</section>
 <section>
 <section id="introduction" class="title-slide slide level1 center">
 <h1>Introduction</h1>
@@ -499,7 +516,7 @@
 <span id="cb10-5"><a href="#cb10-5"></a>        <span class="at">position =</span> position, <span class="at">show.legend =</span> show.legend, <span class="at">inherit.aes =</span> inherit.aes, </span>
 <span id="cb10-6"><a href="#cb10-6"></a>        <span class="at">params =</span> <span class="fu">list2</span>(<span class="at">na.rm =</span> na.rm, ...))</span>
 <span id="cb10-7"><a href="#cb10-7"></a>}</span>
-<span id="cb10-8"><a href="#cb10-8"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x55892e26add8</span><span class="sc">&gt;</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="sc">&lt;</span>bytecode<span class="sc">:</span> <span class="dv">0x55ceebb2b3c0</span><span class="sc">&gt;</span></span>
 <span id="cb10-9"><a href="#cb10-9"></a><span class="er">&lt;</span>environment<span class="sc">:</span> namespace<span class="sc">:</span>ggplot2<span class="sc">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
@@ -514,8 +531,14 @@
 <img data-src="extending-ggplot2_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
 <section id="section-10" class="slide level2" data-menu-title="GeomPoint 6">
 <h2></h2>
-<p><strong>ggplot2</strong> is built on the ggproto object oriented system.</p>
-<p><code>GeomPoint</code> and <code>StatIdentity</code> are each classes* with methods and fields that encode the relevant procedures and defaults to create a scatterplot.</p>
+<ul>
+<li><strong>ggplot2</strong> is built on the ggproto object oriented system.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li><code>GeomPoint</code> and <code>StatIdentity</code> are each objects* with methods and fields that encode the relevant procedures and defaults to create a scatterplot.</li>
+</ul>
+</div>
 </section>
 <section id="section-11" class="slide level2" data-menu-title="GeomPoint 7">
 <h2></h2>
@@ -607,7 +630,7 @@
 </section>
 <section id="section-15" class="slide level2" data-menu-title="GeomPointNew 1">
 <h2></h2>
-<p>It is simple to extend via inheritance, creating <code>GeomPointNew</code> from <code>GeomPoint</code> with a few adjustments to the default aesthetic options.</p>
+<p>It is simple to extend via inheritance, we can create a <code>GeomPointNew</code> from <code>GeomPoint</code> with a few adjustments to the default aesthetic options:</p>
 <div class="fragment">
 <!-- Maybe explain what `ggproto()` is? -->
 <div class="cell">
@@ -910,7 +933,7 @@
 <section id="section-35" class="slide level2" data-menu-title="StatSalesperson 5">
 <h2></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>stat_salesperson <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
+<div class="sourceCode cell-code" id="cb35" data-code-line-numbers="|4,17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>stat_salesperson <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>, <span class="at">data =</span> <span class="cn">NULL</span>, </span>
 <span id="cb35-2"><a href="#cb35-2"></a>                       <span class="at">geom =</span> GeomPath, <span class="at">position =</span> <span class="st">"identity"</span>,</span>
 <span id="cb35-3"><a href="#cb35-3"></a>                       ...,</span>
 <span id="cb35-4"><a href="#cb35-4"></a>                       <span class="at">method =</span> <span class="st">"nearest_insertion"</span>,</span>
@@ -1158,7 +1181,7 @@
 <span id="cb47-11"><a href="#cb47-11"></a>  </span>
 <span id="cb47-12"><a href="#cb47-12"></a>  <span class="at">non_missing_aes =</span> <span class="fu">c</span>(<span class="st">"linetype"</span>, <span class="st">"linewidth"</span>, <span class="st">"shape"</span>),</span>
 <span id="cb47-13"><a href="#cb47-13"></a>  </span>
-<span id="cb47-14"><a href="#cb47-14"></a>  <span class="at">draw_panel =</span> <span class="cf">function</span>(data, panel_params, coord) {</span>
+<span id="cb47-14"><a href="#cb47-14"></a>  <span class="at">draw_group =</span> <span class="cf">function</span>(data, panel_params, coord) {</span>
 <span id="cb47-15"><a href="#cb47-15"></a>    </span>
 <span id="cb47-16"><a href="#cb47-16"></a>    data_expanded <span class="ot">&lt;-</span> data[<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(data), <span class="at">each =</span> <span class="fu">nrow</span>(data)), ]</span>
 <span id="cb47-17"><a href="#cb47-17"></a>    data_expanded<span class="sc">$</span>xend <span class="ot">&lt;-</span> <span class="fu">rep</span>(data<span class="sc">$</span>x, <span class="at">times =</span> <span class="fu">nrow</span>(data))</span>
@@ -1714,7 +1737,7 @@
 <h1>Additional Resources</h1>
 
 </section>
-<section id="section-78" class="slide level2 smaller" data-menu-title="Resource List">
+<section id="section-78" class="slide level2" data-menu-title="Resource List">
 <h2></h2>
 <ul>
 <li><a href="https://ggplot2-book.org/"><strong>ggplot2</strong>: Elegant Graphics for Data Analysis</a> by Hadley Wickham
@@ -1726,13 +1749,61 @@
 <ul>
 <li>Also, the source code of <strong>ggplot2</strong> <a href="https://exts.ggplot2.tidyverse.org/gallery/">extensions</a></li>
 </ul></li>
+<li><a href="https://yjunechoe.github.io/ggtrace/"><strong>ggtrace</strong></a> for interactive debugging of <strong>ggplot2</strong> internals</li>
 <li><a href="https://www.stat.auckland.ac.nz/~paul/RG2e/">R Graphics</a> by Paul Murrell</li>
 </ul>
 </section></section>
 <section>
 <section id="details" class="title-slide slide level1 center">
 <h1>Details</h1>
-
+<!-- ## `GeomComplete$draw_group()` -->
+<!-- Technically, we haven't implemented `GeomComplete` correctly: -->
+<!-- ```{r} -->
+<!-- df_simple <- data.frame( -->
+<!--   x = rep(1:3, times = 2), -->
+<!--   y = rep(1:2, each = 3), -->
+<!--   class = letters[1:3] -->
+<!-- ) -->
+<!-- ggplot(df_simple, aes(x, y, color = class)) + -->
+<!--   geom_point(size = 5) + -->
+<!--   geom_complete() -->
+<!-- ``` -->
+<!-- ## {data-menu-title="GeomComplete$draw_group() 1"} -->
+<!-- ```{r} -->
+<!-- #| code-line-numbers: "|14"  -->
+<!-- GeomComplete <- ggproto("GeomComplete", Geom, -->
+<!--   required_aes = c("x", "y"), -->
+<!--   default_aes = aes( -->
+<!--     colour = "black", -->
+<!--     linewidth = 0.5, -->
+<!--     linetype = 1, -->
+<!--     alpha = NA -->
+<!--   ), -->
+<!--   non_missing_aes = c("linetype", "linewidth", "shape"), -->
+<!--   draw_group = function(data, panel_params, coord) { -->
+<!--     data_expanded <- data[rep(1:nrow(data), each = nrow(data)), ] -->
+<!--     data_expanded$xend <- rep(data$x, times = nrow(data)) -->
+<!--     data_expanded$yend <- rep(data$y, times = nrow(data)) -->
+<!--     coord <- coord$transform(data_expanded, panel_params) -->
+<!--     grid::segmentsGrob(coord$x, coord$y, coord$xend, coord$yend, -->
+<!--       default.units = "native", -->
+<!--       gp = grid::gpar( -->
+<!--         col = alpha(coord$colour, coord$alpha), -->
+<!--         fill = alpha(coord$colour, coord$alpha), -->
+<!--         lwd = coord$linewidth * .pt, -->
+<!--         lty = coord$linetype -->
+<!--       ) -->
+<!--     ) -->
+<!--   }, -->
+<!--   draw_key = draw_key_path -->
+<!-- ) -->
+<!-- ``` -->
+<!-- ## {data-menu-title="GeomComplete$draw_group() 2"} -->
+<!-- ```{r} -->
+<!-- ggplot(df_simple, aes(x, y, color = class)) + -->
+<!--   geom_point(size = 5) + -->
+<!--   geom_complete() -->
+<!-- ``` -->
 </section>
 <section id="coordtransform" class="slide level2">
 <h2><code>coord$transform()</code></h2>
@@ -2439,7 +2510,7 @@
 <span id="cb97-3"><a href="#cb97-3"></a></span>
 <span id="cb97-4"><a href="#cb97-4"></a><span class="co"># Only see what we set, not what we inherited:</span></span>
 <span id="cb97-5"><a href="#cb97-5"></a><span class="fu">ls</span>(GeomComplete)</span>
-<span id="cb97-6"><a href="#cb97-6"></a><span class="co">#&gt; [1] "default_aes"     "draw_key"        "draw_panel"      "non_missing_aes"</span></span>
+<span id="cb97-6"><a href="#cb97-6"></a><span class="co">#&gt; [1] "default_aes"     "draw_group"      "draw_key"        "non_missing_aes"</span></span>
 <span id="cb97-7"><a href="#cb97-7"></a><span class="co">#&gt; [5] "required_aes"    "super"</span></span>
 <span id="cb97-8"><a href="#cb97-8"></a></span>
 <span id="cb97-9"><a href="#cb97-9"></a>GeomComplete<span class="sc">$</span>draw_layer</span>
