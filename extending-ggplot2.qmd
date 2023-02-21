@@ -1980,17 +1980,12 @@ panel_params$x$rescale
 
 ## Avoiding **grid** with `$setup_data()` {data-menu-title="`$setup_data()`"}
 
+::: {.incremental}
+
 * The `$setup_data()` method allows `Geom`s to "intercept" the layer's data 
-before it goes to the `$draw_*()` hierarchy
+before the `$draw_*()` hierarchy
 
-::: {.fragment}
-
-* This is of limited use and is generally only appropriate
-for "row-wise" operations
-
-:::
-
-::: {.fragment}
+* This is of limited use, mainly for "row-wise" operations
 
 * We can attempt to implement `GeomComplete` with this strategy, 
 however we will quickly run into problems
@@ -2075,10 +2070,10 @@ ggplot(df_circles) +
 
 ## Another way to avoid **grid** {data-menu-title="Borrowing `draw_*()` methods"}
 
+::: {.incremental}
+
 * We can use existing `$draw_layer()`, `$draw_panel()`, and `$draw_group()`
 methods in new `Geom` objects.
-
-::: {.fragment}
 
 * This allows a much easier (and less error-prone) implementation of `GeomComplete`
 
@@ -2166,6 +2161,18 @@ ggplot(df_circles) +
 
 ## Other ways to extend **ggplot2**
 
+::: {.incremental}
+
+* Aside from implementing new `Geom` and `Stat` `ggproto` objects,
+there are other formal ways to extend **ggplot2**:
+  * New color palettes for `scale_color/fill()`
+  * Customized themes
+  * New coordinate systems
+  * New scales
+  * New faceting systems
+  
+:::
+
 ```{r}
 #| echo: false
 p1 <- ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
@@ -2188,18 +2195,16 @@ p5 <- ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
   ggnewscale::new_scale_color() +
   geom_point(aes(color = body_mass_g))
 
-# p5 <- ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
-#   geom_point() +
-#   ggforce::facet_zoom(x = Species == "Chinstrap")
+p6 <- ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  geom_point() +
+  ggforce::facet_zoom(x = species == "Adelie")
 
-# p6 <- ggplot(geofacet::state_unemp, aes(year, rate)) +
-#   geom_line() +
-#   geofacet::facet_geo(~ state, grid = "us_state_grid2")
+library("geofacet")
+p7 <- ggplot(geofacet::state_unemp, aes(year, rate)) +
+  geom_line() +
+  geofacet::facet_geo(~ state, grid = "us_state_grid2")
 
-p6 <- ggplot()
-p7 <- ggplot()
-
-aligned_plots <- align_patches(p1, p2, p3, p4, p5, p6, p7)
+aligned_plots <- align_patches(p1, p2, p3, p4, p5)
 ```
 
 ## {data-menu-title="Other extension types 1" .smaller}
@@ -2275,11 +2280,11 @@ aligned_plots[[5]]
 #| eval: false
 ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
   geom_point() +
-  ggforce::facet_zoom(x = species == "Chinstrap")
+  ggforce::facet_zoom(x = species == "Adelie")
 ```
 ```{r}
 #| echo: false
-aligned_plots[[6]]
+p6
 ```
 
 ## {data-menu-title="Other extension types 7" .smaller}
@@ -2292,18 +2297,308 @@ ggplot(geofacet::state_unemp, aes(year, rate)) +
 ```
 ```{r}
 #| echo: false
-aligned_plots[[7]]
+p7 + theme_bw(7)
 ```
 
-## Package development 
+## Package development -- `ggproto` {data-menu-title="Package Development (ggproto)"}
 
-temp
+::: {.incremental}
+
+* R packages for **ggplot2** extensions look slightly different
+than most other packages[^3]
+
+  * These packages export functions as well as `ggproto` objects
+  
+  * Practically, this has little impact on the package development workflow and the code's organization
+  
+  * Example: `ggdensity::GeomHdr`'s [source code](https://github.com/jamesotto852/ggdensity/blob/main/R/hdr.R)
+
+:::
+
+
+[^3]: ["R Packages"](https://r-pkgs.org/) by Hadley Wickham is a great resource for general package development in R.
+
+
+## Package development -- documentation {.smaller data-menu-title="Package Development (documentation 1)"}
+  
+::: {.incremental}
+
+* It is easiest to inherit parameter documentation where possible
+  * Almost always inherit from `ggplot2::stat_identity()`
+  * Sometimes from relevant `Geom`s (e.g. `ggplot2::geom_segment()`) 
+  * Sometimes from workhorse computational packages (e.g. `TSP::solve_tsp()`)
+
+* Layer functions should have sections: "Aesthetics" and "Computed variables"
+  * This is in addition to the typical sections (e.g. description, arguments, examples)
+
+* Group all related functions/objects into a single topic
+  * e.g. `?geom_hdr`, `?stat_hdr`, `?GeomHdr`, and `?StatHdr` are the same
+
+:::
+
+
+## {.smaller data-menu-title="Package Development (documentation 2)"}
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|25-36|25-27|28-36|7-18|20-23|37-38|107,109|143,148|210,212|235,239" 
+
+#' Highest density regions of a 2D density estimate
+#'
+#' Perform 2D density estimation, compute and plot the resulting highest density regions.
+#' `geom_hdr()` draws filled regions and `geom_hdr_lines()` draws lines outlining the regions.
+#' Note, the plotted objects have probabilities mapped to the `alpha` aesthetic by default.
+#'
+#' @section Aesthetics: `geom_hdr()` and `geom_hdr_lines()` understand the following aesthetics (required
+#'   aesthetics are in bold):
+#'
+#'   - **x**
+#'   - **y**
+#'   - alpha
+#'   - color
+#'   - fill (only `geom_hdr`)
+#'   - group
+#'   - linetype
+#'   - linewidth
+#'   - subgroup
+#'
+#' @section Computed variables:
+#'
+#'   \describe{ \item{probs}{The probability associated with the highest density region, specified
+#'   by `probs` argument.} }
+#'
+#' @inheritParams ggplot2::geom_path
+#' @inheritParams ggplot2::stat_identity
+#' @inheritParams ggplot2::stat_density2d
+#' @param method Density estimator to use, accepts character vector:
+#'   `"kde"`,`"histogram"`, `"freqpoly"`, or `"mvnorm"`.
+#'   Alternatively accepts functions  which return closures corresponding to density estimates,
+#'   see `?get_hdr` or `vignette("method", "ggdensity")`.
+#' @param probs Probabilities to compute highest density regions for.
+#' @param xlim,ylim Range to compute and draw regions. If `NULL`, defaults to
+#'   range of data.
+#' @param n Resolution of grid defined by `xlim` and `ylim`.
+#'   Ignored if `method = "histogram"` or `method = "freqpoly"`.
+#' @name geom_hdr
+#' @rdname geom_hdr
+#' @references Scott, David W. Multivariate Density Estimation (2e), Wiley.
+#'
+#' @import ggplot2
+#'
+#' @examples
+#' # Basic simulated data with bivariate normal data and various methods
+#' df <- data.frame(x = rnorm(1000), y = rnorm(1000))
+#' p <- ggplot(df, aes(x, y)) + coord_equal()
+#'
+#' p + geom_hdr()
+#' p + geom_hdr(method = "mvnorm")
+#' p + geom_hdr(method = "freqpoly")
+#' # p + geom_hdr(method = "histogram")
+#'
+#' # Adding point layers on top to visually assess region estimates
+#' pts <- geom_point(size = .2, color = "red")
+#'
+#' p + geom_hdr() + pts
+#' p + geom_hdr(method = "mvnorm") + pts
+#' p + geom_hdr(method = "freqpoly") + pts
+#' # p + geom_hdr(method = "histogram") + pts
+#'
+#' # Highest density region boundary lines
+#' p + geom_hdr_lines()
+#' p + geom_hdr_lines(method = "mvnorm")
+#' p + geom_hdr_lines(method = "freqpoly")
+#' # p + geom_hdr_lines(method = "histogram")
+#'
+#' \dontrun{
+#'
+#' # 2+ groups - mapping other aesthetics in the geom
+#' rdata <- function(n, n_groups = 3, radius = 3) {
+#'   list_of_dfs <- lapply(0:(n_groups-1), function(k) {
+#'     mu <- c(cos(2*k*pi/n_groups), sin(2*k*pi/n_groups))
+#'     m <- MASS::mvrnorm(n, radius*mu, diag(2))
+#'     structure(data.frame(m, as.character(k)), names = c("x", "y", "c"))
+#'   })
+#'   do.call("rbind", list_of_dfs)
+#' }
+#'
+#' dfc <- rdata(1000, n_groups = 5)
+#' pf <- ggplot(dfc, aes(x, y, fill = c)) + coord_equal()
+#'
+#' pf + geom_hdr()
+#' pf + geom_hdr(method = "mvnorm")
+#' pf + geom_hdr(method = "mvnorm", probs = .90, alpha = .5)
+#' pf + geom_hdr(method = "histogram")
+#' pf + geom_hdr(method = "freqpoly")
+#'
+#' pc <- ggplot(dfc, aes(x, y, color = c)) +
+#'  coord_equal() +
+#'  theme_minimal() +
+#'  theme(panel.grid.minor = element_blank())
+#'
+#' pc + geom_hdr_lines()
+#' pc + geom_hdr_lines(method = "mvnorm")
+#'
+#'
+#' # Data with boundaries
+#' ggplot(df, aes(x^2)) + geom_histogram(bins = 30)
+#' ggplot(df, aes(x^2)) + geom_histogram(bins = 30, boundary = 0)
+#' ggplot(df, aes(x^2, y^2)) + geom_hdr(method = "histogram")
+#'
+#' }
+#'
+NULL
+
+
+#' @rdname geom_hdr
+#' @export
+stat_hdr <- function(mapping = NULL, data = NULL,
+                     geom = "hdr", position = "identity",
+                     ...,
+                     method = "kde",
+                     probs = c(.99, .95, .8, .5),
+                     n = 100,
+                     xlim = NULL,
+                     ylim = NULL,
+                     na.rm = FALSE,
+                     show.legend = NA,
+                     inherit.aes = TRUE) {
+  layer(
+    data = data,
+    mapping = mapping,
+    stat = StatHdr,
+    geom = geom,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      method = method,
+      probs = probs,
+      n = n,
+      xlim = xlim,
+      ylim = ylim,
+      na.rm = na.rm,
+      ...
+    )
+  )
+}
 
 
 
-## {data-menu-title="Package Development 1"}
+
+#' @rdname geom_hdr
+#' @format NULL
+#' @usage NULL
+#' @importFrom scales percent
+#' @export
+StatHdr <- ggproto("StatHdr", Stat,
+
+  required_aes = c("x", "y"),
+  default_aes = aes(order = after_stat(probs), alpha = after_stat(probs)),
+
+  output = "bands",
+
+  compute_group = function(self, data, scales, na.rm = FALSE,
+                           method = "kde", probs = c(.99, .95, .8, .5),
+                           n = 100, xlim = NULL, ylim = NULL) {
+
+    rangex <- xlim %||% scales$x$dimension()
+    rangey <- ylim %||% scales$y$dimension()
+
+    # Only calculate HDR membership if we need to
+    need_membership <- (self$output == "points")
+
+    res <- get_hdr(data, method, probs, n, rangex, rangey, hdr_membership = need_membership)
+
+    res_to_df(res, probs, data$group[1], self$output)
+
+  }
+)
+
+# internal helper function to convert output of `get_hdr[_1d]()` into
+# what `GeomHdr*$draw_group()` methods need
+res_to_df <- function(res, probs, group, output) {
+
+  # Need z for xyz_to_isobands/lines()
+  res$df_est$z <- res$df_est$fhat
+
+  if (output == "bands") {
+
+    isobands <- xyz_to_isobands(res$df_est, res$breaks)
+    names(isobands) <- scales::percent_format(accuracy = 1)(probs)
+    df <- iso_to_polygon(isobands, group)
+    df$probs <- ordered(df$level, levels = names(isobands))
+    df$level <- NULL
+
+  } else if (output == "lines") {
+
+    isolines <- xyz_to_isolines(res$df_est, res$breaks)
+    names(isolines) <- scales::percent_format(accuracy = 1)(probs)
+    df <- iso_to_path(isolines, group)
+    df$probs <- ordered(df$level, levels = names(isolines))
+    df$level <- NULL
+
+  } else if (output == "points") {
+
+    df <- res$data
+    df$hdr_membership <- scales::percent_format(accuracy = 1)(df$hdr_membership)
+    df$probs <- ordered(df$hdr_membership, levels = scales::percent_format(accuracy = 1)(c(1, probs)))
+    df$hdr_membership <- NULL
+
+  }
+
+  df
+
+}
 
 
+
+#' @rdname geom_hdr
+#' @export
+geom_hdr <- function(mapping = NULL, data = NULL,
+                       stat = "hdr", position = "identity",
+                       ...,
+                       na.rm = FALSE,
+                       show.legend = NA,
+                       inherit.aes = TRUE) {
+  layer(
+    data = data,
+    mapping = mapping,
+    stat = stat,
+    geom = GeomHdr,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      na.rm = na.rm,
+      ...
+    )
+  )
+}
+
+
+
+#' @rdname geom_hdr
+#' @format NULL
+#' @usage NULL
+#' @export
+GeomHdr <- ggproto("GeomHdr", GeomPolygon)
+```
+
+
+## Package development -- unit testing {data-menu-title="Package Development (testing)"}
+  
+::: {.incremental}
+
+* Basic tools from [**testthat**](https://testthat.r-lib.org/) work well for
+testing logic in `$compute_*()` methods[^4].
+
+* Visual unit tests are available with [**vdiffr**](https://github.com/r-lib/vdiffr)
+  * Allow for programmatic comparison of graphics generated by **ggplot2** 
+  * High sensitivity; low precision -- lots of false positives
+
+[^4]: See the [chapter on unit tests](https://r-pkgs.org/testing-basics.html) in "R Packages" for details
+
+:::
 
 
 
