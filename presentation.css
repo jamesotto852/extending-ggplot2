@@ -25,12 +25,14 @@ div .csl-entry {
   font-size: .45em;
 }
 
+
 .callout {
   background-color: white;
 }
 
 /*-- used for callouts with code --*/
 .callout-tip {
+  font-size: 1em !important;
   padding: 0 !important;
   border: 0 !important;
   
